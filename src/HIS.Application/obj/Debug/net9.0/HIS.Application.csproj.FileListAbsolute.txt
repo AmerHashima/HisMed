@@ -1,0 +1,15 @@
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\bin\Debug\net9.0\HIS.Application.deps.json
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\bin\Debug\net9.0\HIS.Application.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\bin\Debug\net9.0\HIS.Application.pdb
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\bin\Debug\net9.0\HIS.Domain.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\bin\Debug\net9.0\HIS.Domain.pdb
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.csproj.AssemblyReference.cache
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.AssemblyInfoInputs.cache
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.AssemblyInfo.cs
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.csproj.CoreCompileInputs.cache
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Appl.B536FE33.Up2Date
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\refint\HIS.Application.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.pdb
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\ref\HIS.Application.dll

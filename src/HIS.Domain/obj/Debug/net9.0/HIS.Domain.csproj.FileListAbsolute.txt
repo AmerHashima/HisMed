@@ -1,0 +1,11 @@
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\bin\Debug\net9.0\HIS.Domain.deps.json
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\bin\Debug\net9.0\HIS.Domain.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\bin\Debug\net9.0\HIS.Domain.pdb
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.AssemblyInfoInputs.cache
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.AssemblyInfo.cs
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.csproj.CoreCompileInputs.cache
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\refint\HIS.Domain.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.pdb
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\ref\HIS.Domain.dll
