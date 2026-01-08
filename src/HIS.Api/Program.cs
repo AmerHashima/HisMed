@@ -81,12 +81,23 @@ try
     // Add global exception handling middleware
     app.UseMiddleware<GlobalExceptionMiddleware>();
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    // Configure the HTTP request pipeline - Enable Swagger for all environments in containerized deployment
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "HIS API v1");
+        c.RoutePrefix = "swagger"; // Swagger UI at /swagger
+        c.DisplayRequestDuration();
+        c.EnableTryItOutByDefault();
+        c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+    });
+
+    // Health check endpoints
+    app.MapHealthChecks("/api/health");
+    app.MapHealthChecks("/api/health/ready");
+
+    // Redirect root to Swagger in containerized environments
+    app.MapGet("/", () => Results.Redirect("/swagger"));
 
     app.UseHttpsRedirection();
 

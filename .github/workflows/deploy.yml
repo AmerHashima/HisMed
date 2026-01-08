@@ -1,0 +1,32 @@
+name: Deploy HIS (.NET 9)
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build & Push Image
+        run: |
+          docker build -t ghcr.io/amerhashima/his-api:latest .
+          docker push ghcr.io/amerhashima/his-api:latest
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: deploy
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd ~/apps/his
+            docker login ghcr.io -u amerhashima -p ${{ secrets.GHCR_TOKEN }}
+            docker compose pull
+            docker compose up -d
