@@ -93,8 +93,8 @@ try
     });
 
     // Health check endpoints
-    app.MapHealthChecks("/api/health");
-    app.MapHealthChecks("/api/health/ready");
+    //app.MapHealthChecks("/api/health");
+    //app.MapHealthChecks("/api/health/ready");
 
     // Redirect root to Swagger in containerized environments
     app.MapGet("/", () => Results.Redirect("/swagger"));
@@ -102,8 +102,8 @@ try
     app.UseHttpsRedirection();
 
     // Add authentication and authorization middleware
-    app.UseAuthentication();
-    app.UseAuthorization();
+    //app.UseAuthentication();
+    //app.UseAuthorization();
 
     app.MapControllers();
 
