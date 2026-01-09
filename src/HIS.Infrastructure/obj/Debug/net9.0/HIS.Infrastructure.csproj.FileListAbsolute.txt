@@ -17,3 +17,4 @@ D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Infrastructure\obj\Debug\net9.
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Infrastructure\obj\Debug\net9.0\HIS.Infrastructure.pdb
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Infrastructure\obj\Debug\net9.0\HIS.Infrastructure.genruntimeconfig.cache
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Infrastructure\obj\Debug\net9.0\ref\HIS.Infrastructure.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Infrastructure\obj\Debug\net9.0\HIS.Infrastructure.sourcelink.json

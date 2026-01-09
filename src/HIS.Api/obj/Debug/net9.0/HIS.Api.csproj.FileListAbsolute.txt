@@ -181,3 +181,4 @@ D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Api\obj\Debug\net9.0\HIS.Api.g
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Api\obj\Debug\net9.0\ref\HIS.Api.dll
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Api\bin\Debug\net9.0\appsettings.Production.json
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Api\obj\Debug\net9.0\HIS.Api.sourcelink.json

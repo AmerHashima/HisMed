@@ -13,3 +13,4 @@ D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\H
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\refint\HIS.Application.dll
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.pdb
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\ref\HIS.Application.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Application\obj\Debug\net9.0\HIS.Application.sourcelink.json

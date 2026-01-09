@@ -9,3 +9,4 @@ D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Do
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\refint\HIS.Domain.dll
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.pdb
 D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\ref\HIS.Domain.dll
+D:\programming\MyWork\MAINSELFPROJECT\His\src\HIS.Domain\obj\Debug\net9.0\HIS.Domain.sourcelink.json

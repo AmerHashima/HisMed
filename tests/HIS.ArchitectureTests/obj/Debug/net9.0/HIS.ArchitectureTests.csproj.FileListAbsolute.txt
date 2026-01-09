@@ -479,3 +479,4 @@ D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.ArchitectureTests\bin\Debug\
 D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.ArchitectureTests\obj\Debug\net9.0\MvcTestingAppManifest.json
 D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.ArchitectureTests\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.InMemory.dll
 D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.ArchitectureTests\bin\Debug\net9.0\appsettings.Production.json
+D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.ArchitectureTests\obj\Debug\net9.0\HIS.ArchitectureTests.sourcelink.json

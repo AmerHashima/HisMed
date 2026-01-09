@@ -474,3 +474,4 @@ D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.IntegrationTests\bin\Debug\n
 D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.IntegrationTests\obj\Debug\net9.0\MvcTestingAppManifest.json
 D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.IntegrationTests\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.InMemory.dll
 D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.IntegrationTests\bin\Debug\net9.0\appsettings.Production.json
+D:\programming\MyWork\MAINSELFPROJECT\His\tests\HIS.IntegrationTests\obj\Debug\net9.0\HIS.IntegrationTests.sourcelink.json
