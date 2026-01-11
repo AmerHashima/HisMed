@@ -3,3 +3,248 @@
 ################################################################################
 
 /.vs/HIS.Solution
+
+################################################################################
+# Build folders - These are essential to ignore
+################################################################################
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/           # This ignores all bin folders
+[Oo]bj/           # This ignores all obj folders
+[Ll]og/
+[Ll]ogs/
+
+# More specific patterns for bin/obj
+**/bin/
+**/obj/
+**/[Bb]in/
+**/[Oo]bj/
+
+################################################################################
+# Visual Studio specific files
+################################################################################
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+# Visual Studio 2017 auto generated files
+Generated\ Files/
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+################################################################################
+# .NET specific
+################################################################################
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+################################################################################
+# Test Results
+################################################################################
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Coverage results
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+################################################################################
+# IDE and Editor files
+################################################################################
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# JetBrains Rider
+*.sln.iml
+.idea/
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+################################################################################
+# Database files
+################################################################################
+
+*.mdf
+*.ldf
+*.ndf
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+################################################################################
+# Environment and Configuration
+################################################################################
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Application specific settings (keep the templates)
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+!appsettings.Production.json
+
+# Connection strings and secrets
+connectionstrings.json
+secrets.json
+launchSettings.json
+
+################################################################################
+# Docker
+################################################################################
+
+.dockerignore
+docker-compose.override.yml
+
+################################################################################
+# OS generated files
+################################################################################
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+
+################################################################################
+# Logs and temporary files
+################################################################################
+
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary folders
+tmp/
+temp/
+
+################################################################################
+# SSL and Security
+################################################################################
+
+*.crt
+*.key
+*.p12
+*.pem
+*.pfx
+
+################################################################################
+# Entity Framework
+################################################################################
+
+# Keep migration files but ignore temp EF files
+**/Migrations/*.designer.cs
+**/Migrations/*_*.cs
+!**/Migrations/[0-9]*_*.cs
+
+################################################################################
+# Additional development files
+################################################################################
+
+# Benchmark Results
+BenchmarkDotNet.Artifacts/
+
+# Azure
+PublishScripts/
+
+# Package managers
+node_modules/
