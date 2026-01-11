@@ -12,6 +12,9 @@ public class HISDbContext : DbContext
     }
 
     public DbSet<SystemUser> SystemUsers { get; set; }
+    public DbSet<Patient> Patients { get; set; }
+    public DbSet<AppLookupMaster> AppLookupMasters { get; set; } // Add this line
+    public DbSet<AppLookupDetail> AppLookupDetails { get; set; } // Add this line
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

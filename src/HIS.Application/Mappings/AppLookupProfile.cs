@@ -1,0 +1,32 @@
+using AutoMapper;
+using HIS.Application.DTOs.AppLookup;
+using HIS.Domain.Entities;
+
+namespace HIS.Application.Mappings;
+
+public class AppLookupProfile : Profile
+{
+    public AppLookupProfile()
+    {
+        // AppLookupMaster mappings
+        CreateMap<AppLookupMaster, AppLookupMasterDto>()
+            .ReverseMap();
+
+        CreateMap<CreateAppLookupMasterDto, AppLookupMaster>()
+            .ForMember(dest => dest.Oid, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.LookupDetails, opt => opt.Ignore());
+
+        // AppLookupDetail mappings
+        CreateMap<AppLookupDetail, AppLookupDetailDto>()
+            .ForMember(dest => dest.MasterLookupCode, opt => opt.MapFrom(src => src.LookupMaster.LookupCode))
+            .ReverseMap();
+
+        CreateMap<CreateAppLookupDetailDto, AppLookupDetail>()
+            .ForMember(dest => dest.Oid, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.LookupMaster, opt => opt.Ignore());
+    }
+}

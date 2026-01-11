@@ -1,5 +1,6 @@
 using HIS.Application.Interfaces;
 using HIS.Application.Mappings;
+using HIS.Application.Services;
 using HIS.Domain.Interfaces;
 using HIS.Infrastructure.Persistence;
 using HIS.Infrastructure.Repositories;
@@ -21,11 +22,17 @@ public static class DependencyInjection
 
         // Register repositories
         services.AddScoped<ISystemUserRepository, SystemUserRepository>();
+        services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IAppLookupMasterRepository, AppLookupMasterRepository>();
+        services.AddScoped<IAppLookupDetailRepository, AppLookupDetailRepository>();
+        
         services.AddAutoMapper(cfg => {
             // optional: extra config
         }, typeof(SystemUserProfile).Assembly);
+        
         // Register services
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IQueryBuilderService, QueryBuilderService>(); // This line is important
 
         return services;
     }

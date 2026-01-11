@@ -20,6 +20,6 @@ public class GetSystemUserByIdHandler : IRequestHandler<GetSystemUserByIdQuery, 
     public async Task<SystemUserDto?> Handle(GetSystemUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _repository.GetByIdAsync(request.Id, cancellationToken);
-        return user != null ? _mapper.Map<SystemUserDto>(user) : null;
+        return user == null ? null : _mapper.Map<SystemUserDto>(user);
     }
 }

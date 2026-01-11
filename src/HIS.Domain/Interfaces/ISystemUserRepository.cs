@@ -3,7 +3,7 @@ using HIS.Domain.Entities;
 
 namespace HIS.Domain.Interfaces;
 
-public interface ISystemUserRepository : IRepository<SystemUser>
+public interface ISystemUserRepository : IBaseRepository<SystemUser>
 {
     Task<SystemUser?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default);
     Task<SystemUser?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);

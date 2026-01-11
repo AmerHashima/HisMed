@@ -3,8 +3,7 @@ using MediatR;
 
 namespace HIS.Application.Queries.SystemUser;
 
-public class GetSystemUserListQuery : IRequest<IEnumerable<SystemUserDto>>
-{
-    public bool IncludeInactive { get; set; } = false;
-    public int? RoleId { get; set; }
-}
+public record GetSystemUserListQuery(
+    bool IncludeInactive = false,
+    int? RoleId = null
+) : IRequest<IEnumerable<SystemUserDto>>;

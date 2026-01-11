@@ -3,7 +3,4 @@ using MediatR;
 
 namespace HIS.Application.Commands.SystemUser;
 
-public class UpdateSystemUserCommand : IRequest<SystemUserDto>
-{
-    public UpdateSystemUserDto UpdateSystemUserDto { get; set; } = new();
-}
+public record UpdateSystemUserCommand(UpdateSystemUserDto SystemUser) : IRequest<SystemUserDto>;

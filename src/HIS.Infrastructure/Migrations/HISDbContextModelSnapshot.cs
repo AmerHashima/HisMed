@@ -22,6 +22,376 @@ namespace HIS.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HIS.Domain.Entities.AppLookupDetail", b =>
+                {
+                    b.Property<Guid>("Oid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDefault")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LookupMasterID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SortOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ValueCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ValueNameAr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ValueNameEn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Oid");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("IsDefault")
+                        .HasDatabaseName("IX_AppLookupDetail_IsDefault");
+
+                    b.HasIndex("LookupMasterID")
+                        .HasDatabaseName("IX_AppLookupDetail_MasterID");
+
+                    b.HasIndex("SortOrder")
+                        .HasDatabaseName("IX_AppLookupDetail_SortOrder");
+
+                    b.HasIndex("UpdatedBy");
+
+                    b.HasIndex("LookupMasterID", "ValueCode")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_LookupDetail");
+
+                    b.ToTable("AppLookupDetail", (string)null);
+                });
+
+            modelBuilder.Entity("HIS.Domain.Entities.AppLookupMaster", b =>
+                {
+                    b.Property<Guid>("Oid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSystem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("LookupCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LookupNameAr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LookupNameEn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Oid");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("IsSystem")
+                        .HasDatabaseName("IX_AppLookupMaster_IsSystem");
+
+                    b.HasIndex("LookupCode")
+                        .IsUnique()
+                        .HasDatabaseName("IX_AppLookupMaster_LookupCode");
+
+                    b.HasIndex("LookupNameEn")
+                        .HasDatabaseName("IX_AppLookupMaster_LookupNameEn");
+
+                    b.HasIndex("UpdatedBy");
+
+                    b.ToTable("AppLookupMaster", (string)null);
+                });
+
+            modelBuilder.Entity("HIS.Domain.Entities.Patient", b =>
+                {
+                    b.Property<Guid>("Oid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PatientID")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("AddressLine2")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("BloodGroup")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedDate")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EmergencyMobile")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("EmergencyName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("EmergencyRelation")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FirstNameAr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstNameEn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FullNameAr")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComputedColumnSql("([FirstNameAr] + ' ' + ISNULL([MiddleNameAr] + ' ', '') + [LastNameAr])", false);
+
+                    b.Property<string>("FullNameEn")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComputedColumnSql("([FirstNameEn] + ' ' + ISNULL([MiddleNameEn] + ' ', '') + [LastNameEn])", false);
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("IdentifierType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastNameAr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastNameEn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MRN")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MaritalStatus")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MiddleNameAr")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MiddleNameEn")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("NationalID")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Nationality")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PassportNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("PostalCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("State")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ModifiedDate");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Oid");
+
+                    b.HasIndex("BloodGroup")
+                        .HasDatabaseName("IX_Patients_BloodGroup");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("Email")
+                        .HasDatabaseName("IX_Patients_Email");
+
+                    b.HasIndex("Gender")
+                        .HasDatabaseName("IX_Patients_Gender");
+
+                    b.HasIndex("IsActive")
+                        .HasDatabaseName("IX_Patients_IsActive");
+
+                    b.HasIndex("MRN")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Patients_MRN");
+
+                    b.HasIndex("Mobile")
+                        .HasDatabaseName("IX_Patients_Mobile");
+
+                    b.HasIndex("NationalID")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Patients_NationalID")
+                        .HasFilter("[NationalID] IS NOT NULL");
+
+                    b.HasIndex("Nationality")
+                        .HasDatabaseName("IX_Patients_Nationality");
+
+                    b.HasIndex("PassportNumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Patients_PassportNumber")
+                        .HasFilter("[PassportNumber] IS NOT NULL");
+
+                    b.HasIndex("UpdatedBy");
+
+                    b.HasIndex("LastNameAr", "FirstNameAr")
+                        .HasDatabaseName("IX_Patients_NameAr");
+
+                    b.HasIndex("LastNameEn", "FirstNameEn")
+                        .HasDatabaseName("IX_Patients_NameEn");
+
+                    b.ToTable("Patients", (string)null);
+                });
+
             modelBuilder.Entity("HIS.Domain.Entities.SystemUser", b =>
                 {
                     b.Property<Guid>("Oid")
@@ -57,7 +427,6 @@ namespace HIS.Infrastructure.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
@@ -130,6 +499,78 @@ namespace HIS.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("HIS.Domain.Entities.AppLookupDetail", b =>
+                {
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy");
+
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy");
+
+                    b.HasOne("HIS.Domain.Entities.AppLookupMaster", "LookupMaster")
+                        .WithMany("LookupDetails")
+                        .HasForeignKey("LookupMasterID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_AppLookupDetail_Master");
+
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedBy");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("LookupMaster");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("HIS.Domain.Entities.AppLookupMaster", b =>
+                {
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy");
+
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy");
+
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedBy");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("HIS.Domain.Entities.Patient", b =>
+                {
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy");
+
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy");
+
+                    b.HasOne("HIS.Domain.Entities.SystemUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedBy");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
             modelBuilder.Entity("HIS.Domain.Entities.SystemUser", b =>
                 {
                     b.HasOne("HIS.Domain.Entities.SystemUser", "CreatedByUser")
@@ -149,6 +590,11 @@ namespace HIS.Infrastructure.Migrations
                     b.Navigation("DeletedByUser");
 
                     b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("HIS.Domain.Entities.AppLookupMaster", b =>
+                {
+                    b.Navigation("LookupDetails");
                 });
 #pragma warning restore 612, 618
         }
