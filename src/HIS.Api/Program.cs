@@ -126,8 +126,8 @@ try
     app.UseHttpsRedirection();
 
     // Add authentication and authorization middleware
-    //app.UseAuthentication();
-    //app.UseAuthorization();
+    app.UseAuthentication();
+    app.UseAuthorization();
 
     app.MapControllers();
 
