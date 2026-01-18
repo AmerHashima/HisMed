@@ -75,7 +75,31 @@ try
     // Add FluentValidation
     builder.Services.AddFluentValidationAutoValidation()
                     .AddFluentValidationClientsideAdapters();
+      builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll", policy =>
+        {
+            policy.AllowAnyOrigin()      // Allow requests from any origin/region
+                  .AllowAnyMethod()      // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
+                  .AllowAnyHeader();    // Allow any headers
+                  //.WithExposedHeaders("Token-Expired"); // Expose custom headers to clients
+        });
 
+        // Alternative: Named policy for specific origins (if needed later)
+        //options.AddPolicy("AllowSpecificOrigins", policy =>
+        //{
+        //    policy.WithOrigins(
+        //            "http://localhost:3000",      // React default
+        //            "http://localhost:4200",      // Angular default
+        //            "http://localhost:5173",      // Vite default
+        //            "https://yourdomain.com"      // Production domain
+        //          )
+        //          .AllowAnyMethod()
+        //          .AllowAnyHeader()
+        //          .AllowCredentials();  // Allow credentials with specific origins
+        //});
+    });
+  
     var app = builder.Build();
 
     // Add global exception handling middleware
