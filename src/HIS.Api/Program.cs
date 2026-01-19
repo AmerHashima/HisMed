@@ -131,6 +131,7 @@ try
 
     app.MapControllers();
 
+    app.UseCors("AllowAll");
     app.Run();
 }
 catch (ReflectionTypeLoadException ex)
