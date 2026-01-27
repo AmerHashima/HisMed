@@ -1,52 +1,56 @@
+using System.Reflection;
+using System.Text;
 using FluentValidation.AspNetCore;
 using HIS.Api.Middleware;
 using HIS.Application;
-using HIS.Application.Validators.SystemUser;
 using HIS.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
-
-using System.Reflection;
-using System.Text;
+using Microsoft.OpenApi.Models; // This should work with correct package version
 
 var builder = WebApplication.CreateBuilder(args);
 
 try
 {
-    // Add services to the container.
+    // --------------------------
+    // Add services to the container
+    // --------------------------
     builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
 
-    // Configure Swagger with JWT support
-    builder.Services.AddSwaggerGen(c =>
+    // Add Application & Infrastructure layers
+    builder.Services.AddApplication();
+    builder.Services.AddInfrastructure(builder.Configuration);
+
+    // --------------------------
+    // Configure FluentValidation
+    // --------------------------
+    builder.Services.AddFluentValidationAutoValidation()
+                    .AddFluentValidationClientsideAdapters();
+
+    // --------------------------
+    // Configure CORS to allow any region
+    // --------------------------
+    builder.Services.AddCors(options =>
     {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "HIS API", Version = "v1" });
-
-        // Add JWT Authentication to Swagger
-        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        options.AddPolicy("AllowAll", policy =>
         {
-            Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
-            Name = "Authorization",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
-            Scheme = "Bearer"
-        });
-
-        c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
-
-        {
-
-            [new OpenApiSecuritySchemeReference("foo", document)] = [],
-
-            [new OpenApiSecuritySchemeReference("bar", document)] = []
-
+            policy.AllowAnyOrigin()      // Allow requests from any origin/region
+                  .AllowAnyMethod()      // Allow any HTTP method
+                  .AllowAnyHeader();     // Allow any headers
         });
     });
 
-    // Add JWT Authentication
+    // --------------------------
+    // Configure JWT Authentication
+    // --------------------------
     var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+    var secretKey = jwtSettings["SecretKey"];
+
+    if (string.IsNullOrEmpty(secretKey))
+    {
+        throw new InvalidOperationException("JWT SecretKey is not configured.");
+    }
+
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -62,81 +66,175 @@ try
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
             ClockSkew = TimeSpan.Zero
+        };
+
+        // Add events for better error handling
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                {
+                    context.Response.Headers.Append("Token-Expired", "true");
+                }
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                context.HandleResponse();
+                context.Response.StatusCode = 401;
+                context.Response.ContentType = "application/json";
+                var result = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    success = false,
+                    message = "You are not authorized to access this resource",
+                    data = (object?)null
+                });
+                return context.Response.WriteAsync(result);
+            }
         };
     });
 
     builder.Services.AddAuthorization();
 
-    builder.Services.AddApplication();
-    builder.Services.AddInfrastructure(builder.Configuration);
-
-    // Add FluentValidation
-    builder.Services.AddFluentValidationAutoValidation()
-                    .AddFluentValidationClientsideAdapters();
-      builder.Services.AddCors(options =>
+    // --------------------------
+    // Configure Swagger with JWT and Global Authorization
+    // --------------------------
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(c =>
     {
-        options.AddPolicy("AllowAll", policy =>
+        c.SwaggerDoc("v1", new OpenApiInfo
         {
-            policy.AllowAnyOrigin()      // Allow requests from any origin/region
-                  .AllowAnyMethod()      // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
-                  .AllowAnyHeader();    // Allow any headers
-                  //.WithExposedHeaders("Token-Expired"); // Expose custom headers to clients
+            Title = "Hospital Information System API",
+            Version = "v1",
+            Description = "HIS API with JWT Authentication - Use the Authorize button to add your Bearer token",
+            Contact = new OpenApiContact
+            {
+                Name = "HIS Development Team",
+                Email = "support@his.com",
+                Url = new Uri("https://his.com/support")
+            },
+            License = new OpenApiLicense
+            {
+                Name = "MIT License",
+                Url = new Uri("https://opensource.org/licenses/MIT")
+            }
         });
 
-        // Alternative: Named policy for specific origins (if needed later)
-        //options.AddPolicy("AllowSpecificOrigins", policy =>
-        //{
-        //    policy.WithOrigins(
-        //            "http://localhost:3000",      // React default
-        //            "http://localhost:4200",      // Angular default
-        //            "http://localhost:5173",      // Vite default
-        //            "https://yourdomain.com"      // Production domain
-        //          )
-        //          .AllowAnyMethod()
-        //          .AllowAnyHeader()
-        //          .AllowCredentials();  // Allow credentials with specific origins
-        //});
+        // Add JWT Authentication to Swagger
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below. Example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+            BearerFormat = "JWT"
+        });
+
+        // Global security requirement - applies to ALL endpoints
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    },
+                    Scheme = "oauth2",
+                    Name = "Bearer",
+                    In = ParameterLocation.Header
+                },
+                new List<string>()
+            }
+        });
+
+        // Include XML comments for better documentation
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        if (File.Exists(xmlPath))
+        {
+            c.IncludeXmlComments(xmlPath);
+        }
+
+        // Enable annotations for better Swagger documentation
+        c.EnableAnnotations();
     });
-  
+
+    // --------------------------
+    // Add Health Checks
+    // --------------------------
+    builder.Services.AddHealthChecks()
+        .AddDbContextCheck<HIS.Infrastructure.Persistence.HISDbContext>("database");
+
+    // --------------------------
+    // Build app
+    // --------------------------
     var app = builder.Build();
 
-    // Add global exception handling middleware
+    // --------------------------
+    // Configure middleware pipeline
+    // --------------------------
+    
+    // Global exception handling
     app.UseMiddleware<GlobalExceptionMiddleware>();
 
-    // Configure the HTTP request pipeline - Enable Swagger for all environments in containerized deployment
+    // Enable Swagger for all environments
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "HIS API v1");
-        c.RoutePrefix = "swagger"; // Swagger UI at /swagger
+        c.RoutePrefix = "swagger";
+        c.DocumentTitle = "HIS API Documentation";
         c.DisplayRequestDuration();
         c.EnableTryItOutByDefault();
         c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+        c.DefaultModelsExpandDepth(-1);
+        c.EnableFilter();
+        c.EnableDeepLinking();
+        c.ConfigObject.AdditionalItems["persistAuthorization"] = true;
     });
 
     // Health check endpoints
-    //app.MapHealthChecks("/api/health");
-    //app.MapHealthChecks("/api/health/ready");
+    app.MapHealthChecks("/api/health");
+    app.MapHealthChecks("/api/health/ready");
+    app.MapHealthChecks("/health");
 
-    // Redirect root to Swagger in containerized environments
+    // Redirect root to Swagger
     app.MapGet("/", () => Results.Redirect("/swagger"));
+
+    // ⭐ CORS must be before Authentication and Authorization
+    app.UseCors("AllowAll");
 
     app.UseHttpsRedirection();
 
-    // Add authentication and authorization middleware
+    // Authentication must come before Authorization
     app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
 
-    app.UseCors("AllowAll");
+    // --------------------------
+    // Log startup information
+    // --------------------------
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("=================================================");
+    logger.LogInformation("HIS API is starting up...");
+    logger.LogInformation("Environment: {Environment}", app.Environment.EnvironmentName);
+    logger.LogInformation("CORS Policy: AllowAll - Accepting requests from any origin");
+    logger.LogInformation("Swagger UI: /swagger");
+    logger.LogInformation("Health Check: /api/health");
+    logger.LogInformation("=================================================");
+
     app.Run();
 }
 catch (ReflectionTypeLoadException ex)
 {
-    // Log detailed information about the type loading failure
+    Console.WriteLine("=================================================");
     Console.WriteLine("ReflectionTypeLoadException occurred:");
     Console.WriteLine($"Message: {ex.Message}");
 
@@ -155,12 +253,20 @@ catch (ReflectionTypeLoadException ex)
             }
         }
     }
-
-    throw; // Re-throw to maintain the original behavior
+    Console.WriteLine("=================================================");
+    throw;
 }
 catch (Exception ex)
 {
+    Console.WriteLine("=================================================");
     Console.WriteLine($"Startup error: {ex.Message}");
+    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+    if (ex.InnerException != null)
+    {
+        Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+    }
+    Console.WriteLine("=================================================");
     throw;
 }
+
 public partial class Program { }
