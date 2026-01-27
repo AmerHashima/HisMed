@@ -1,37 +1,5 @@
 ﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/.vs/HIS.Solution
-
-################################################################################
-# Build folders - These are essential to ignore
-################################################################################
-
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Ww][Ii][Nn]32/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/           # This ignores all bin folders
-[Oo]bj/           # This ignores all obj folders
-[Ll]og/
-[Ll]ogs/
-
-# More specific patterns for bin/obj
-**/bin/
-**/obj/
-**/[Bb]in/
-**/[Oo]bj/
-
-################################################################################
-# Visual Studio specific files
+# Visual Studio and .NET
 ################################################################################
 
 # User-specific files
@@ -44,15 +12,61 @@ bld/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Visual Studio 2015/2017 cache/options directory
+# Mono auto generated files
+mono_crash.*
+
+################################################################################
+# Build results - CRITICAL to ignore bin and obj folders
+################################################################################
+
+# Build directories
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+
+# Bin and Obj folders at any level
+[Bb]in/
+[Oo]bj/
+**/[Bb]in/
+**/[Oo]bj/
+
+# Logs
+[Ll]og/
+[Ll]ogs/
+
+################################################################################
+# .NET Core and ASP.NET Core
+################################################################################
+
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+################################################################################
+# Visual Studio cache/options
+################################################################################
+
+# Visual Studio 2015/2017/2019/2022 cache/options directory
 .vs/
-# Uncomment if you have tasks that create the project's static files in wwwroot
-#wwwroot/
+.vscode/
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
+################################################################################
 # Files built by Visual Studio
+################################################################################
+
 *_i.c
 *_p.c
 *_h.h
@@ -83,27 +97,10 @@ Generated\ Files/
 *.scc
 
 ################################################################################
-# .NET specific
-################################################################################
-
-# .NET Core
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
-# NuGet Packages
-*.nupkg
-*.snupkg
-**/[Pp]ackages/*
-!**/[Pp]ackages/build/
-*.nuget.props
-*.nuget.targets
-
-################################################################################
 # Test Results
 ################################################################################
 
-# MSTest test Results
+# MSTest
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
@@ -112,32 +109,53 @@ artifacts/
 TestResult.xml
 nunit-*.xml
 
-# Coverage results
+# xUnit
+*.trx
+
+# Code Coverage
+*.coverage
+*.coveragexml
+coverage/
 coverage*.json
 coverage*.xml
 coverage*.info
-*.coverage
-*.coveragexml
+
+# AxoCover
+.axoCover/*
+!.axoCover/settings.json
 
 ################################################################################
-# IDE and Editor files
+# Visual Studio profiler
 ################################################################################
 
-# ReSharper
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Visual Studio Trace Files
+*.e2e
+
+################################################################################
+# ReSharper & JetBrains Rider
+################################################################################
+
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
-
-# JetBrains Rider
-*.sln.iml
 .idea/
+*.sln.iml
 
-# Visual Studio Code
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+################################################################################
+# NuGet Packages
+################################################################################
+
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
 
 ################################################################################
 # Database files
@@ -153,7 +171,7 @@ _ReSharper*/
 *.sqlite3
 
 ################################################################################
-# Environment and Configuration
+# Configuration and Secrets - IMPORTANT FOR SECURITY
 ################################################################################
 
 # Environment variables
@@ -162,7 +180,7 @@ _ReSharper*/
 .env.production
 .env.development
 
-# Application specific settings (keep the templates)
+# Application settings with secrets
 appsettings.*.json
 !appsettings.json
 !appsettings.Development.json
@@ -171,14 +189,38 @@ appsettings.*.json
 # Connection strings and secrets
 connectionstrings.json
 secrets.json
-launchSettings.json
+**/appsettings.local.json
+
+# SSL Certificates and Keys
+*.crt
+*.key
+*.p12
+*.pem
+*.pfx
+*.cer
+
+# Azure publish profiles
+*.pubxml
+*.publishproj
+PublishScripts/
 
 ################################################################################
 # Docker
 ################################################################################
 
-.dockerignore
+# Docker override files
 docker-compose.override.yml
+docker-compose.local.yml
+.dockerignore
+
+################################################################################
+# Entity Framework
+################################################################################
+
+# Keep migration files but you can optionally ignore specific ones
+# Uncomment if you don't want to track migrations
+# **/Migrations/*.cs
+# !**/Migrations/*_Initial.cs
 
 ################################################################################
 # OS generated files
@@ -189,9 +231,8 @@ Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
-*.tmp
-*.temp
-Desktop.ini
+[Dd]esktop.ini
+$RECYCLE.BIN/
 
 # macOS
 .DS_Store
@@ -199,16 +240,52 @@ Desktop.ini
 ._*
 .Spotlight-V100
 .Trashes
+.AppleDouble
+.LSOverride
 
 # Linux
 *~
+.directory
+.Trash-*
+
+################################################################################
+# IDE and Editor files
+################################################################################
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Visual Studio Code - Local History
+.history/
+
+################################################################################
+# Node.js (if you have frontend)
+################################################################################
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
 
 ################################################################################
 # Logs and temporary files
 ################################################################################
 
-*.log
 logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
 *.pid
 *.seed
 *.pid.lock
@@ -216,35 +293,56 @@ logs/
 # Temporary folders
 tmp/
 temp/
+.temp/
 
 ################################################################################
-# SSL and Security
+# Application specific
 ################################################################################
 
-*.crt
-*.key
-*.p12
-*.pem
-*.pfx
+# Static files (if auto-generated)
+wwwroot/dist/
+wwwroot/lib/
+wwwroot/css/*.min.css
+wwwroot/js/*.min.js
+
+# Reports
+reports/
+*.report
+
+# Backup files
+*.bak
+*.backup
+*.[Bb]ackup
 
 ################################################################################
-# Entity Framework
+# Azure specific (if deploying to Azure)
 ################################################################################
 
-# Keep migration files but ignore temp EF files
-**/Migrations/*.designer.cs
-**/Migrations/*_*.cs
-!**/Migrations/[0-9]*_*.cs
+*.azurePubxml
+csx/
+*.build.csdef
+ecf/
+rcf/
+AppPackages/
+BundleArtifacts/
 
 ################################################################################
-# Additional development files
+# Special files to keep (overrides)
 ################################################################################
 
-# Benchmark Results
-BenchmarkDotNet.Artifacts/
+# Force include certain files even if they match patterns above
+!.gitkeep
+!.gitattributes
 
-# Azure
-PublishScripts/
+################################################################################
+# Project specific exclusions
+################################################################################
 
-# Package managers
-node_modules/
+# HIS specific files
+*.old
+*.orig
+*.bkp
+
+# Development only files
+**/TestData/
+**/SampleData/
