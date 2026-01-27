@@ -1,4 +1,13 @@
 ﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+# Visual Studio folder - DO NOT TRACK
+.vs/
+/.vs/
+**/.vs/
+
+################################################################################
 # Visual Studio and .NET
 ################################################################################
 
@@ -32,6 +41,8 @@ x86/
 bld/
 
 # Bin and Obj folders at any level
+bin/    
+Obj/
 [Bb]in/
 [Oo]bj/
 **/[Bb]in/
@@ -211,7 +222,6 @@ PublishScripts/
 # Docker override files
 docker-compose.override.yml
 docker-compose.local.yml
-.dockerignore
 
 ################################################################################
 # Entity Framework
@@ -346,3 +356,29 @@ BundleArtifacts/
 # Development only files
 **/TestData/
 **/SampleData/
+
+################################################################################
+# Explicit project bin/obj exclusions (redundant but explicit)
+################################################################################
+
+# API Project
+src/HIS.Api/bin/
+src/HIS.Api/obj/
+
+# Application Layer
+src/HIS.Application/bin/
+src/HIS.Application/obj/
+
+# Domain Layer
+src/HIS.Domain/bin/
+src/HIS.Domain/obj/
+
+# Infrastructure Layer
+src/HIS.Infrastructure/bin/
+src/HIS.Infrastructure/obj/
+
+# Test Projects
+tests/HIS.UnitTests/bin/
+tests/HIS.UnitTests/obj/
+tests/HIS.IntegrationTests/bin/
+tests/HIS.IntegrationTests/obj/
