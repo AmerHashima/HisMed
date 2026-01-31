@@ -21,21 +21,26 @@ public class GetPatientListHandler : IRequestHandler<GetPatientListQuery, IEnume
     {
         IEnumerable<Domain.Entities.Patient> patients;
 
+        // Priority-based filtering
         if (!string.IsNullOrEmpty(request.SearchTerm))
         {
             patients = await _repository.SearchPatientsAsync(request.SearchTerm, cancellationToken);
         }
-        else if (request.Gender.HasValue)
+        else if (request.BranchId.HasValue)
         {
-            patients = await _repository.GetPatientsByGenderAsync(request.Gender.Value, cancellationToken);
+            patients = await _repository.GetPatientsByBranchAsync(request.BranchId.Value, cancellationToken);
         }
-        else if (!string.IsNullOrEmpty(request.BloodGroup))
+        else if (request.GenderLookupId.HasValue)
         {
-            patients = await _repository.GetPatientsByBloodGroupAsync(request.BloodGroup, cancellationToken);
+            patients = await _repository.GetPatientsByGenderAsync(request.GenderLookupId.Value, cancellationToken);
         }
-        else if (!string.IsNullOrEmpty(request.Nationality))
+        else if (request.BloodGroupLookupId.HasValue)
         {
-            patients = await _repository.GetPatientsByNationalityAsync(request.Nationality, cancellationToken);
+            patients = await _repository.GetPatientsByBloodGroupAsync(request.BloodGroupLookupId.Value, cancellationToken);
+        }
+        else if (request.NationalityLookupId.HasValue)
+        {
+            patients = await _repository.GetPatientsByNationalityAsync(request.NationalityLookupId.Value, cancellationToken);
         }
         else if (!request.IncludeInactive)
         {
@@ -46,6 +51,11 @@ public class GetPatientListHandler : IRequestHandler<GetPatientListQuery, IEnume
             patients = await _repository.GetAllAsync(cancellationToken);
         }
 
-        return _mapper.Map<IEnumerable<PatientDto>>(patients);
+        // Apply pagination
+        var pagedPatients = patients
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize);
+
+        return _mapper.Map<IEnumerable<PatientDto>>(pagedPatients);
     }
 }

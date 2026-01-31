@@ -8,11 +8,14 @@ namespace HIS.Domain.Entities;
 public class AppLookupDetail : BaseEntity
 {
     [Required]
-    public Guid LookupMasterID { get; set; }
+    public Guid MasterID { get; set; }
+
+    [ForeignKey(nameof(MasterID))]
+    public virtual AppLookupMaster Master { get; set; } = null!;
 
     [Required]
     [MaxLength(50)]
-    public string ValueCode { get; set; } = string.Empty; // e.g. M, F, SINGLE
+    public string ValueCode { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(100)]
@@ -22,11 +25,13 @@ public class AppLookupDetail : BaseEntity
     [MaxLength(100)]
     public string ValueNameEn { get; set; } = string.Empty;
 
-    public int SortOrder { get; set; } = 1;
+    public int SortOrder { get; set; }
 
-    public bool IsDefault { get; set; } = false;
+    public bool IsDefault { get; set; }
 
-    // Navigation Properties
-    [ForeignKey(nameof(LookupMasterID))]
-    public virtual AppLookupMaster LookupMaster { get; set; } = null!;
+    public bool IsActive { get; set; } = true;
+
+    // DO NOT add CreatedByUser or UpdatedByUser navigation properties
+    // This causes EF Core relationship ambiguity issues
+ 
 }

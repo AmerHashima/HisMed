@@ -1,6 +1,6 @@
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
 using MediatR;
 
-namespace HIS.Application.Commands.SystemUser;
+namespace HIS.Application.Commands.SystemUserSpace;
 
 public record UpdateSystemUserCommand(UpdateSystemUserDto SystemUser) : IRequest<SystemUserDto>;

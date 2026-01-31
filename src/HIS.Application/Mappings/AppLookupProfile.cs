@@ -20,13 +20,13 @@ public class AppLookupProfile : Profile
 
         // AppLookupDetail mappings
         CreateMap<AppLookupDetail, AppLookupDetailDto>()
-            .ForMember(dest => dest.MasterLookupCode, opt => opt.MapFrom(src => src.LookupMaster.LookupCode))
+            .ForMember(dest => dest.MasterLookupCode, opt => opt.MapFrom(src => src.Master.LookupCode))
             .ReverseMap();
 
         CreateMap<CreateAppLookupDetailDto, AppLookupDetail>()
             .ForMember(dest => dest.Oid, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
-            .ForMember(dest => dest.LookupMaster, opt => opt.Ignore());
+            .ForMember(dest => dest.Master    , opt => opt.Ignore());
     }
 }

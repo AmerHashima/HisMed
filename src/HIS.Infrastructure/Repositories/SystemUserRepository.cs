@@ -56,10 +56,10 @@ public class SystemUserRepository : BaseRepository<SystemUser>, ISystemUserRepos
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<SystemUser>> GetUsersByRoleAsync(int roleId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<SystemUser>> GetUsersByRoleAsync(Guid roleId, CancellationToken cancellationToken = default)
     {
         return await _context.SystemUsers
-            .Where(x => !x.IsDeleted && x.RoleID == roleId)
+            .Where(x => !x.IsDeleted && x.RoleId == roleId)
             .ToListAsync(cancellationToken);
     }
 }

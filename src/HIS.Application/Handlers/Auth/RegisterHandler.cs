@@ -1,7 +1,7 @@
 using AutoMapper;
 using HIS.Application.Commands.Auth;
 using HIS.Application.DTOs.Auth;
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
 using HIS.Application.Interfaces;
 using HIS.Domain.Entities;
 using HIS.Domain.Interfaces;
@@ -25,69 +25,61 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, AuthResponseDto>
 
     public async Task<AuthResponseDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        try
+        var dto = request.RegisterDto;
+
+        // Check if username is unique
+        if (!await _userRepository.IsUsernameUniqueAsync(dto.Username, cancellationToken: cancellationToken))
         {
-            var dto = request.RegisterDto;
-
-            // Check if username is unique
-            if (!await _userRepository.IsUsernameUniqueAsync(dto.Username, cancellationToken: cancellationToken))
-            {
-                throw new InvalidOperationException($"Username '{dto.Username}' is already taken.");
-            }
-
-            // Check if email is unique (if provided)
-            if (!string.IsNullOrEmpty(dto.Email))
-            {
-                if (!await _userRepository.IsEmailUniqueAsync(dto.Email, cancellationToken: cancellationToken))
-                {
-                    throw new InvalidOperationException($"Email '{dto.Email}' is already in use.");
-                }
-            }
-
-            // Hash password
-            var (hashedPassword, salt) = HashPassword(dto.Password);
-
-            // Create user
-            var user = new Domain.Entities.SystemUser
-            {
-                Username = dto.Username,
-                PasswordHash = hashedPassword,
-                PasswordSalt = salt,
-                Email = dto.Email,
-                Mobile = dto.Mobile,
-                FirstName = dto.FirstName,
-                MiddleName = dto.MiddleName,
-                LastName = dto.LastName,
-                FullName = dto.FullName,
-                //Gender = dto.Gender,
-                BirthDate = dto.BirthDate,
-                RoleID = dto.RoleID,
-                IsActive = true,
-                TwoFactorEnabled = false,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            var createdUser = await _userRepository.AddAsync(user, cancellationToken);
-
-            // Generate tokens
-            var token = _jwtService.GenerateToken(createdUser);
-            var refreshToken = _jwtService.GenerateRefreshToken();
-
-            var userDto = _mapper.Map<SystemUserDto>(createdUser);
-
-            return new AuthResponseDto
-            {
-                Token = token,
-                RefreshToken = refreshToken,
-                Expires = DateTime.UtcNow.AddMinutes(60),
-                User = userDto
-            };
+            throw new InvalidOperationException($"Username '{dto.Username}' is already taken.");
         }
-        catch (Exception ex)
+
+        // Check if email is unique (if provided)
+        if (!string.IsNullOrEmpty(dto.Email))
         {
-            // Log exception (logging mechanism not shown here)
-            throw new ApplicationException("An error occurred during registration.", ex);
+            if (!await _userRepository.IsEmailUniqueAsync(dto.Email, cancellationToken: cancellationToken))
+            {
+                throw new InvalidOperationException($"Email '{dto.Email}' is already in use.");
+            }
         }
+
+        // Hash password
+        var (hashedPassword, salt) = HashPassword(dto.Password);
+
+        // Create user
+        var user = new SystemUser
+        {
+            Username = dto.Username,
+            PasswordHash = hashedPassword,
+            PasswordSalt = salt,
+            Email = dto.Email,
+            Mobile = dto.Mobile,
+            FirstName = dto.FirstName,
+            MiddleName = dto.MiddleName,
+            LastName = dto.LastName,
+            FullName = $"{dto.FirstName} {dto.MiddleName} {dto.LastName}".Trim().Replace("  ", " "),
+         //   GenderLookupId = dto.GenderLookupId, // Fixed: Use GenderLookupId (Guid)
+            BirthDate = dto.BirthDate,
+          RoleId = dto.RoleId, // Fixed: Use RoleId (Guid)
+            IsActive = true,
+            TwoFactorEnabled = false,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var createdUser = await _userRepository.AddAsync(user, cancellationToken);
+
+        // Generate tokens
+        var token = _jwtService.GenerateToken(createdUser);
+        var refreshToken = _jwtService.GenerateRefreshToken();
+
+        var userDto = _mapper.Map<SystemUserDto>(createdUser);
+
+        return new AuthResponseDto
+        {
+            Token = token,
+            RefreshToken = refreshToken,
+            Expires = DateTime.UtcNow.AddMinutes(60),
+            User = userDto
+        };
     }
 
     private static (string hashedPassword, string salt) HashPassword(string password)

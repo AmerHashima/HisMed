@@ -1,12 +1,11 @@
 using AutoMapper;
-using HIS.Application.Commands.SystemUser;
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.Commands.SystemUserSpace;
+using HIS.Application.DTOs.SystemUserSpace;
 using HIS.Domain.Interfaces;
 using MediatR;
 using System.Security.Cryptography;
-using System.Text;
 
-namespace HIS.Application.Handlers.SystemUser;
+namespace HIS.Application.Handlers.SystemUserSpace;
 
 public class CreateSystemUserHandler : IRequestHandler<CreateSystemUserCommand, SystemUserDto>
 {
@@ -42,7 +41,7 @@ public class CreateSystemUserHandler : IRequestHandler<CreateSystemUserCommand, 
         var user = _mapper.Map<Domain.Entities.SystemUser>(request.SystemUser);
         user.PasswordHash = hashedPassword;
         user.PasswordSalt = salt;
-        user.FullName = $"{user.FirstName} {user.MiddleName} {user.LastName}".Trim();
+        user.FullName = $"{user.FirstName} {user.MiddleName} {user.LastName}".Trim().Replace("  ", " ");
 
         var createdUser = await _repository.AddAsync(user, cancellationToken);
         return _mapper.Map<SystemUserDto>(createdUser);

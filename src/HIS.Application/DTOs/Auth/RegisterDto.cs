@@ -34,13 +34,12 @@ public class RegisterDto
     [MaxLength(50)]
     public string LastName { get; set; } = string.Empty;
 
-    [MaxLength(1)]
-    public string Gender { get; set; }
+    public Guid? Gender { get; set; }
     public string FullName => string.IsNullOrEmpty(MiddleName)
         ? $"{FirstName} {LastName}".Trim()
         : $"{FirstName} {MiddleName} {LastName}".Trim();
 
     public DateOnly? BirthDate { get; set; }
 
-    public int RoleID { get; set; } = 1; // Default role
+    public Guid RoleId { get; set; }  // Default role
 }

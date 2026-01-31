@@ -24,8 +24,8 @@ public static class LookupSeeder
 
             var genderDetails = new List<AppLookupDetail>
             {
-                new() { LookupMasterID = genderMaster.Oid, ValueCode = "M", ValueNameAr = "ذكر", ValueNameEn = "Male", SortOrder = 1 },
-                new() { LookupMasterID = genderMaster.Oid, ValueCode = "F", ValueNameAr = "أنثى", ValueNameEn = "Female", SortOrder = 2 }
+                new() { MasterID = genderMaster.Oid, ValueCode = "M", ValueNameAr = "ذكر", ValueNameEn = "Male", SortOrder = 1 },
+                new() { MasterID = genderMaster.Oid, ValueCode = "F", ValueNameAr = "أنثى", ValueNameEn = "Female", SortOrder = 2 }
             };
 
             context.AppLookupDetails.AddRange(genderDetails);
@@ -48,10 +48,10 @@ public static class LookupSeeder
 
             var maritalDetails = new List<AppLookupDetail>
             {
-                new() { LookupMasterID = maritalMaster.Oid, ValueCode = "SINGLE", ValueNameAr = "أعزب", ValueNameEn = "Single", SortOrder = 1, IsDefault = true },
-                new() { LookupMasterID = maritalMaster.Oid, ValueCode = "MARRIED", ValueNameAr = "متزوج", ValueNameEn = "Married", SortOrder = 2 },
-                new() { LookupMasterID = maritalMaster.Oid, ValueCode = "DIVORCED", ValueNameAr = "مطلق", ValueNameEn = "Divorced", SortOrder = 3 },
-                new() { LookupMasterID = maritalMaster.Oid, ValueCode = "WIDOWED", ValueNameAr = "أرمل", ValueNameEn = "Widowed", SortOrder = 4 }
+                new() { MasterID = maritalMaster.Oid, ValueCode = "SINGLE", ValueNameAr = "أعزب", ValueNameEn = "Single", SortOrder = 1, IsDefault = true },
+                new() { MasterID = maritalMaster.Oid, ValueCode = "MARRIED", ValueNameAr = "متزوج", ValueNameEn = "Married", SortOrder = 2 },
+                new() { MasterID = maritalMaster.Oid, ValueCode = "DIVORCED", ValueNameAr = "مطلق", ValueNameEn = "Divorced", SortOrder = 3 },
+                new() { MasterID = maritalMaster.Oid, ValueCode = "WIDOWED", ValueNameAr = "أرمل", ValueNameEn = "Widowed", SortOrder = 4 }
             };
 
             context.AppLookupDetails.AddRange(maritalDetails);

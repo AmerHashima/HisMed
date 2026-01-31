@@ -1,7 +1,7 @@
-using AutoMapper;
+ using AutoMapper;
 using HIS.Application.Commands.Auth;
 using HIS.Application.DTOs.Auth;
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
 using HIS.Application.Interfaces;
 using HIS.Domain.Interfaces;
 using MediatR;

@@ -6,7 +6,7 @@ using HIS.Application;
 using HIS.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models; // This should work with correct package version
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,55 +34,96 @@ try
     {
         options.AddPolicy("AllowAll", policy =>
         {
-            policy.AllowAnyOrigin()      // Allow requests from any origin/region
-                  .AllowAnyMethod()      // Allow any HTTP method
-                  .AllowAnyHeader();     // Allow any headers
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
         });
     });
 
     // --------------------------
-    // Configure JWT Authentication
+    // Configure JWT Authentication with better error handling
     // --------------------------
     var jwtSettings = builder.Configuration.GetSection("JwtSettings");
     var secretKey = jwtSettings["SecretKey"];
+    var issuer = jwtSettings["Issuer"];
+    var audience = jwtSettings["Audience"];
 
+    // Validate JWT configuration
     if (string.IsNullOrEmpty(secretKey))
     {
-        throw new InvalidOperationException("JWT SecretKey is not configured.");
+        throw new InvalidOperationException("JWT SecretKey is not configured in appsettings.json");
     }
+    if (string.IsNullOrEmpty(issuer))
+    {
+        throw new InvalidOperationException("JWT Issuer is not configured in appsettings.json");
+    }
+    if (string.IsNullOrEmpty(audience))
+    {
+        throw new InvalidOperationException("JWT Audience is not configured in appsettings.json");
+    }
+
+    Console.WriteLine($"JWT Configuration - Issuer: {issuer}, Audience: {audience}, KeyLength: {secretKey.Length}");
 
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     })
     .AddJwtBearer(options =>
     {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false; // Set to true in production
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
+            ValidIssuer = issuer,
+            ValidAudience = audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero, // No tolerance for expiration
+            // Additional validation
+            RequireExpirationTime = true,
+            RequireSignedTokens = true
         };
 
-        // Add events for better error handling
+        // Enhanced events for better debugging
         options.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = context =>
             {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogError("Authentication failed: {Error}", context.Exception.Message);
+                
                 if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                 {
                     context.Response.Headers.Append("Token-Expired", "true");
+                    logger.LogWarning("Token expired at {Time}", ((SecurityTokenExpiredException)context.Exception).Expires);
                 }
+                else if (context.Exception.GetType() == typeof(SecurityTokenInvalidSignatureException))
+                {
+                    logger.LogError("Invalid token signature - Secret key mismatch!");
+                }
+                else if (context.Exception.GetType() == typeof(SecurityTokenInvalidIssuerException))
+                {
+                    logger.LogError("Invalid issuer - Expected: {Expected}, Got: {Actual}", 
+                        issuer, ((SecurityTokenInvalidIssuerException)context.Exception).InvalidIssuer);
+                }
+                else if (context.Exception.GetType() == typeof(SecurityTokenInvalidAudienceException))
+                {
+                    logger.LogError("Invalid audience - Expected: {Expected}", audience);
+                }
+                
                 return Task.CompletedTask;
             },
             OnChallenge = context =>
             {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("JWT Challenge triggered - Path: {Path}, Error: {Error}", 
+                    context.Request.Path, context.Error ?? "No error specified");
+                
                 context.HandleResponse();
                 context.Response.StatusCode = 401;
                 context.Response.ContentType = "application/json";
@@ -90,9 +131,28 @@ try
                 {
                     success = false,
                     message = "You are not authorized to access this resource",
+                    error = context.Error ?? "authentication_failed",
+                    errorDescription = context.ErrorDescription ?? "JWT token validation failed",
                     data = (object?)null
                 });
                 return context.Response.WriteAsync(result);
+            },
+            OnTokenValidated = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                var userName = context.Principal?.Identity?.Name ?? "Unknown";
+                logger.LogInformation("Token validated successfully for user: {UserName}", userName);
+                return Task.CompletedTask;
+            },
+            OnMessageReceived = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                var token = context.Request.Headers["Authorization"].ToString();
+                if (!string.IsNullOrEmpty(token))
+                {
+                    logger.LogInformation("Received token: {Token}", token.Substring(0, Math.Min(50, token.Length)) + "...");
+                }
+                return Task.CompletedTask;
             }
         };
     });
@@ -225,6 +285,8 @@ try
     logger.LogInformation("=================================================");
     logger.LogInformation("HIS API is starting up...");
     logger.LogInformation("Environment: {Environment}", app.Environment.EnvironmentName);
+    logger.LogInformation("JWT Issuer: {Issuer}", issuer);
+    logger.LogInformation("JWT Audience: {Audience}", audience);
     logger.LogInformation("CORS Policy: AllowAll - Accepting requests from any origin");
     logger.LogInformation("Swagger UI: /swagger");
     logger.LogInformation("Health Check: /api/health");

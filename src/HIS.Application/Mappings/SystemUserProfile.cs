@@ -1,5 +1,5 @@
 using AutoMapper;
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
 using HIS.Domain.Entities;
 
 namespace HIS.Application.Mappings;

@@ -7,7 +7,7 @@ public class ApiResponse<T>
     public bool Success { get; set; }
     public string? Message { get; set; }
     public T? Data { get; set; }
-    public List<string>? Errors { get; set; }
+    public IDictionary<string, string[]>? Errors { get; set; } // Fixed: Changed from List<string> to IDictionary
     public string? InnerException { get; set; }
     public int StatusCode { get; set; }
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
@@ -24,8 +24,30 @@ public class ApiResponse<T>
         };
     }
 
-    public static ApiResponse<T> ErrorResult(string message, List<string>? errors = null, int statusCode = 400, string? innerException = null)
+    public static ApiResponse<T> ErrorResult(string message, IDictionary<string, string[]>? errors = null, int statusCode = 400, string? innerException = null)
     {
+        return new ApiResponse<T>
+        {
+            Success = false,
+            Message = message,
+            Errors = errors,
+            StatusCode = statusCode,
+            InnerException = innerException
+        };
+    }
+
+    // Overload for simple error messages
+    public static ApiResponse<T> ErrorResult(string message, List<string>? errorMessages = null, int statusCode = 400, string? innerException = null)
+    {
+        IDictionary<string, string[]>? errors = null;
+        if (errorMessages != null && errorMessages.Any())
+        {
+            errors = new Dictionary<string, string[]>
+            {
+                { "General", errorMessages.ToArray() }
+            };
+        }
+
         return new ApiResponse<T>
         {
             Success = false,
@@ -38,12 +60,23 @@ public class ApiResponse<T>
 
     public static ApiResponse<T> ErrorResult(Exception exception, int statusCode = 500)
     {
-        var errors = new List<string> { exception.Message };
-        
-        // Handle specific exception types
-        if (exception is ReflectionTypeLoadException reflectionEx)
+        var errors = new Dictionary<string, string[]>
         {
-            errors.AddRange(reflectionEx.LoaderExceptions?.Select(ex => ex?.Message ?? "Unknown loader exception") ?? Array.Empty<string>());
+            { "Exception", new[] { exception.Message } }
+        };
+
+        // Handle specific exception types
+        if (exception is ReflectionTypeLoadException reflectionEx && reflectionEx.LoaderExceptions != null)
+        {
+            var loaderErrors = reflectionEx.LoaderExceptions
+                .Where(ex => ex != null)
+                .Select(ex => ex!.Message)
+                .ToArray();
+
+            if (loaderErrors.Any())
+            {
+                errors["LoaderExceptions"] = loaderErrors;
+            }
         }
 
         return new ApiResponse<T>
@@ -69,8 +102,30 @@ public class ApiResponse : ApiResponse<object>
         };
     }
 
-    public new static ApiResponse ErrorResult(string message, List<string>? errors = null, int statusCode = 400, string? innerException = null)
+    public new static ApiResponse ErrorResult(string message, IDictionary<string, string[]>? errors = null, int statusCode = 400, string? innerException = null)
     {
+        return new ApiResponse
+        {
+            Success = false,
+            Message = message,
+            Errors = errors,
+            StatusCode = statusCode,
+            InnerException = innerException
+        };
+    }
+
+    // Overload for simple error messages
+    public static ApiResponse ErrorResult(string message, List<string>? errorMessages, int statusCode = 400, string? innerException = null)
+    {
+        IDictionary<string, string[]>? errors = null;
+        if (errorMessages != null && errorMessages.Any())
+        {
+            errors = new Dictionary<string, string[]>
+            {
+                { "General", errorMessages.ToArray() }
+            };
+        }
+
         return new ApiResponse
         {
             Success = false,
@@ -83,11 +138,22 @@ public class ApiResponse : ApiResponse<object>
 
     public new static ApiResponse ErrorResult(Exception exception, int statusCode = 500)
     {
-        var errors = new List<string> { exception.Message };
-        
-        if (exception is ReflectionTypeLoadException reflectionEx)
+        var errors = new Dictionary<string, string[]>
         {
-            errors.AddRange(reflectionEx.LoaderExceptions?.Select(ex => ex?.Message ?? "Unknown loader exception") ?? Array.Empty<string>());
+            { "Exception", new[] { exception.Message } }
+        };
+
+        if (exception is ReflectionTypeLoadException reflectionEx && reflectionEx.LoaderExceptions != null)
+        {
+            var loaderErrors = reflectionEx.LoaderExceptions
+                .Where(ex => ex != null)
+                .Select(ex => ex!.Message)
+                .ToArray();
+
+            if (loaderErrors.Any())
+            {
+                errors["LoaderExceptions"] = loaderErrors;
+            }
         }
 
         return new ApiResponse

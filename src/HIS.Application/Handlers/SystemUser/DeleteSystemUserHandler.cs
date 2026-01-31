@@ -1,8 +1,8 @@
-using HIS.Application.Commands.SystemUser;
+using HIS.Application.Commands.SystemUserSpace;
 using HIS.Domain.Interfaces;
 using MediatR;
 
-namespace HIS.Application.Handlers.SystemUser;
+namespace HIS.Application.Handlers.SystemUserSpace;
 
 public class DeleteSystemUserHandler : IRequestHandler<DeleteSystemUserCommand, bool>
 {

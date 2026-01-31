@@ -1,12 +1,12 @@
 using AutoMapper;
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
 using HIS.Application.DTOs.Common;
-using HIS.Application.Queries.SystemUser;
+using HIS.Application.Queries.SystemUserSpace;
 using HIS.Application.Services;
 using HIS.Domain.Interfaces;
 using MediatR;
 
-namespace HIS.Application.Handlers.SystemUser;
+namespace HIS.Application.Handlers.SystemUserSpace;
 
 public class GetSystemUserDataHandler : IRequestHandler<GetSystemUserDataQuery, PagedResult<SystemUserDto>>
 {

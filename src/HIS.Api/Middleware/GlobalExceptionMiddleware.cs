@@ -1,6 +1,6 @@
 using HIS.Api.Models;
+using HIS.Application.Common.Exceptions;
 using System.Net;
-using System.Reflection;
 using System.Text.Json;
 
 namespace HIS.Api.Middleware;
@@ -22,51 +22,89 @@ public class GlobalExceptionMiddleware
         {
             await _next(context);
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
-            _logger.LogError(exception, "An unhandled exception occurred: {Message}", exception.Message);
-            await HandleExceptionAsync(context, exception);
+            _logger.LogError(ex, "An unhandled exception occurred: {Message}", ex.Message);
+            await HandleExceptionAsync(context, ex);
         }
     }
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        
+
         var response = exception switch
         {
-            KeyNotFoundException => ApiResponse.ErrorResult(
-                exception.Message, 
-                statusCode: (int)HttpStatusCode.NotFound),
-            
-            InvalidOperationException => ApiResponse.ErrorResult(
-                exception.Message, 
-                statusCode: (int)HttpStatusCode.BadRequest),
-            
-            ArgumentException => ApiResponse.ErrorResult(
-                exception.Message, 
-                statusCode: (int)HttpStatusCode.BadRequest),
-            
-            UnauthorizedAccessException => ApiResponse.ErrorResult(
-                "Unauthorized access", 
-                statusCode: (int)HttpStatusCode.Unauthorized),
-            
-            ReflectionTypeLoadException reflectionEx => ApiResponse.ErrorResult(
-                "Application startup error - type loading failed",
-                reflectionEx.LoaderExceptions?.Select(ex => ex?.Message ?? "Unknown loader exception").ToList(),
-                (int)HttpStatusCode.InternalServerError,
-                reflectionEx.InnerException?.Message),
-            
-            _ => ApiResponse.ErrorResult(
-                "An internal server error occurred",
-                new List<string> { exception.Message },
-                (int)HttpStatusCode.InternalServerError,
-                exception.InnerException?.Message)
+            HIS.Application.Common.Exceptions.ValidationException validationEx => new ApiResponse
+            {
+                Success = false,
+                Message = "Validation failed",
+                Errors = validationEx.Errors,
+                Data = null,
+                StatusCode = (int)HttpStatusCode.BadRequest
+            },
+            BusinessValidationException businessEx => new ApiResponse
+            {
+                Success = false,
+                Message = businessEx.Message,
+                Errors = businessEx.PropertyName != null
+                    ? new Dictionary<string, string[]> { { businessEx.PropertyName, new[] { businessEx.ErrorMessage ?? businessEx.Message } } }
+                    : null,
+                Data = null,
+                StatusCode = (int)HttpStatusCode.BadRequest
+            },
+            NotFoundException notFoundEx => new ApiResponse
+            {
+                Success = false,
+                Message = notFoundEx.Message,
+                Data = null,
+                StatusCode = (int)HttpStatusCode.NotFound
+            },
+            UnauthorizedException unauthorizedEx => new ApiResponse
+            {
+                Success = false,
+                Message = unauthorizedEx.Message,
+                Data = null,
+                StatusCode = (int)HttpStatusCode.Unauthorized
+            },
+            ForbiddenException forbiddenEx => new ApiResponse
+            {
+                Success = false,
+                Message = forbiddenEx.Message,
+                Data = null,
+                StatusCode = (int)HttpStatusCode.Forbidden
+            },
+            UnauthorizedAccessException => new ApiResponse
+            {
+                Success = false,
+                Message = "Unauthorized access",
+                Data = null,
+                StatusCode = (int)HttpStatusCode.Unauthorized
+            },
+            InvalidOperationException invalidOpEx => new ApiResponse
+            {
+                Success = false,
+                Message = invalidOpEx.Message,
+                Data = null,
+                StatusCode = (int)HttpStatusCode.BadRequest
+            },
+            KeyNotFoundException keyNotFoundEx => new ApiResponse
+            {
+                Success = false,
+                Message = keyNotFoundEx.Message,
+                Data = null,
+                StatusCode = (int)HttpStatusCode.NotFound
+            },
+            _ => new ApiResponse
+            {
+                Success = false,
+                Message = "An internal server error occurred",
+                Data = null,
+                StatusCode = (int)HttpStatusCode.InternalServerError
+            }
         };
 
-        response.TraceId = context.TraceIdentifier;
         context.Response.StatusCode = response.StatusCode;
-
         var jsonResponse = JsonSerializer.Serialize(response, new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase

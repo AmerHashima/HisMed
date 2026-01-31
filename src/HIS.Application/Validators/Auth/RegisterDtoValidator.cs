@@ -70,9 +70,9 @@ public class RegisterDtoValidator : AbstractValidator<RegisterDto>
             .WithMessage("Birth date must be in the past")
             .When(x => x.BirthDate.HasValue);
 
-        RuleFor(x => x.RoleID)
-            .GreaterThan(0)
-            .WithMessage("Role ID must be a positive number");
+        //RuleFor(x => x.RoleID)
+        //    .GreaterThan(0)
+        //    .WithMessage("Role ID must be a positive number");
     }
 
     private static bool BeValidGender(char? gender)

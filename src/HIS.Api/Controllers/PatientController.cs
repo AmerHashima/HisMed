@@ -43,11 +43,12 @@ public class PatientController : BaseApiController
     /// <summary>
     /// Get all patients with optional filtering
     /// </summary>
-    /// <param name="searchTerm">Search term for patient name, MRN, National ID, or mobile</param>
+    /// <param name="searchTerm">Search term for patient name, MRN, identity number, or mobile</param>
     /// <param name="includeInactive">Include inactive patients</param>
-    /// <param name="gender">Filter by gender (M/F)</param>
-    /// <param name="bloodGroup">Filter by blood group</param>
-    /// <param name="nationality">Filter by nationality</param>
+    /// <param name="genderLookupId">Filter by gender lookup ID</param>
+    /// <param name="bloodGroupLookupId">Filter by blood group lookup ID</param>
+    /// <param name="nationalityLookupId">Filter by nationality lookup ID</param>
+    /// <param name="branchId">Filter by branch ID</param>
     /// <param name="page">Page number</param>
     /// <param name="pageSize">Page size</param>
     /// <returns>List of patients</returns>
@@ -55,13 +56,23 @@ public class PatientController : BaseApiController
     public async Task<ActionResult<ApiResponse<IEnumerable<PatientDto>>>> GetPatients(
         [FromQuery] string? searchTerm = null,
         [FromQuery] bool includeInactive = false,
-        [FromQuery] char? gender = null,
-        [FromQuery] string? bloodGroup = null,
-        [FromQuery] string? nationality = null,
+        [FromQuery] Guid? genderLookupId = null,
+        [FromQuery] Guid? bloodGroupLookupId = null,
+        [FromQuery] Guid? nationalityLookupId = null,
+        [FromQuery] Guid? branchId = null,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 50)
     {
-        var query = new GetPatientListQuery(searchTerm, includeInactive, gender, bloodGroup, nationality, page, pageSize);
+        var query = new GetPatientListQuery(
+            searchTerm,
+            includeInactive,
+            genderLookupId,
+            bloodGroupLookupId,
+            nationalityLookupId,
+            branchId,
+            page,
+            pageSize);
+
         var patients = await _mediator.Send(query);
         return SuccessResponse(patients, "Patients retrieved successfully");
     }
@@ -76,10 +87,10 @@ public class PatientController : BaseApiController
     {
         var query = new GetPatientByIdQuery(id);
         var patient = await _mediator.Send(query);
-        
+
         if (patient == null)
             return ErrorResponse<PatientDto>("Patient not found", 404);
-        
+
         return SuccessResponse(patient, "Patient retrieved successfully");
     }
 
@@ -93,12 +104,29 @@ public class PatientController : BaseApiController
     {
         var query = new GetPatientByMRNQuery(mrn);
         var patient = await _mediator.Send(query);
-        
+
         if (patient == null)
             return ErrorResponse<PatientDto>("Patient not found", 404);
-        
+
         return SuccessResponse(patient, "Patient retrieved successfully");
     }
+
+    /// <summary>
+    /// Get patient by identity number
+    /// </summary>
+    /// <param name="identityNumber">Identity number (National ID, Passport, or Iqama)</param>
+    /// <returns>Patient details</returns>
+    //[HttpGet("by-identity/{identityNumber}")]
+    //public async Task<ActionResult<ApiResponse<PatientDto>>> GetPatientByIdentityNumber(string identityNumber)
+    //{
+    //    var query = new GetPatientByIdentityNumberQuery(identityNumber);
+    //    var patient = await _mediator.Send(query);
+
+    //    if (patient == null)
+    //        return ErrorResponse<PatientDto>("Patient not found", 404);
+
+    //    return SuccessResponse(patient, "Patient retrieved successfully");
+    //}
 
     /// <summary>
     /// Create a new patient
@@ -160,10 +188,10 @@ public class PatientController : BaseApiController
         {
             var command = new DeletePatientCommand(id);
             var result = await _mediator.Send(command);
-            
+
             if (!result)
                 return ErrorResponse("Patient not found", 404);
-                
+
             return SuccessResponse("Patient deleted successfully");
         }
         catch (Exception ex)

@@ -1,10 +1,10 @@
 using AutoMapper;
-using HIS.Application.DTOs.SystemUser;
-using HIS.Application.Queries.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
+using HIS.Application.Queries.SystemUserSpace;
 using HIS.Domain.Interfaces;
 using MediatR;
 
-namespace HIS.Application.Handlers.SystemUser;
+namespace HIS.Application.Handlers.SystemUserSpace;
 
 public class GetSystemUserListHandler : IRequestHandler<GetSystemUserListQuery, IEnumerable<SystemUserDto>>
 {
@@ -21,11 +21,7 @@ public class GetSystemUserListHandler : IRequestHandler<GetSystemUserListQuery, 
     {
         IEnumerable<Domain.Entities.SystemUser> users;
 
-        if (request.RoleId.HasValue)
-        {
-            users = await _repository.GetUsersByRoleAsync(request.RoleId.Value, cancellationToken);
-        }
-        else if (!request.IncludeInactive)
+      if (!request.IncludeInactive)
         {
             users = await _repository.GetActiveUsersAsync(cancellationToken);
         }

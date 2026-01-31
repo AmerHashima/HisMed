@@ -1,7 +1,7 @@
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
 using MediatR;
 
-namespace HIS.Application.Queries.SystemUser;
+namespace HIS.Application.Queries.SystemUserSpace;
 
 public record GetSystemUserListQuery(
     bool IncludeInactive = false,

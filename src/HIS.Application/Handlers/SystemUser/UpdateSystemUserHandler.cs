@@ -1,10 +1,10 @@
 using AutoMapper;
-using HIS.Application.Commands.SystemUser;
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.Commands.SystemUserSpace;
+using HIS.Application.DTOs.SystemUserSpace;
 using HIS.Domain.Interfaces;
 using MediatR;
 
-namespace HIS.Application.Handlers.SystemUser;
+namespace HIS.Application.Handlers.SystemUserSpace;
 
 public class UpdateSystemUserHandler : IRequestHandler<UpdateSystemUserCommand, SystemUserDto>
 {
@@ -47,10 +47,10 @@ public class UpdateSystemUserHandler : IRequestHandler<UpdateSystemUserCommand, 
         existingUser.FirstName = request.SystemUser.FirstName;
         existingUser.MiddleName = request.SystemUser.MiddleName;
         existingUser.LastName = request.SystemUser.LastName;
-        existingUser.FullName = $"{request.SystemUser.FirstName} {request.SystemUser.MiddleName} {request.SystemUser.LastName}".Trim();
-        existingUser.Gender = request.SystemUser.Gender;
+        existingUser.FullName = $"{request.SystemUser.FirstName} {request.SystemUser.MiddleName} {request.SystemUser.LastName}".Trim().Replace("  ", " ");
+        existingUser.GenderLookupId = request.SystemUser.GenderLookupId; // Fixed: Use GenderLookupId (Guid)
         existingUser.BirthDate = request.SystemUser.BirthDate;
-        existingUser.RoleID = request.SystemUser.RoleID;
+        existingUser.RoleId = request.SystemUser.RoleId; // Fixed: Use RoleId (Guid) not RoleID (int)
         existingUser.IsActive = request.SystemUser.IsActive;
         existingUser.TwoFactorEnabled = request.SystemUser.TwoFactorEnabled;
         existingUser.UpdatedAt = DateTime.UtcNow;

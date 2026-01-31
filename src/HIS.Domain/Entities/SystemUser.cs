@@ -1,10 +1,10 @@
+using HIS.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using HIS.Domain.Common;
 
 namespace HIS.Domain.Entities;
 
-[Table("Users")]
+[Table("SystemUsers")]
 public class SystemUser : BaseEntity
 {
     [Required]
@@ -36,20 +36,24 @@ public class SystemUser : BaseEntity
     [MaxLength(50)]
     public string LastName { get; set; } = string.Empty;
 
-    //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public string FullName { get;  set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
 
-    [MaxLength(1)]
-    public char? Gender { get; set; }
+    // Foreign Key for Gender
+    public Guid? GenderLookupId { get; set; }
+    [ForeignKey(nameof(GenderLookupId))]
+    public virtual AppLookupDetail? Gender { get; set; }
 
     public DateOnly? BirthDate { get; set; }
 
-    public int RoleID { get; set; }
+    // Foreign Key for Role
+    [Required]
+    public Guid RoleId { get; set; }
+    [ForeignKey(nameof(RoleId))]
+    public virtual Role Role { get; set; } = null!;
 
     public bool IsActive { get; set; } = true;
 
     public DateTime? LastLogin { get; set; }
-
 
     public int FailedLoginCount { get; set; } = 0;
 
@@ -59,6 +63,6 @@ public class SystemUser : BaseEntity
 
     public bool TwoFactorEnabled { get; set; } = false;
 
-
-
+    // Navigation Property
+    public virtual Doctor? DoctorProfile { get; set; }
 }

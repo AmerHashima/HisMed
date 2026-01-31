@@ -1,6 +1,7 @@
-using HIS.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Metrics;
+using HIS.Domain.Common;
 
 namespace HIS.Domain.Entities;
 
@@ -12,15 +13,15 @@ public class Patient : BaseEntity
     [MaxLength(50)]
     public string MRN { get; set; } = string.Empty; // Medical Record Number
 
-    [MaxLength(20)]
-    public string? NationalID { get; set; }
-
-    [MaxLength(20)]
-    public string? PassportNumber { get; set; }
+    // Foreign Key for IdentityType
+    [Required]
+    public Guid IdentityTypeLookupId { get; set; }
+    [ForeignKey(nameof(IdentityTypeLookupId))]
+    public virtual AppLookupDetail IdentityType { get; set; } = null!;
 
     [Required]
     [MaxLength(20)]
-    public string IdentifierType { get; set; } = string.Empty; // NationalID / Passport / Iqama
+    public string IdentityNumber { get; set; } = string.Empty; // Unified identifier
 
     /* ==== Names (Arabic & English) ==== */
     [Required]
@@ -34,6 +35,9 @@ public class Patient : BaseEntity
     [MaxLength(100)]
     public string LastNameAr { get; set; } = string.Empty;
 
+    // Computed property
+    public string FullNameAr { get; set; } = string.Empty;
+
     [Required]
     [MaxLength(100)]
     public string FirstNameEn { get; set; } = string.Empty;
@@ -45,25 +49,33 @@ public class Patient : BaseEntity
     [MaxLength(100)]
     public string LastNameEn { get; set; } = string.Empty;
 
-    // Computed properties - will be configured in EF configuration
-    public string FullNameAr { get; set; } = string.Empty;
+    // Computed property
     public string FullNameEn { get; set; } = string.Empty;
 
     /* ==== Demographics ==== */
+    // Foreign Key for Gender
     [Required]
-    public char Gender { get; set; } // M / F
+    public Guid GenderLookupId { get; set; }
+    [ForeignKey(nameof(GenderLookupId))]
+    public virtual AppLookupDetail Gender { get; set; } = null!;
 
     [Required]
     public DateOnly BirthDate { get; set; }
 
-    [MaxLength(20)]
-    public string? MaritalStatus { get; set; }
+    // Foreign Key for Nationality (nullable)
+    public Guid? NationalityLookupId { get; set; }
+    [ForeignKey(nameof(NationalityLookupId))]
+    public virtual AppLookupDetail? Nationality { get; set; }
 
-    [MaxLength(50)]
-    public string? Nationality { get; set; }
+    // Foreign Key for MaritalStatus (nullable)
+    public Guid? MaritalStatusLookupId { get; set; }
+    [ForeignKey(nameof(MaritalStatusLookupId))]
+    public virtual AppLookupDetail? MaritalStatus { get; set; }
 
-    [MaxLength(5)]
-    public string? BloodGroup { get; set; }
+    // Foreign Key for BloodGroup (nullable)
+    public Guid? BloodGroupLookupId { get; set; }
+    [ForeignKey(nameof(BloodGroupLookupId))]
+    public virtual AppLookupDetail? BloodGroup { get; set; }
 
     /* ==== Contact ==== */
     [Required]
@@ -76,37 +88,11 @@ public class Patient : BaseEntity
     [MaxLength(100)]
     public string? Email { get; set; }
 
-    /* ==== Address ==== */
+    /* ==== Branch ==== */
     [Required]
-    [MaxLength(200)]
-    public string AddressLine1 { get; set; } = string.Empty;
-
-    [MaxLength(200)]
-    public string? AddressLine2 { get; set; }
-
-    [Required]
-    [MaxLength(100)]
-    public string City { get; set; } = string.Empty;
-
-    [MaxLength(100)]
-    public string? State { get; set; }
-
-    [MaxLength(20)]
-    public string? PostalCode { get; set; }
-
-    [Required]
-    [MaxLength(100)]
-    public string Country { get; set; } = string.Empty;
-
-    /* ==== Emergency Contact ==== */
-    [MaxLength(150)]
-    public string? EmergencyName { get; set; }
-
-    [MaxLength(50)]
-    public string? EmergencyRelation { get; set; }
-
-    [MaxLength(20)]
-    public string? EmergencyMobile { get; set; }
+    public Guid BranchId { get; set; }
+    [ForeignKey(nameof(BranchId))]
+    public virtual HospitalBranch Branch { get; set; } = null!;
 
     /* ==== System Fields ==== */
     public bool IsActive { get; set; } = true;
@@ -115,6 +101,8 @@ public class Patient : BaseEntity
     public int Age => DateTime.Today.Year - BirthDate.Year - (DateTime.Today.DayOfYear < BirthDate.DayOfYear ? 1 : 0);
 
     // Navigation Properties
-  //  public virtual ICollection<Appointment>? Appointments { get; set; }
-   // public virtual ICollection<MedicalRecord>? MedicalRecords { get; set; }
+    public virtual ICollection<Appointment>? Appointments { get; set; }
+    public virtual ICollection<Encounter>? Encounters { get; set; }
+
+
 }

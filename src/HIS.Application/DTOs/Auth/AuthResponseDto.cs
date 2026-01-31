@@ -1,4 +1,4 @@
-using HIS.Application.DTOs.SystemUser;
+using HIS.Application.DTOs.SystemUserSpace;
 
 namespace HIS.Application.DTOs.Auth;
 

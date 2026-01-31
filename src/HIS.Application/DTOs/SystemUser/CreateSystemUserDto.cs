@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace HIS.Application.DTOs.SystemUser;
+namespace HIS.Application.DTOs.SystemUserSpace;
 
 public class CreateSystemUserDto
 {
@@ -31,14 +31,12 @@ public class CreateSystemUserDto
     [StringLength(50, ErrorMessage = "Last name cannot exceed 50 characters")]
     public string LastName { get; set; } = string.Empty;
 
-    public char? Gender { get; set; }
-
+    public Guid? GenderLookupId { get; set; }
     public DateOnly? BirthDate { get; set; }
 
-    [Required(ErrorMessage = "Role ID is required")]
-    public int RoleID { get; set; }
+    [Required(ErrorMessage = "Role is required")]
+    public Guid RoleId { get; set; }
 
     public bool IsActive { get; set; } = true;
-
     public bool TwoFactorEnabled { get; set; } = false;
 }

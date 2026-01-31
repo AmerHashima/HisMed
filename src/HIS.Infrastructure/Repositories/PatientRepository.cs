@@ -14,24 +14,36 @@ public class PatientRepository : BaseRepository<Patient>, IPatientRepository
     public async Task<Patient?> GetByMRNAsync(string mrn, CancellationToken cancellationToken = default)
     {
         return await _context.Patients
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
             .FirstOrDefaultAsync(p => p.MRN == mrn && !p.IsDeleted, cancellationToken);
     }
 
-    public async Task<Patient?> GetByNationalIDAsync(string nationalId, CancellationToken cancellationToken = default)
+    public async Task<Patient?> GetByIdentityNumberAsync(string identityNumber, CancellationToken cancellationToken = default)
     {
         return await _context.Patients
-            .FirstOrDefaultAsync(p => p.NationalID == nationalId && !p.IsDeleted, cancellationToken);
-    }
-
-    public async Task<Patient?> GetByPassportNumberAsync(string passportNumber, CancellationToken cancellationToken = default)
-    {
-        return await _context.Patients
-            .FirstOrDefaultAsync(p => p.PassportNumber == passportNumber && !p.IsDeleted, cancellationToken);
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
+            .FirstOrDefaultAsync(p => p.IdentityNumber == identityNumber && !p.IsDeleted, cancellationToken);
     }
 
     public async Task<IEnumerable<Patient>> GetActivePatientsAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Patients
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
             .Where(p => p.IsActive && !p.IsDeleted)
             .OrderBy(p => p.LastNameEn)
             .ThenBy(p => p.FirstNameEn)
@@ -41,16 +53,21 @@ public class PatientRepository : BaseRepository<Patient>, IPatientRepository
     public async Task<IEnumerable<Patient>> SearchPatientsAsync(string searchTerm, CancellationToken cancellationToken = default)
     {
         var search = searchTerm.ToLower();
-        
+
         return await _context.Patients
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
             .Where(p => !p.IsDeleted && (
                 p.FirstNameEn.ToLower().Contains(search) ||
                 p.LastNameEn.ToLower().Contains(search) ||
                 p.FirstNameAr.ToLower().Contains(search) ||
                 p.LastNameAr.ToLower().Contains(search) ||
                 p.MRN.ToLower().Contains(search) ||
-                p.NationalID!.ToLower().Contains(search) ||
-                p.PassportNumber!.ToLower().Contains(search) ||
+                p.IdentityNumber.ToLower().Contains(search) ||
                 p.Mobile.ToLower().Contains(search)))
             .OrderBy(p => p.LastNameEn)
             .ThenBy(p => p.FirstNameEn)
@@ -63,40 +80,67 @@ public class PatientRepository : BaseRepository<Patient>, IPatientRepository
             .AnyAsync(p => p.MRN == mrn && !p.IsDeleted, cancellationToken);
     }
 
-    public async Task<bool> NationalIDExistsAsync(string nationalId, CancellationToken cancellationToken = default)
+    public async Task<bool> IdentityNumberExistsAsync(string identityNumber, CancellationToken cancellationToken = default)
     {
         return await _context.Patients
-            .AnyAsync(p => p.NationalID == nationalId && !p.IsDeleted, cancellationToken);
+            .AnyAsync(p => p.IdentityNumber == identityNumber && !p.IsDeleted, cancellationToken);
     }
 
-    public async Task<bool> PassportNumberExistsAsync(string passportNumber, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Patient>> GetPatientsByGenderAsync(Guid genderLookupId, CancellationToken cancellationToken = default)
     {
         return await _context.Patients
-            .AnyAsync(p => p.PassportNumber == passportNumber && !p.IsDeleted, cancellationToken);
-    }
-
-    public async Task<IEnumerable<Patient>> GetPatientsByGenderAsync(char gender, CancellationToken cancellationToken = default)
-    {
-        return await _context.Patients
-            .Where(p => p.Gender == gender && p.IsActive && !p.IsDeleted)
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
+            .Where(p => p.GenderLookupId == genderLookupId && p.IsActive && !p.IsDeleted)
             .OrderBy(p => p.LastNameEn)
             .ThenBy(p => p.FirstNameEn)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Patient>> GetPatientsByBloodGroupAsync(string bloodGroup, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Patient>> GetPatientsByBloodGroupAsync(Guid bloodGroupLookupId, CancellationToken cancellationToken = default)
     {
         return await _context.Patients
-            .Where(p => p.BloodGroup == bloodGroup && p.IsActive && !p.IsDeleted)
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
+            .Where(p => p.BloodGroupLookupId == bloodGroupLookupId && p.IsActive && !p.IsDeleted)
             .OrderBy(p => p.LastNameEn)
             .ThenBy(p => p.FirstNameEn)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Patient>> GetPatientsByNationalityAsync(string nationality, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Patient>> GetPatientsByNationalityAsync(Guid nationalityLookupId, CancellationToken cancellationToken = default)
     {
         return await _context.Patients
-            .Where(p => p.Nationality == nationality && p.IsActive && !p.IsDeleted)
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
+            .Where(p => p.NationalityLookupId == nationalityLookupId && p.IsActive && !p.IsDeleted)
+            .OrderBy(p => p.LastNameEn)
+            .ThenBy(p => p.FirstNameEn)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Patient>> GetPatientsByBranchAsync(Guid branchId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Patients
+            .Include(p => p.IdentityType)
+            .Include(p => p.Gender)
+            .Include(p => p.Nationality)
+            .Include(p => p.MaritalStatus)
+            .Include(p => p.BloodGroup)
+            .Include(p => p.Branch)
+            .Where(p => p.BranchId == branchId && p.IsActive && !p.IsDeleted)
             .OrderBy(p => p.LastNameEn)
             .ThenBy(p => p.FirstNameEn)
             .ToListAsync(cancellationToken);

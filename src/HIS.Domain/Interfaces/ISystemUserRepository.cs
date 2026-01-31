@@ -10,5 +10,5 @@ public interface ISystemUserRepository : IBaseRepository<SystemUser>
     Task<bool> IsUsernameUniqueAsync(string username, Guid? excludeUserId = null, CancellationToken cancellationToken = default);
     Task<bool> IsEmailUniqueAsync(string email, Guid? excludeUserId = null, CancellationToken cancellationToken = default);
     Task<IEnumerable<SystemUser>> GetActiveUsersAsync(CancellationToken cancellationToken = default);
-    Task<IEnumerable<SystemUser>> GetUsersByRoleAsync(int roleId, CancellationToken cancellationToken = default);
+    //Task<IEnumerable<SystemUser>> GetUsersByRoleAsync(int roleId, CancellationToken cancellationToken = default);
 }

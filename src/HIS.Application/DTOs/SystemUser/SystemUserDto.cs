@@ -1,4 +1,4 @@
-namespace HIS.Application.DTOs.SystemUser;
+namespace HIS.Application.DTOs.SystemUserSpace;
 
 public class SystemUserDto
 {
@@ -10,9 +10,15 @@ public class SystemUserDto
     public string? MiddleName { get; set; }
     public string LastName { get; set; } = string.Empty;
     public string FullName { get; set; } = string.Empty;
-    public char? Gender { get; set; }
+
+    public Guid? GenderLookupId { get; set; }
+    public string? GenderName { get; set; }
+
     public DateOnly? BirthDate { get; set; }
-    public int RoleID { get; set; }
+
+    public Guid RoleId { get; set; }
+    public string? RoleName { get; set; }
+
     public bool IsActive { get; set; }
     public DateTime? LastLogin { get; set; }
     public int FailedLoginCount { get; set; }

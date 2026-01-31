@@ -1,5 +1,5 @@
 using FluentValidation;
-using HIS.Application.Commands.SystemUser;
+using HIS.Application.Commands.SystemUserSpace;
 
 namespace HIS.Application.Validators.SystemUser;
 
@@ -40,15 +40,15 @@ public class CreateSystemUserValidator : AbstractValidator<CreateSystemUserComma
             .NotEmpty().WithMessage("Last name is required.")
             .MaximumLength(50).WithMessage("Last name must not exceed 50 characters.");
 
-        RuleFor(x => x.SystemUser.Gender)
-            .Must(g => g == null || g == 'M' || g == 'F').WithMessage("Gender must be 'M' or 'F'.")
-            .When(x => x.SystemUser.Gender.HasValue);
+        RuleFor(x => x.SystemUser.GenderLookupId)
+            .Must(g => g == null).WithMessage("Gender must be 'M' or 'F'.")
+            .When(x => x.SystemUser.GenderLookupId.HasValue);
 
         RuleFor(x => x.SystemUser.BirthDate)
             .LessThan(DateOnly.FromDateTime(DateTime.Today)).WithMessage("Birth date must be in the past.")
             .When(x => x.SystemUser.BirthDate.HasValue);
 
-        RuleFor(x => x.SystemUser.RoleID)
-            .GreaterThan(0).WithMessage("Role ID must be greater than 0.");
+        //RuleFor(x => x.SystemUser.RoleId)
+        //    .GreaterThan(0).WithMessage("Role ID must be greater than 0.");
     }
 }

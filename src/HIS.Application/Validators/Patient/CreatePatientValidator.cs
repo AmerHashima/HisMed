@@ -8,23 +8,20 @@ public class CreatePatientValidator : AbstractValidator<CreatePatientDto>
     public CreatePatientValidator()
     {
         // Identifier validation
-        RuleFor(x => x.IdentifierType)
-            .NotEmpty().WithMessage("Identifier type is required")
-            .Must(BeValidIdentifierType).WithMessage("Identifier type must be NationalID, Passport, or Iqama");
+        //RuleFor(x => x.IdentifierType)
+        //    .NotEmpty().WithMessage("Identifier type is required")
+        //    .Must(BeValidIdentifierType).WithMessage("Identifier type must be NationalID, Passport, or Iqama");
 
-        // Conditional identifier validation
-        When(x => x.IdentifierType == "NationalID", () => {
-            RuleFor(x => x.NationalID)
-                .NotEmpty().WithMessage("National ID is required when identifier type is NationalID")
-                .Length(10).WithMessage("National ID must be 10 digits")
-                .Matches(@"^\d{10}$").WithMessage("National ID must contain only digits");
-        });
+        RuleFor(x => x.IdentityNumber)
+            .NotEmpty().WithMessage("Identity number is required")
+            .MaximumLength(20).WithMessage("Identity number cannot exceed 20 characters")
+            .Matches(@"^[A-Z0-9]+$").WithMessage("Identity number must contain only uppercase letters and numbers");
 
-        When(x => x.IdentifierType == "Passport", () => {
-            RuleFor(x => x.PassportNumber)
-                .NotEmpty().WithMessage("Passport number is required when identifier type is Passport")
-                .Length(5, 20).WithMessage("Passport number must be between 5 and 20 characters");
-        });
+        //When(x => x.IdentifierType == "Passport", () => {
+        //    RuleFor(x => x.PassportNumber)
+        //        .NotEmpty().WithMessage("Passport number is required when identifier type is Passport")
+        //        .Length(5, 20).WithMessage("Passport number must be between 5 and 20 characters");
+        //});
 
         // Names validation
         RuleFor(x => x.FirstNameAr)
@@ -46,17 +43,17 @@ public class CreatePatientValidator : AbstractValidator<CreatePatientDto>
             .Matches(@"^[a-zA-Z\s]+$").WithMessage("English last name must contain only letters");
 
         // Demographics validation
-        RuleFor(x => x.Gender)
-            .NotEmpty().WithMessage("Gender is required")
-            .Must(BeValidGender).WithMessage("Gender must be M or F");
+        //RuleFor(x => x.Gender)
+        //    .NotEmpty().WithMessage("Gender is required")
+        //    .Must(BeValidGender).WithMessage("Gender must be M or F");
 
         RuleFor(x => x.BirthDate)
             .NotEmpty().WithMessage("Birth date is required")
             .Must(BeAValidAge).WithMessage("Invalid birth date");
 
-        RuleFor(x => x.BloodGroup)
-            .Must(BeValidBloodGroup).WithMessage("Invalid blood group")
-            .When(x => !string.IsNullOrEmpty(x.BloodGroup));
+        //RuleFor(x => x.BloodGroup)
+        //    .Must(BeValidBloodGroup).WithMessage("Invalid blood group")
+        //    .When(x => !string.IsNullOrEmpty(x.BloodGroup));
 
         // Contact validation
         RuleFor(x => x.Mobile)
@@ -67,18 +64,18 @@ public class CreatePatientValidator : AbstractValidator<CreatePatientDto>
             .EmailAddress().WithMessage("Invalid email format")
             .When(x => !string.IsNullOrEmpty(x.Email));
 
-        // Address validation
-        RuleFor(x => x.AddressLine1)
-            .NotEmpty().WithMessage("Address line 1 is required")
-            .MaximumLength(200).WithMessage("Address line 1 cannot exceed 200 characters");
+        //// Address validation
+        //RuleFor(x => x.AddressLine1)
+        //    .NotEmpty().WithMessage("Address line 1 is required")
+        //    .MaximumLength(200).WithMessage("Address line 1 cannot exceed 200 characters");
 
-        RuleFor(x => x.City)
-            .NotEmpty().WithMessage("City is required")
-            .MaximumLength(100).WithMessage("City cannot exceed 100 characters");
+        //RuleFor(x => x.City)
+        //    .NotEmpty().WithMessage("City is required")
+        //    .MaximumLength(100).WithMessage("City cannot exceed 100 characters");
 
-        RuleFor(x => x.Country)
-            .NotEmpty().WithMessage("Country is required")
-            .MaximumLength(100).WithMessage("Country cannot exceed 100 characters");
+        //RuleFor(x => x.Country)
+        //    .NotEmpty().WithMessage("Country is required")
+        //    .MaximumLength(100).WithMessage("Country cannot exceed 100 characters");
     }
 
     private static bool BeValidIdentifierType(string identifierType)
