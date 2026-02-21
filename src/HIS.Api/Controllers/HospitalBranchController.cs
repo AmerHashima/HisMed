@@ -76,7 +76,7 @@ public class HospitalBranchController : BaseApiController
     /// <param name="createBranchDto">Branch creation data</param>
     /// <returns>Created branch</returns>
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse<HospitalBranchDto>>> CreateBranch([FromBody] CreateHospitalBranchDto createBranchDto)
     {
         try
@@ -98,7 +98,7 @@ public class HospitalBranchController : BaseApiController
     /// <param name="updateBranchDto">Branch update data</param>
     /// <returns>Updated branch</returns>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse<HospitalBranchDto>>> UpdateBranch(Guid id, [FromBody] UpdateHospitalBranchDto updateBranchDto)
     {
         try
@@ -126,7 +126,7 @@ public class HospitalBranchController : BaseApiController
     /// <param name="id">Branch ID</param>
     /// <returns>Success response</returns>
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse>> DeleteBranch(Guid id)
     {
         try

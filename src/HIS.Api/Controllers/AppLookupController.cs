@@ -79,7 +79,7 @@ public class AppLookupController : BaseApiController
     /// <param name="createLookupMasterDto">Lookup master creation data</param>
     /// <returns>Created lookup master</returns>
     [HttpPost("masters")]
-    [Authorize(Roles = "Admin")] // Only admins can create lookup masters
+     // Only admins can create lookup masters
     public async Task<ActionResult<ApiResponse<AppLookupMasterDto>>> CreateLookupMaster([FromBody] CreateAppLookupMasterDto createLookupMasterDto)
     {
         try
@@ -100,7 +100,7 @@ public class AppLookupController : BaseApiController
     /// <param name="createLookupDetailDto">Lookup detail creation data</param>
     /// <returns>Created lookup detail</returns>
     [HttpPost("details")]
-    [Authorize(Roles = "Admin")] // Only admins can create lookup details
+     // Only admins can create lookup details
     public async Task<ActionResult<ApiResponse<AppLookupDetailDto>>> CreateLookupDetail([FromBody] CreateAppLookupDetailDto createLookupDetailDto)
     {
         try

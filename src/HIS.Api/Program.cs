@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using HIS.Api.Middleware;
 using HIS.Application;
 using HIS.Infrastructure;
+using HIS.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -291,7 +292,11 @@ try
     logger.LogInformation("Swagger UI: /swagger");
     logger.LogInformation("Health Check: /api/health");
     logger.LogInformation("=================================================");
-
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<HISDbContext>();
+        await HISDbContextSeed.SeedAsync(context);
+    }
     app.Run();
 }
 catch (ReflectionTypeLoadException ex)

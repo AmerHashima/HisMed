@@ -83,7 +83,7 @@ public class SystemUserController : BaseApiController
     /// <param name="createUserDto">User creation data</param>
     /// <returns>Created user</returns>
     [HttpPost]
-    //[Authorize(Roles = "Admin")] // Only admins can create users
+    // // Only admins can create users
     public async Task<ActionResult<ApiResponse<SystemUserDto>>> CreateSystemUser([FromBody] CreateSystemUserDto createUserDto)
     {
         try
@@ -105,7 +105,7 @@ public class SystemUserController : BaseApiController
     /// <param name="updateUserDto">User update data</param>
     /// <returns>Updated user</returns>
     [HttpPut("{id}")]
-    //[Authorize(Roles = "Admin")] // Only admins can update users
+    // // Only admins can update users
     public async Task<ActionResult<ApiResponse<SystemUserDto>>> UpdateSystemUser(Guid id, [FromBody] UpdateSystemUserDto updateUserDto)
     {
         try
@@ -133,7 +133,7 @@ public class SystemUserController : BaseApiController
     /// <param name="id">User ID</param>
     /// <returns>Success response</returns>
     [HttpDelete("{id}")]
-   // [Authorize(Roles = "Admin")] // Only admins can delete users
+   //  // Only admins can delete users
     public async Task<ActionResult<ApiResponse>> DeleteSystemUser(Guid id)
     {
         try

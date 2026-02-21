@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HIS.Api.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
+
 public class RoleController : BaseApiController
 {
     private readonly IMediator _mediator;

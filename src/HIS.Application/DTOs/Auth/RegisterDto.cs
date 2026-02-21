@@ -41,5 +41,5 @@ public class RegisterDto
 
     public DateOnly? BirthDate { get; set; }
 
-    public Guid RoleId { get; set; }  // Default role
+    public Guid? RoleId { get; set; }  // Default role
 }

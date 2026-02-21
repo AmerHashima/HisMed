@@ -110,6 +110,7 @@ public class HISDbContext : DbContext
 
         // 🔹 Apply configurations
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

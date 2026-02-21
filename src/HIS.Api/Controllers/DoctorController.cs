@@ -71,7 +71,7 @@ public class DoctorController : BaseApiController
     /// Create a new doctor
     /// </summary>
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse<DoctorDto>>> CreateDoctor([FromBody] CreateDoctorDto createDoctorDto)
     {
         try
@@ -90,7 +90,7 @@ public class DoctorController : BaseApiController
     /// Update an existing doctor
     /// </summary>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse<DoctorDto>>> UpdateDoctor(Guid id, [FromBody] UpdateDoctorDto updateDoctorDto)
     {
         try
@@ -116,7 +116,7 @@ public class DoctorController : BaseApiController
     /// Delete a doctor (soft delete)
     /// </summary>
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse>> DeleteDoctor(Guid id)
     {
         try

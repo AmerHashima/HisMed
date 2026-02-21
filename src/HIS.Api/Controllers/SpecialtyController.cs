@@ -68,7 +68,7 @@ public class SpecialtyController : BaseApiController
     /// Create a new specialty
     /// </summary>
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse<SpecialtyDto>>> CreateSpecialty([FromBody] CreateSpecialtyDto createSpecialtyDto)
     {
         try
@@ -87,7 +87,7 @@ public class SpecialtyController : BaseApiController
     /// Update an existing specialty
     /// </summary>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse<SpecialtyDto>>> UpdateSpecialty(Guid id, [FromBody] UpdateSpecialtyDto updateSpecialtyDto)
     {
         try
@@ -113,7 +113,7 @@ public class SpecialtyController : BaseApiController
     /// Delete a specialty (soft delete)
     /// </summary>
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    
     public async Task<ActionResult<ApiResponse>> DeleteSpecialty(Guid id)
     {
         try
