@@ -28,5 +28,6 @@ jobs:
           script: |
             cd ~/apps/his
             docker login ghcr.io -u amerhashima -p ${{ secrets.GHCR_TOKEN }}
+                  docker rm -f his-api 2>/dev/null || true
             docker compose pull
             docker compose up -d
