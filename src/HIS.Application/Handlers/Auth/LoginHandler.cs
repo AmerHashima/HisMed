@@ -33,11 +33,11 @@ public class LoginHandler : IRequestHandler<LoginCommand, AuthResponseDto>
             throw new UnauthorizedAccessException("Invalid username or password.");
         }
 
-        // Check if account is locked
-        if (user.LockoutEnd.HasValue && user.LockoutEnd > DateTime.UtcNow)
-        {
-            throw new UnauthorizedAccessException($"Account is locked until {user.LockoutEnd}.");
-        }
+        //// Check if account is locked
+        //if (user.LockoutEnd.HasValue && user.LockoutEnd > DateTime.UtcNow)
+        //{
+        //    throw new UnauthorizedAccessException($"Account is locked until {user.LockoutEnd}.");
+        //}
 
         // Verify password
         if (!VerifyPassword(request.LoginDto.Password, user.PasswordHash, user.PasswordSalt))
