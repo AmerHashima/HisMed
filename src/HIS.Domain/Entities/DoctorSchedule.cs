@@ -22,7 +22,7 @@ public class DoctorSchedule : BaseEntity
     [Required]
     public TimeOnly EndTime { get; set; }
 
-    public int SlotDurationMinutes { get; set; } = 15;
+    public float SlotDurationMinutes { get; set; } = 15;
 
     public bool IsActive { get; set; } = true;
 }

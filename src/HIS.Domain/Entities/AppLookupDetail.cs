@@ -24,6 +24,7 @@ public class AppLookupDetail : BaseEntity
     [Required]
     [MaxLength(100)]
     public string ValueNameEn { get; set; } = string.Empty;
+    public int DayOfWeek { get; set; }
 
     public int SortOrder { get; set; }
 

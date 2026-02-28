@@ -18,6 +18,7 @@ public class DoctorScheduleException : BaseEntity
     public TimeOnly? StartTime { get; set; }
 
     public TimeOnly? EndTime { get; set; }
+    public int DayOfWeek { get; set; }
 
     [MaxLength(30)]
     public string? ExceptionType { get; set; } // Holiday, Leave, Conference

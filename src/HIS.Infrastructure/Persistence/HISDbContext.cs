@@ -107,6 +107,23 @@ public class HISDbContext : DbContext
                   .HasForeignKey(e => e.BranchId)
                   .OnDelete(DeleteBehavior.NoAction);
         });
+        modelBuilder.Entity<AppLookupDetail>().HasAlternateKey(e => e.DayOfWeek);
+        modelBuilder.Entity<DoctorSchedule>(entity =>
+        {
+            entity.HasOne<AppLookupDetail>().WithMany()
+            .HasForeignKey(e => e.DayOfWeek)
+            .HasPrincipalKey(e => e.DayOfWeek)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        });
+        modelBuilder.Entity<DoctorSchedule>().Property(e => e.SlotDurationMinutes).HasColumnType("float");
+        modelBuilder.Entity<DoctorScheduleException>(entity =>
+        {
+            entity.HasOne<AppLookupDetail>().WithMany()
+            .HasForeignKey(e => e.DayOfWeek)
+            .HasPrincipalKey(e => e.DayOfWeek)
+            .OnDelete(DeleteBehavior.NoAction);
+        });
 
         // 🔹 Apply configurations
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
