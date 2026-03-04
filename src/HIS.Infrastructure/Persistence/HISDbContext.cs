@@ -1,8 +1,9 @@
 using HIS.Domain.Common;
 using HIS.Domain.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace HIS.Infrastructure.Persistence;
 
@@ -107,23 +108,106 @@ public class HISDbContext : DbContext
                   .HasForeignKey(e => e.BranchId)
                   .OnDelete(DeleteBehavior.NoAction);
         });
-        modelBuilder.Entity<AppLookupDetail>().HasAlternateKey(e => e.DayOfWeek);
-        modelBuilder.Entity<DoctorSchedule>(entity =>
-        {
-            entity.HasOne<AppLookupDetail>().WithMany()
-            .HasForeignKey(e => e.DayOfWeek)
-            .HasPrincipalKey(e => e.DayOfWeek)
-            .OnDelete(DeleteBehavior.NoAction);
+        //modelBuilder.Entity<DoctorSchedule>(entity => { entity.Property(X => X.DayOfWeekId).HasColumnType("Guid"); });
+        //modelBuilder.Entity<DoctorScheduleException>(entity => { entity.Property(X => X.DayOfWeekId).HasColumnType("Guid"); });
+        //========================================================
+        //                  Seed DaysData into tables
+        //========================================================
+        modelBuilder.Entity<AppLookupMaster>().HasData(
+            
+            new AppLookupMaster
+            {
+                Oid = Guid.Parse("10000000-0000-0000-0000-000000000010"),
+                LookupCode = "Days",
+                LookupNameAr = "الايام",
+                LookupNameEn = "Days",
+                Description = "Days Of The Week",
+                CreatedAt = new DateTime(2026, 3, 3)
 
-        });
-        modelBuilder.Entity<DoctorSchedule>().Property(e => e.SlotDurationMinutes).HasColumnType("float");
-        modelBuilder.Entity<DoctorScheduleException>(entity =>
-        {
-            entity.HasOne<AppLookupDetail>().WithMany()
-            .HasForeignKey(e => e.DayOfWeek)
-            .HasPrincipalKey(e => e.DayOfWeek)
-            .OnDelete(DeleteBehavior.NoAction);
-        });
+            }
+        );
+        modelBuilder.Entity<AppLookupDetail>().HasData(
+                        new AppLookupDetail
+                        {
+                            Oid = Guid.Parse("10000000-0000-0000-0010-000000000001"),
+                            MasterID = Guid.Parse("10000000-0000-0000-0000-000000000010"),
+                            ValueCode = "Sat",
+                            ValueNameAr = "السبت",
+                            ValueNameEn = "Saturday",
+                            SortOrder = 1,
+                            IsDefault = false,
+                            IsActive = true,
+                            CreatedAt = new DateTime(2026, 3, 3)
+
+                        },
+            new AppLookupDetail
+            {
+                Oid = Guid.Parse("10000000-0000-0000-0010-000000000002"),
+                MasterID = Guid.Parse("10000000-0000-0000-0000-000000000010"),
+                ValueCode = "Sun",
+                ValueNameAr = "الاحد",
+                ValueNameEn = "Sunday",
+                SortOrder = 2,
+                IsDefault = false,
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 3, 3)
+
+            },
+            new AppLookupDetail
+            {
+                Oid = Guid.Parse("10000000-0000-0000-0010-000000000003"),
+                MasterID = Guid.Parse("10000000-0000-0000-0000-000000000010"),
+                ValueCode = "Mon",
+                ValueNameAr = "الاثنين",
+                ValueNameEn = "Monday",
+                SortOrder = 3,
+                IsDefault = false,
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 3, 3)
+
+            },
+            new AppLookupDetail
+            {
+                Oid = Guid.Parse("10000000-0000-0000-0010-000000000004"),
+                MasterID = Guid.Parse("10000000-0000-0000-0000-000000000010"),
+                ValueCode = "Tue",
+                ValueNameAr = "الثلاثاء",
+                ValueNameEn = "Tuesday",
+                SortOrder = 4,
+                IsDefault = false,
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 3, 3)
+
+            },
+            new AppLookupDetail
+            {
+                Oid = Guid.Parse("10000000-0000-0000-0010-000000000005"),
+                MasterID = Guid.Parse("10000000-0000-0000-0000-000000000010"),
+                ValueCode = "Wed",
+                ValueNameAr = "الاربعاء",
+                ValueNameEn = "Wednesday",
+                SortOrder = 5,
+                IsDefault = false,
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 3, 3)
+
+            },
+            new AppLookupDetail
+            {
+                Oid = Guid.Parse("10000000-0000-0000-0010-000000000006"),
+                MasterID = Guid.Parse("10000000-0000-0000-0000-000000000010"),
+                ValueCode = "Thu",
+                ValueNameAr = "الخميس",
+                ValueNameEn = "Thursday",
+                SortOrder = 6,
+                IsDefault = false,
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 3, 3)
+
+            }
+            );
+
+
 
         // 🔹 Apply configurations
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -1,5 +1,6 @@
 using HIS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace HIS.Infrastructure.Persistence;
 
@@ -290,108 +291,204 @@ public static class HISDbContextSeed
             LookupNameAr = "فصيلة الدم",
             Description = "Patient Blood Groups",
             CreatedAt = DateTime.UtcNow
+            
         };
-        lookupMasters.Add(bloodGroupMaster);
+        //lookupMasters.Add(bloodGroupMaster);
 
-        lookupDetails.AddRange(new[]
-        {
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000001"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "A_POSITIVE",
-                ValueNameAr = "A+",
-                ValueNameEn = "A+",
-                SortOrder = 1,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000002"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "A_NEGATIVE",
-                ValueNameAr = "A-",
-                ValueNameEn = "A-",
-                SortOrder = 2,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000003"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "B_POSITIVE",
-                ValueNameAr = "B+",
-                ValueNameEn = "B+",
-                SortOrder = 3,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000004"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "B_NEGATIVE",
-                ValueNameAr = "B-",
-                ValueNameEn = "B-",
-                SortOrder = 4,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000005"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "AB_POSITIVE",
-                ValueNameAr = "AB+",
-                ValueNameEn = "AB+",
-                SortOrder = 5,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000006"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "AB_NEGATIVE",
-                ValueNameAr = "AB-",
-                ValueNameEn = "AB-",
-                SortOrder = 6,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000007"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "O_POSITIVE",
-                ValueNameAr = "O+",
-                ValueNameEn = "O+",
-                SortOrder = 7,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new AppLookupDetail
-            {
-                Oid = Guid.Parse("10000000-0000-0000-0005-000000000008"),
-                MasterID = bloodGroupMaster.Oid,
-                ValueCode = "O_NEGATIVE",
-                ValueNameAr = "O-",
-                ValueNameEn = "O-",
-                SortOrder = 8,
-                IsDefault = false,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            }
-        });
+        //lookupDetails.AddRange(new[]
+        //{
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000001"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "A_POSITIVE",
+        //        ValueNameAr = "A+",
+        //        ValueNameEn = "A+",
+        //        SortOrder = 1,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000002"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "A_NEGATIVE",
+        //        ValueNameAr = "A-",
+        //        ValueNameEn = "A-",
+        //        SortOrder = 2,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000003"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "B_POSITIVE",
+        //        ValueNameAr = "B+",
+        //        ValueNameEn = "B+",
+        //        SortOrder = 3,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000004"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "B_NEGATIVE",
+        //        ValueNameAr = "B-",
+        //        ValueNameEn = "B-",
+        //        SortOrder = 4,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000005"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "AB_POSITIVE",
+        //        ValueNameAr = "AB+",
+        //        ValueNameEn = "AB+",
+        //        SortOrder = 5,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000006"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "AB_NEGATIVE",
+        //        ValueNameAr = "AB-",
+        //        ValueNameEn = "AB-",
+        //        SortOrder = 6,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000007"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "O_POSITIVE",
+        //        ValueNameAr = "O+",
+        //        ValueNameEn = "O+",
+        //        SortOrder = 7,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid = Guid.Parse("10000000-0000-0000-0005-000000000008"),
+        //        MasterID = bloodGroupMaster.Oid,
+        //        ValueCode = "O_NEGATIVE",
+        //        ValueNameAr = "O-",
+        //        ValueNameEn = "O-",
+        //        SortOrder = 8,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+        //    }
+        //});
+        //var DaysMaster = new AppLookupMaster
+        //{
+        //    Oid =  Guid.Parse("10000000-0000-0000-0000-000000000010"),
+        //    LookupCode="Days",
+        //    LookupNameAr ="الايام",
+        //    LookupNameEn="Days",
+        //    Description ="Days Of The Week",
+        //    CreatedAt= DateTime.UtcNow,
+            
+        //};
+        //lookupMasters.Add(DaysMaster);
+
+        //lookupDetails.AddRange(new[]
+        //{
+        //    new AppLookupDetail
+        //    {
+        //        Oid= Guid.Parse("10000000-0000-0000-0010-000000000001"),
+        //        MasterID= DaysMaster.Oid,
+        //        ValueCode = "Days",
+        //        ValueNameAr = "السبت",
+        //        ValueNameEn ="Saturday",
+        //        SortOrder = 1,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid= Guid.Parse("10000000-0000-0000-0010-000000000002"),
+        //        MasterID= DaysMaster.Oid,
+        //        ValueCode = "Days",
+        //        ValueNameAr = "الاحد",
+        //        ValueNameEn ="Sunday",
+        //        SortOrder = 2,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid= Guid.Parse("10000000-0000-0000-0010-000000000003"),
+        //        MasterID= DaysMaster.Oid,
+        //        ValueCode = "Days",
+        //        ValueNameAr = "الاثنين",
+        //        ValueNameEn ="Monday",
+        //        SortOrder = 3,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid= Guid.Parse("10000000-0000-0000-0010-000000000004"),
+        //        MasterID= DaysMaster.Oid,
+        //        ValueCode = "Days",
+        //        ValueNameAr = "الثلاثاء",
+        //        ValueNameEn ="Tuesday",
+        //        SortOrder = 4,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid= Guid.Parse("10000000-0000-0000-0010-000000000005"),
+        //        MasterID= DaysMaster.Oid,
+        //        ValueCode = "Days",
+        //        ValueNameAr = "الاربعاء",
+        //        ValueNameEn ="Wednesday",
+        //        SortOrder = 5,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+
+        //    },
+        //    new AppLookupDetail
+        //    {
+        //        Oid= Guid.Parse("10000000-0000-0000-0010-000000000006"),
+        //        MasterID= DaysMaster.Oid,
+        //        ValueCode = "Days",
+        //        ValueNameAr = "الخميس",
+        //        ValueNameEn ="Thursday",
+        //        SortOrder = 6,
+        //        IsDefault = false,
+        //        IsActive = true,
+        //        CreatedAt = DateTime.UtcNow
+
+        //    },
+
+
+        //});
 
         // ====================================
         // 6. DEPARTMENT

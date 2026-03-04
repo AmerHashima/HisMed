@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HIS.Infrastructure.Migrations
 {
     [DbContext(typeof(HISDbContext))]
-    [Migration("20260228124257_UpdateLookUpDetailsRealtionships")]
-    partial class UpdateLookUpDetailsRealtionships
+    [Migration("20260303231142_LinkDoctorScheduelExceptionToAppLookUpDetail")]
+    partial class LinkDoctorScheduelExceptionToAppLookUpDetail
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,9 +36,6 @@ namespace HIS.Infrastructure.Migrations
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -339,8 +336,8 @@ namespace HIS.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DayOfWeekId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -360,8 +357,8 @@ namespace HIS.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<double>("SlotDurationMinutes")
-                        .HasColumnType("float");
+                    b.Property<float>("SlotDurationMinutes")
+                        .HasColumnType("real");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
@@ -374,7 +371,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasKey("Oid");
 
-                    b.HasIndex("DayOfWeek");
+                    b.HasIndex("DayOfWeekId");
 
                     b.HasIndex("DoctorId");
 
@@ -393,8 +390,8 @@ namespace HIS.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DayOfWeekId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -433,7 +430,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasKey("Oid");
 
-                    b.HasIndex("DayOfWeek");
+                    b.HasIndex("DayOfWeekId");
 
                     b.HasIndex("DoctorId");
 
@@ -1099,11 +1096,10 @@ namespace HIS.Infrastructure.Migrations
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorSchedule", b =>
                 {
-                    b.HasOne("HIS.Domain.Entities.AppLookupDetail", null)
+                    b.HasOne("HIS.Domain.Entities.AppLookupDetail", "DayOfweek")
                         .WithMany()
-                        .HasForeignKey("DayOfWeek")
-                        .HasPrincipalKey("DayOfWeek")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("DayOfWeekId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HIS.Domain.Entities.Doctor", "Doctor")
@@ -1112,16 +1108,17 @@ namespace HIS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("DayOfweek");
+
                     b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorScheduleException", b =>
                 {
-                    b.HasOne("HIS.Domain.Entities.AppLookupDetail", null)
+                    b.HasOne("HIS.Domain.Entities.AppLookupDetail", "Days")
                         .WithMany()
-                        .HasForeignKey("DayOfWeek")
-                        .HasPrincipalKey("DayOfWeek")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("DayOfWeekId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HIS.Domain.Entities.Doctor", "Doctor")
@@ -1129,6 +1126,8 @@ namespace HIS.Infrastructure.Migrations
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Days");
 
                     b.Navigation("Doctor");
                 });

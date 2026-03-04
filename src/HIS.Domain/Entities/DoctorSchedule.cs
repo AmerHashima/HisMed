@@ -13,8 +13,10 @@ public class DoctorSchedule : BaseEntity
     public virtual Doctor Doctor { get; set; } = null!;
 
     [Required]
-    [Range(0, 6)] // 0=Sunday, 6=Saturday
-    public int DayOfWeek { get; set; }
+   
+    public Guid DayOfWeekId { get; set; }
+    [ForeignKey(nameof(DayOfWeekId))]
+    public virtual AppLookupDetail DayOfweek { get; set; }
 
     [Required]
     public TimeOnly StartTime { get; set; }

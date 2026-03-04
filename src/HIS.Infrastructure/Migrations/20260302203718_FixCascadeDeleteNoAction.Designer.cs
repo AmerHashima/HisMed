@@ -4,6 +4,7 @@ using HIS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HIS.Infrastructure.Migrations
 {
     [DbContext(typeof(HISDbContext))]
-    partial class HISDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260302203718_FixCascadeDeleteNoAction")]
+    partial class FixCascadeDeleteNoAction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,86 +84,6 @@ namespace HIS.Infrastructure.Migrations
                     b.HasIndex("MasterID");
 
                     b.ToTable("AppLookupDetail");
-
-                    b.HasData(
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0010-000000000001"),
-                            CreatedAt = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000010"),
-                            SortOrder = 1,
-                            ValueCode = "Sat",
-                            ValueNameAr = "السبت",
-                            ValueNameEn = "Saturday"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0010-000000000002"),
-                            CreatedAt = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000010"),
-                            SortOrder = 2,
-                            ValueCode = "Sun",
-                            ValueNameAr = "الاحد",
-                            ValueNameEn = "Sunday"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0010-000000000003"),
-                            CreatedAt = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000010"),
-                            SortOrder = 3,
-                            ValueCode = "Mon",
-                            ValueNameAr = "الاثنين",
-                            ValueNameEn = "Monday"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0010-000000000004"),
-                            CreatedAt = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000010"),
-                            SortOrder = 4,
-                            ValueCode = "Tue",
-                            ValueNameAr = "الثلاثاء",
-                            ValueNameEn = "Tuesday"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0010-000000000005"),
-                            CreatedAt = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000010"),
-                            SortOrder = 5,
-                            ValueCode = "Wed",
-                            ValueNameAr = "الاربعاء",
-                            ValueNameEn = "Wednesday"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0010-000000000006"),
-                            CreatedAt = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000010"),
-                            SortOrder = 6,
-                            ValueCode = "Thu",
-                            ValueNameAr = "الخميس",
-                            ValueNameEn = "Thursday"
-                        });
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.AppLookupMaster", b =>
@@ -215,19 +138,6 @@ namespace HIS.Infrastructure.Migrations
                     b.HasKey("Oid");
 
                     b.ToTable("AppLookupMaster");
-
-                    b.HasData(
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0000-000000000010"),
-                            CreatedAt = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Days Of The Week",
-                            IsDeleted = false,
-                            IsSystem = false,
-                            LookupCode = "Days",
-                            LookupNameAr = "الايام",
-                            LookupNameEn = "Days"
-                        });
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Appointment", b =>
@@ -480,6 +390,9 @@ namespace HIS.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("DayOfWeek")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("DayOfWeekId")
                         .HasColumnType("uniqueidentifier");
 
@@ -520,7 +433,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasKey("Oid");
 
-                    b.HasIndex("DayOfWeekId");
+                    b.HasIndex("DayOfWeek");
 
                     b.HasIndex("DoctorId");
 
@@ -1207,7 +1120,7 @@ namespace HIS.Infrastructure.Migrations
                 {
                     b.HasOne("HIS.Domain.Entities.AppLookupDetail", "Days")
                         .WithMany()
-                        .HasForeignKey("DayOfWeekId")
+                        .HasForeignKey("DayOfWeek")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
