@@ -103,6 +103,10 @@ public class Patient : BaseEntity
     // Navigation Properties
     public virtual ICollection<Appointment>? Appointments { get; set; }
     public virtual ICollection<Encounter>? Encounters { get; set; }
+    public virtual ICollection<PatientAddress>? Addresses { get; set; }
+    public virtual ICollection<PatientContact>? Contacts { get; set; }
+    public virtual ICollection<PatientAttachment>? Attachments { get; set; }
+    public virtual ICollection<PatientInsurance>? Insurances { get; set; }
 
 
 }

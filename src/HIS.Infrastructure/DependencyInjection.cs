@@ -51,6 +51,10 @@ public static class DependencyInjection
         // Register repositories - Patients
         // ====================================
         services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IPatientAddressRepository, PatientAddressRepository>();
+        services.AddScoped<IPatientContactRepository, PatientContactRepository>();
+        services.AddScoped<IPatientAttachmentRepository, PatientAttachmentRepository>();
+        services.AddScoped<IPatientInsuranceRepository, PatientInsuranceRepository>();
 
         // ====================================
         // Register repositories - Appointments & Encounters

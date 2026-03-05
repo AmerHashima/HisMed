@@ -43,15 +43,6 @@ public class PatientController : BaseApiController
     /// <summary>
     /// Get all patients with optional filtering
     /// </summary>
-    /// <param name="searchTerm">Search term for patient name, MRN, identity number, or mobile</param>
-    /// <param name="includeInactive">Include inactive patients</param>
-    /// <param name="genderLookupId">Filter by gender lookup ID</param>
-    /// <param name="bloodGroupLookupId">Filter by blood group lookup ID</param>
-    /// <param name="nationalityLookupId">Filter by nationality lookup ID</param>
-    /// <param name="branchId">Filter by branch ID</param>
-    /// <param name="page">Page number</param>
-    /// <param name="pageSize">Page size</param>
-    /// <returns>List of patients</returns>
     [HttpGet]
     public async Task<ActionResult<ApiResponse<IEnumerable<PatientDto>>>> GetPatients(
         [FromQuery] string? searchTerm = null,
@@ -112,23 +103,6 @@ public class PatientController : BaseApiController
     }
 
     /// <summary>
-    /// Get patient by identity number
-    /// </summary>
-    /// <param name="identityNumber">Identity number (National ID, Passport, or Iqama)</param>
-    /// <returns>Patient details</returns>
-    //[HttpGet("by-identity/{identityNumber}")]
-    //public async Task<ActionResult<ApiResponse<PatientDto>>> GetPatientByIdentityNumber(string identityNumber)
-    //{
-    //    var query = new GetPatientByIdentityNumberQuery(identityNumber);
-    //    var patient = await _mediator.Send(query);
-
-    //    if (patient == null)
-    //        return ErrorResponse<PatientDto>("Patient not found", 404);
-
-    //    return SuccessResponse(patient, "Patient retrieved successfully");
-    //}
-
-    /// <summary>
     /// Create a new patient
     /// </summary>
     /// <param name="createPatientDto">Patient creation data</param>
@@ -145,6 +119,26 @@ public class PatientController : BaseApiController
         catch (InvalidOperationException ex)
         {
             return ErrorResponse<PatientDto>(ex.Message, 400);
+        }
+    }
+
+    /// <summary>
+    /// Create a new patient with all related data (addresses, contacts, attachments, insurances) in a single request
+    /// </summary>
+    /// <param name="dto">Full patient creation data including sub-entities</param>
+    /// <returns>Created patient with all related data</returns>
+    [HttpPost("full")]
+    public async Task<ActionResult<ApiResponse<FullPatientDto>>> CreateFullPatient([FromBody] CreateFullPatientDto dto)
+    {
+        try
+        {
+            var command = new CreateFullPatientCommand(dto);
+            var patient = await _mediator.Send(command);
+            return CreatedResponse(patient, nameof(GetPatient), new { id = patient.Oid }, "Patient with all related data created successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return ErrorResponse<FullPatientDto>(ex.Message, 400);
         }
     }
 
@@ -199,4 +193,200 @@ public class PatientController : BaseApiController
             return ErrorResponse($"Error deleting patient: {ex.Message}", 500);
         }
     }
+
+    #region Patient Addresses
+
+    /// <summary>
+    /// Get all addresses for a patient
+    /// </summary>
+    [HttpGet("{patientId}/addresses")]
+    public async Task<ActionResult<ApiResponse<IEnumerable<PatientAddressDto>>>> GetPatientAddresses(Guid patientId)
+    {
+        var query = new GetPatientAddressesQuery(patientId);
+        var addresses = await _mediator.Send(query);
+        return SuccessResponse(addresses, "Patient addresses retrieved successfully");
+    }
+
+    /// <summary>
+    /// Add an address to a patient
+    /// </summary>
+    [HttpPost("{patientId}/addresses")]
+    public async Task<ActionResult<ApiResponse<PatientAddressDto>>> CreatePatientAddress(Guid patientId, [FromBody] CreatePatientAddressDto dto)
+    {
+        try
+        {
+            dto.PatientId = patientId;
+            var command = new CreatePatientAddressCommand(dto);
+            var address = await _mediator.Send(command);
+            return SuccessResponse(address, "Patient address created successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return ErrorResponse<PatientAddressDto>(ex.Message, 400);
+        }
+    }
+
+    /// <summary>
+    /// Delete a patient address (soft delete)
+    /// </summary>
+    [HttpDelete("addresses/{id}")]
+    public async Task<ActionResult<ApiResponse>> DeletePatientAddress(Guid id)
+    {
+        var command = new DeletePatientAddressCommand(id);
+        var result = await _mediator.Send(command);
+
+        if (!result)
+            return ErrorResponse("Patient address not found", 404);
+
+        return SuccessResponse("Patient address deleted successfully");
+    }
+
+    #endregion
+
+    #region Patient Contacts
+
+    /// <summary>
+    /// Get all contacts for a patient
+    /// </summary>
+    [HttpGet("{patientId}/contacts")]
+    public async Task<ActionResult<ApiResponse<IEnumerable<PatientContactDto>>>> GetPatientContacts(Guid patientId)
+    {
+        var query = new GetPatientContactsQuery(patientId);
+        var contacts = await _mediator.Send(query);
+        return SuccessResponse(contacts, "Patient contacts retrieved successfully");
+    }
+
+    /// <summary>
+    /// Add a contact to a patient
+    /// </summary>
+    [HttpPost("{patientId}/contacts")]
+    public async Task<ActionResult<ApiResponse<PatientContactDto>>> CreatePatientContact(Guid patientId, [FromBody] CreatePatientContactDto dto)
+    {
+        try
+        {
+            dto.PatientId = patientId;
+            var command = new CreatePatientContactCommand(dto);
+            var contact = await _mediator.Send(command);
+            return SuccessResponse(contact, "Patient contact created successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return ErrorResponse<PatientContactDto>(ex.Message, 400);
+        }
+    }
+
+    /// <summary>
+    /// Delete a patient contact (soft delete)
+    /// </summary>
+    [HttpDelete("contacts/{id}")]
+    public async Task<ActionResult<ApiResponse>> DeletePatientContact(Guid id)
+    {
+        var command = new DeletePatientContactCommand(id);
+        var result = await _mediator.Send(command);
+
+        if (!result)
+            return ErrorResponse("Patient contact not found", 404);
+
+        return SuccessResponse("Patient contact deleted successfully");
+    }
+
+    #endregion
+
+    #region Patient Attachments
+
+    /// <summary>
+    /// Get all attachments for a patient
+    /// </summary>
+    [HttpGet("{patientId}/attachments")]
+    public async Task<ActionResult<ApiResponse<IEnumerable<PatientAttachmentDto>>>> GetPatientAttachments(Guid patientId)
+    {
+        var query = new GetPatientAttachmentsQuery(patientId);
+        var attachments = await _mediator.Send(query);
+        return SuccessResponse(attachments, "Patient attachments retrieved successfully");
+    }
+
+    /// <summary>
+    /// Add an attachment to a patient
+    /// </summary>
+    [HttpPost("{patientId}/attachments")]
+    public async Task<ActionResult<ApiResponse<PatientAttachmentDto>>> CreatePatientAttachment(Guid patientId, [FromBody] CreatePatientAttachmentDto dto)
+    {
+        try
+        {
+            dto.PatientId = patientId;
+            var command = new CreatePatientAttachmentCommand(dto);
+            var attachment = await _mediator.Send(command);
+            return SuccessResponse(attachment, "Patient attachment created successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return ErrorResponse<PatientAttachmentDto>(ex.Message, 400);
+        }
+    }
+
+    /// <summary>
+    /// Delete a patient attachment (soft delete)
+    /// </summary>
+    [HttpDelete("attachments/{id}")]
+    public async Task<ActionResult<ApiResponse>> DeletePatientAttachment(Guid id)
+    {
+        var command = new DeletePatientAttachmentCommand(id);
+        var result = await _mediator.Send(command);
+
+        if (!result)
+            return ErrorResponse("Patient attachment not found", 404);
+
+        return SuccessResponse("Patient attachment deleted successfully");
+    }
+
+    #endregion
+
+    #region Patient Insurances
+
+    /// <summary>
+    /// Get all insurances for a patient
+    /// </summary>
+    [HttpGet("{patientId}/insurances")]
+    public async Task<ActionResult<ApiResponse<IEnumerable<PatientInsuranceDto>>>> GetPatientInsurances(Guid patientId)
+    {
+        var query = new GetPatientInsurancesQuery(patientId);
+        var insurances = await _mediator.Send(query);
+        return SuccessResponse(insurances, "Patient insurances retrieved successfully");
+    }
+
+    /// <summary>
+    /// Add an insurance to a patient
+    /// </summary>
+    [HttpPost("{patientId}/insurances")]
+    public async Task<ActionResult<ApiResponse<PatientInsuranceDto>>> CreatePatientInsurance(Guid patientId, [FromBody] CreatePatientInsuranceDto dto)
+    {
+        try
+        {
+            dto.PatientId = patientId;
+            var command = new CreatePatientInsuranceCommand(dto);
+            var insurance = await _mediator.Send(command);
+            return SuccessResponse(insurance, "Patient insurance created successfully");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return ErrorResponse<PatientInsuranceDto>(ex.Message, 400);
+        }
+    }
+
+    /// <summary>
+    /// Delete a patient insurance (soft delete)
+    /// </summary>
+    [HttpDelete("insurances/{id}")]
+    public async Task<ActionResult<ApiResponse>> DeletePatientInsurance(Guid id)
+    {
+        var command = new DeletePatientInsuranceCommand(id);
+        var result = await _mediator.Send(command);
+
+        if (!result)
+            return ErrorResponse("Patient insurance not found", 404);
+
+        return SuccessResponse("Patient insurance deleted successfully");
+    }
+
+    #endregion
 }

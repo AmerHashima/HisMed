@@ -30,6 +30,10 @@ public class HISDbContext : DbContext
     
     // Patients
     public DbSet<Patient> Patients { get; set; }
+    public DbSet<PatientAddress> PatientAddresses { get; set; }
+    public DbSet<PatientContact> PatientContacts { get; set; }
+    public DbSet<PatientAttachment> PatientAttachments { get; set; }
+    public DbSet<PatientInsurance> PatientInsurances { get; set; }
     
     // Appointments & Encounters
     public DbSet<Appointment> Appointments { get; set; }
@@ -87,6 +91,63 @@ public class HISDbContext : DbContext
             entity.HasOne(a => a.Branch)
                   .WithMany()
                   .HasForeignKey(a => a.BranchId)
+                  .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<PatientAddress>(entity =>
+        {
+            entity.HasOne(a => a.Patient)
+                  .WithMany(p => p.Addresses)
+                  .HasForeignKey(a => a.PatientId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(a => a.Country)
+                  .WithMany()
+                  .HasForeignKey(a => a.CountryId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(a => a.City)
+                  .WithMany()
+                  .HasForeignKey(a => a.CityId)
+                  .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<PatientContact>(entity =>
+        {
+            entity.HasOne(c => c.Patient)
+                  .WithMany(p => p.Contacts)
+                  .HasForeignKey(c => c.PatientId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(c => c.Relationship)
+                  .WithMany()
+                  .HasForeignKey(c => c.RelationshipId)
+                  .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<PatientAttachment>(entity =>
+        {
+            entity.HasOne(a => a.Patient)
+                  .WithMany(p => p.Attachments)
+                  .HasForeignKey(a => a.PatientId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(a => a.AttachmentType)
+                  .WithMany()
+                  .HasForeignKey(a => a.AttachmentTypeId)
+                  .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<PatientInsurance>(entity =>
+        {
+            entity.HasOne(i => i.Patient)
+                  .WithMany(p => p.Insurances)
+                  .HasForeignKey(i => i.PatientId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(i => i.InsuranceCompany)
+                  .WithMany()
+                  .HasForeignKey(i => i.InsuranceCompanyId)
                   .OnDelete(DeleteBehavior.NoAction);
         });
 

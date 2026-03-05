@@ -1,0 +1,148 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace HIS.Application.DTOs.Patient;
+
+/// <summary>
+/// Composite DTO for creating a patient with all related data in a single request
+/// </summary>
+public class CreateFullPatientDto
+{
+    /* ==== Identifiers ==== */
+    [Required(ErrorMessage = "Identity type is required")]
+    public Guid IdentityTypeLookupId { get; set; }
+
+    [Required(ErrorMessage = "Identity number is required")]
+    [StringLength(20, ErrorMessage = "Identity number cannot exceed 20 characters")]
+    public string IdentityNumber { get; set; } = string.Empty;
+
+    /* ==== Names (Arabic) ==== */
+    [Required(ErrorMessage = "Arabic first name is required")]
+    [StringLength(100, ErrorMessage = "Arabic first name cannot exceed 100 characters")]
+    public string FirstNameAr { get; set; } = string.Empty;
+
+    [StringLength(100, ErrorMessage = "Arabic middle name cannot exceed 100 characters")]
+    public string? MiddleNameAr { get; set; }
+
+    [Required(ErrorMessage = "Arabic last name is required")]
+    [StringLength(100, ErrorMessage = "Arabic last name cannot exceed 100 characters")]
+    public string LastNameAr { get; set; } = string.Empty;
+
+    /* ==== Names (English) ==== */
+    [Required(ErrorMessage = "English first name is required")]
+    [StringLength(100, ErrorMessage = "English first name cannot exceed 100 characters")]
+    public string FirstNameEn { get; set; } = string.Empty;
+
+    [StringLength(100, ErrorMessage = "English middle name cannot exceed 100 characters")]
+    public string? MiddleNameEn { get; set; }
+
+    [Required(ErrorMessage = "English last name is required")]
+    [StringLength(100, ErrorMessage = "English last name cannot exceed 100 characters")]
+    public string LastNameEn { get; set; } = string.Empty;
+
+    /* ==== Demographics ==== */
+    [Required(ErrorMessage = "Gender is required")]
+    public Guid GenderLookupId { get; set; }
+
+    [Required(ErrorMessage = "Birth date is required")]
+    public DateOnly BirthDate { get; set; }
+
+    public Guid? NationalityLookupId { get; set; }
+    public Guid? MaritalStatusLookupId { get; set; }
+    public Guid? BloodGroupLookupId { get; set; }
+
+    /* ==== Contact ==== */
+    [Required(ErrorMessage = "Mobile number is required")]
+    [Phone(ErrorMessage = "Invalid mobile number format")]
+    [StringLength(20, ErrorMessage = "Mobile number cannot exceed 20 characters")]
+    public string Mobile { get; set; } = string.Empty;
+
+    [Phone(ErrorMessage = "Invalid phone number format")]
+    [StringLength(20, ErrorMessage = "Phone number cannot exceed 20 characters")]
+    public string? Phone { get; set; }
+
+    [EmailAddress(ErrorMessage = "Invalid email format")]
+    [StringLength(100, ErrorMessage = "Email cannot exceed 100 characters")]
+    public string? Email { get; set; }
+
+    /* ==== Branch ==== */
+    [Required(ErrorMessage = "Branch is required")]
+    public Guid BranchId { get; set; }
+
+    /* ==== Related Data ==== */
+    public List<CreateFullPatientAddressDto>? Addresses { get; set; }
+    public List<CreateFullPatientContactDto>? Contacts { get; set; }
+    public List<CreateFullPatientAttachmentDto>? Attachments { get; set; }
+    public List<CreateFullPatientInsuranceDto>? Insurances { get; set; }
+}
+
+public class CreateFullPatientAddressDto
+{
+    public Guid? CountryId { get; set; }
+    public Guid? CityId { get; set; }
+
+    [StringLength(200)]
+    public string? District { get; set; }
+
+    [StringLength(200)]
+    public string? Street { get; set; }
+
+    [StringLength(50)]
+    public string? BuildingNumber { get; set; }
+
+    [StringLength(20)]
+    public string? PostalCode { get; set; }
+
+    [StringLength(20)]
+    public string? AdditionalNumber { get; set; }
+}
+
+public class CreateFullPatientContactDto
+{
+    [StringLength(200)]
+    public string? ContactName { get; set; }
+
+    public Guid? RelationshipId { get; set; }
+
+    [StringLength(20)]
+    public string? Mobile { get; set; }
+
+    [StringLength(20)]
+    public string? Phone { get; set; }
+
+    [StringLength(200)]
+    [EmailAddress(ErrorMessage = "Invalid email format")]
+    public string? Email { get; set; }
+}
+
+public class CreateFullPatientAttachmentDto
+{
+    public Guid? AttachmentTypeId { get; set; }
+
+    [StringLength(500)]
+    public string? FileName { get; set; }
+
+    [StringLength(1000)]
+    public string? FilePath { get; set; }
+
+    [StringLength(20)]
+    public string? FileExtension { get; set; }
+
+    public long? FileSize { get; set; }
+}
+
+public class CreateFullPatientInsuranceDto
+{
+    public Guid? InsuranceCompanyId { get; set; }
+
+    [StringLength(100)]
+    public string? PolicyNumber { get; set; }
+
+    [StringLength(100)]
+    public string? MemberId { get; set; }
+
+    [StringLength(50)]
+    public string? InsuranceClass { get; set; }
+
+    public DateOnly? StartDate { get; set; }
+    public DateOnly? ExpiryDate { get; set; }
+}
