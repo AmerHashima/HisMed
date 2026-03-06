@@ -12,6 +12,9 @@ namespace HIS.Domain.Interfaces
     {
 
         public Task<DoctorSchedule?> GetScheduelByIdAsync(Guid Id, CancellationToken cancellationToken = default);
-        
+        public  Task<List<DoctorSchedule>> AddDoctorScheduelList(IEnumerable<DoctorSchedule> doctorSchedules, CancellationToken cancellation = default);
+
+
+
     }
 }

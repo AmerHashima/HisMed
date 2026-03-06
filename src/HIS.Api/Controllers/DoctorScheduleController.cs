@@ -39,6 +39,19 @@ namespace HIS.Api.Controllers
             }
 
         }
+        [HttpPost("AddDoctorScheduleBulk")]
+        public async Task<ActionResult<ApiResponse<List<DoctorScheduleBulkResponseDto>>>> CreateDoctorScheduleBulk( [FromBody] List<CreateDoctorScheduleBulkDto> request)
+        {
+            try        
+            {
+                var schdeuels = await mediator.Send(new CreateDoctorScheduleBulkCommand( request));
+                return SuccessResponse(schdeuels,"Schedules Added successfully");
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse<List<DoctorScheduleBulkResponseDto>>(ex.Message,500);
+            }
+        }
         [HttpPut]
         public async Task<ActionResult<ApiResponse<DoctorScheduleDto>>> UpdateDoctorScheduel([FromBody] UpdateDoctorSchdeuelDto request)
         {
@@ -93,6 +106,7 @@ namespace HIS.Api.Controllers
             return SuccessResponse(Scheduel, "DoctorScheduel data retrieved successfully");
 
         }
+        
 
     }
 }

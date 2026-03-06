@@ -10,5 +10,6 @@ namespace HIS.Domain.Interfaces
 {
     public interface IDoctorscheduelExceptionRepository:IBaseRepository<DoctorScheduleException>
     {
+        public Task<DoctorScheduleException?> GetScheduelEXceptionByIdAsync(Guid Id, CancellationToken cancellationToken = default);
     }
 }
