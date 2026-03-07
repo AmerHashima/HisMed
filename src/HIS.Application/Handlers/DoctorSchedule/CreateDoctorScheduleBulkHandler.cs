@@ -18,8 +18,18 @@ namespace HIS.Application.Handlers.DoctorSchedule
         }
         public async Task<List<DoctorScheduleBulkResponseDto>> Handle(CreateDoctorScheduleBulkCommand request, CancellationToken cancellationToken)
         {
-            var SchedulesList = mapper.Map<List<Domain.Entities.DoctorSchedule>>(request.DoctorSechduelList);
-             var result = await repository.AddDoctorScheduelList(SchedulesList,cancellationToken);
+            //var SchedulesList = mapper.Map<List<Domain.Entities.DoctorSchedule>>(request.DoctorSechduelList);
+            var SchedulesList = request.DoctorSechduelList.SelectMany(x => x.DoctorSchedules
+            .Select(innerlist => new Domain.Entities.DoctorSchedule()
+            {
+                DoctorId = x.DoctorId,
+                StartTime = innerlist.StartTime,
+                EndTime = innerlist.EndTime,
+                DayOfWeekId = innerlist.DayOfWeekId,
+                SlotDurationMinutes = innerlist.SlotDurationMinutes
+            }));
+            
+            var result = await repository.AddDoctorScheduelList(SchedulesList,cancellationToken);
             return mapper.Map<List<DoctorScheduleBulkResponseDto>>(result);
         }
     }

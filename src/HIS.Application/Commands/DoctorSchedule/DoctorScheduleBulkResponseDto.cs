@@ -10,6 +10,11 @@ namespace HIS.Application.Commands.DoctorSchedule
     public class DoctorScheduleBulkResponseDto
     {
         public Guid DoctorId { get; set; }
-        public List<DoctorSchedulesListDto> DoctorSchedules { get; set; }
+        public TimeOnly StartTime { get; set; }
+
+        public TimeOnly EndTime { get; set; }
+
+        public float SlotDurationMinutes { get; set; }
+
     }
 }

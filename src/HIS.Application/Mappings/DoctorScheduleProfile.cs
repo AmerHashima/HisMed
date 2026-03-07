@@ -20,8 +20,16 @@ namespace HIS.Application.Mappings
             //CreateMap<List<CreateDoctorScheduleDto>, List<DoctorSchedule>>();
             //CreateMap<List<DoctorSchedule>, List<DoctorScheduleDto>>();
 
+            
+            
+            //CreateMap<DoctorSchedulesListDto, DoctorSchedule>()
+            // .ForMember(dest => dest.DayOfWeekId, opt => opt.MapFrom(src => src.DayOfWeekId))
+            // .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
+            // .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
+            // .ForMember(dest => dest.SlotDurationMinutes, opt => opt.MapFrom(src => src.SlotDurationMinutes));
             CreateMap<CreateDoctorScheduleBulkDto, DoctorSchedule>();
-            CreateMap<DoctorScheduleBulkResponseDto, DoctorSchedule>();
+            CreateMap<DoctorSchedule,DoctorScheduleBulkResponseDto>();
+
         }
     }
 }
