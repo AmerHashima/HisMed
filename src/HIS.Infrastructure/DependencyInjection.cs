@@ -46,6 +46,8 @@ public static class DependencyInjection
         // Register repositories - Medical Staff
         // ====================================
         services.AddScoped<IDoctorRepository, DoctorRepository>();
+        services.AddScoped<IDoctorBranchRepository, DoctorBranchRepository>();
+        services.AddScoped<IDoctorAttachmentRepository, DoctorAttachmentRepository>();
 
         // ====================================
         // Register repositories - Patients

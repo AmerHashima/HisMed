@@ -19,14 +19,15 @@ public class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand, DoctorDt
 
     public async Task<DoctorDto> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
     {
-        if (await _repository.LicenseNumberExistsAsync(request.Doctor.LicenseNumber, cancellationToken: cancellationToken))
+        if (!string.IsNullOrEmpty(request.Doctor.LicenseNumber) &&
+            await _repository.LicenseNumberExistsAsync(request.Doctor.LicenseNumber, cancellationToken: cancellationToken))
         {
             throw new InvalidOperationException($"Doctor with license number '{request.Doctor.LicenseNumber}' already exists");
         }
 
         var doctor = _mapper.Map<Domain.Entities.Doctor>(request.Doctor);
         var createdDoctor = await _repository.AddAsync(doctor, cancellationToken);
-        
+
         return _mapper.Map<DoctorDto>(createdDoctor);
     }
 }

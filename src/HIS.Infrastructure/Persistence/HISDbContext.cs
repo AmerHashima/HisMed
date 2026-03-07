@@ -27,6 +27,8 @@ public class HISDbContext : DbContext
     
     // Medical Staff
     public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<DoctorBranch> DoctorBranches { get; set; }
+    public DbSet<DoctorAttachment> DoctorAttachments { get; set; }
     
     // Patients
     public DbSet<Patient> Patients { get; set; }
@@ -91,6 +93,70 @@ public class HISDbContext : DbContext
             entity.HasOne(a => a.Branch)
                   .WithMany()
                   .HasForeignKey(a => a.BranchId)
+                  .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<Doctor>(entity =>
+        {
+            entity.HasOne(d => d.User)
+                  .WithMany()
+                  .HasForeignKey(d => d.UserId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(d => d.Gender)
+                  .WithMany()
+                  .HasForeignKey(d => d.GenderId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(d => d.LicenseType)
+                  .WithMany()
+                  .HasForeignKey(d => d.LicenseTypeId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(d => d.Specialty)
+                  .WithMany()
+                  .HasForeignKey(d => d.SpecialtyId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(d => d.SubSpecialty)
+                  .WithMany()
+                  .HasForeignKey(d => d.SubSpecialtyId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(d => d.Department)
+                  .WithMany()
+                  .HasForeignKey(d => d.DepartmentId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(d => d.Branch)
+                  .WithMany()
+                  .HasForeignKey(d => d.BranchId)
+                  .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<DoctorBranch>(entity =>
+        {
+            entity.HasOne(db => db.Doctor)
+                  .WithMany(d => d.DoctorBranches)
+                  .HasForeignKey(db => db.DoctorId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(db => db.Branch)
+                  .WithMany()
+                  .HasForeignKey(db => db.BranchId)
+                  .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<DoctorAttachment>(entity =>
+        {
+            entity.HasOne(da => da.Doctor)
+                  .WithMany(d => d.DoctorAttachments)
+                  .HasForeignKey(da => da.DoctorId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(da => da.AttachmentType)
+                  .WithMany()
+                  .HasForeignKey(da => da.AttachmentTypeId)
                   .OnDelete(DeleteBehavior.NoAction);
         });
 

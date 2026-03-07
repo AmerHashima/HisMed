@@ -54,8 +54,8 @@ public class GetDoctorDataHandler : IRequestHandler<GetDoctorDataQuery, PagedRes
             HasPreviousPage = pagedEntities.HasPreviousPage,
             Metadata = new Dictionary<string, object>
             {
-                { "availableFilters", new List<string> { "LicenseNumber", "SpecialtyId", "BranchId", "DepartmentLookupId", "IsActive", "IsNphiesEnabled" } },
-                { "availableSortFields", new List<string> { "LicenseNumber", "IsActive", "CreatedAt" } }
+                { "availableFilters", new List<string> { "LicenseNumber", "SpecialtyId", "BranchId", "DepartmentId", "GenderId", "IsActive", "IsNphiesEnabled", "FirstNameEn", "LastNameEn" } },
+                { "availableSortFields", new List<string> { "LicenseNumber", "FirstNameEn", "LastNameEn", "IsActive", "CreatedAt" } }
             }
         };
     }

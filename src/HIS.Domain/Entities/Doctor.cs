@@ -7,34 +7,89 @@ namespace HIS.Domain.Entities;
 [Table("Doctors")]
 public class Doctor : BaseEntity
 {
-    [Required]
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
     [ForeignKey(nameof(UserId))]
-    public virtual SystemUser User { get; set; } = null!;
+    public virtual SystemUser? User { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public string LicenseNumber { get; set; } = string.Empty;
+    /* ==== Names (Arabic) ==== */
+    [MaxLength(200)]
+    public string? FirstNameAr { get; set; }
 
-    [Required]
-    public Guid SpecialtyId { get; set; }
+    [MaxLength(200)]
+    public string? MiddleNameAr { get; set; }
+
+    [MaxLength(200)]
+    public string? LastNameAr { get; set; }
+
+    /* ==== Names (English) ==== */
+    [MaxLength(200)]
+    public string? FirstNameEn { get; set; }
+
+    [MaxLength(200)]
+    public string? MiddleNameEn { get; set; }
+
+    [MaxLength(200)]
+    public string? LastNameEn { get; set; }
+
+    /* ==== Demographics ==== */
+    public Guid? GenderId { get; set; }
+    [ForeignKey(nameof(GenderId))]
+    public virtual AppLookupDetail? Gender { get; set; }
+
+    /* ==== License ==== */
+    [MaxLength(100)]
+    public string? LicenseNumber { get; set; }
+
+    public Guid? LicenseTypeId { get; set; }
+    [ForeignKey(nameof(LicenseTypeId))]
+    public virtual AppLookupDetail? LicenseType { get; set; }
+
+    public DateOnly? LicenseIssueDate { get; set; }
+    public DateOnly? LicenseExpiryDate { get; set; }
+
+    /* ==== Specialty ==== */
+    public Guid? SpecialtyId { get; set; }
     [ForeignKey(nameof(SpecialtyId))]
-    public virtual Specialty Specialty { get; set; } = null!;
+    public virtual Specialty? Specialty { get; set; }
 
-    [Required]
-    public Guid DepartmentLookupId { get; set; }
-    [ForeignKey(nameof(DepartmentLookupId))]
-    public virtual AppLookupDetail Department { get; set; } = null!;
+    public Guid? SubSpecialtyId { get; set; }
+    [ForeignKey(nameof(SubSpecialtyId))]
+    public virtual AppLookupDetail? SubSpecialty { get; set; }
 
-    [Required]
-    public Guid BranchId { get; set; }
+    /* ==== Department ==== */
+    public Guid? DepartmentId { get; set; }
+    [ForeignKey(nameof(DepartmentId))]
+    public virtual AppLookupDetail? Department { get; set; }
+
+    /* ==== Contact ==== */
+    [MaxLength(20)]
+    public string? Mobile { get; set; }
+
+    [MaxLength(20)]
+    public string? Phone { get; set; }
+
+    [MaxLength(200)]
+    public string? Email { get; set; }
+
+    /* ==== Professional ==== */
+    public int? YearsOfExperience { get; set; }
+
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal? ConsultationFee { get; set; }
+
+    /* ==== Branch ==== */
+    public Guid? BranchId { get; set; }
     [ForeignKey(nameof(BranchId))]
-    public virtual HospitalBranch Branch { get; set; } = null!;
+    public virtual HospitalBranch? Branch { get; set; }
 
-    [MaxLength(50)]
+    /* ==== NPHIES ==== */
+    [MaxLength(100)]
     public string? NphiesProviderId { get; set; }
 
-    public bool IsNphiesEnabled { get; set; } = true;
+    [MaxLength(100)]
+    public string? NphiesLicenseNumber { get; set; }
+
+    public bool IsNphiesEnabled { get; set; } = false;
     public bool IsActive { get; set; } = true;
 
     // Navigation Properties
@@ -43,5 +98,6 @@ public class Doctor : BaseEntity
     public virtual ICollection<DoctorSchedule>? Schedules { get; set; }
     public virtual ICollection<DoctorScheduleException>? ScheduleExceptions { get; set; }
     public virtual ICollection<DoctorTimeSlot>? TimeSlots { get; set; }
-
+    public virtual ICollection<DoctorBranch>? DoctorBranches { get; set; }
+    public virtual ICollection<DoctorAttachment>? DoctorAttachments { get; set; }
 }

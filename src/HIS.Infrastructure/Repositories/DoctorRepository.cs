@@ -15,7 +15,10 @@ public class DoctorRepository : BaseRepository<Doctor>, IDoctorRepository
     {
         return await _context.Doctors
             .Include(d => d.User)
+            .Include(d => d.Gender)
+            .Include(d => d.LicenseType)
             .Include(d => d.Specialty)
+            .Include(d => d.SubSpecialty)
             .Include(d => d.Department)
             .Include(d => d.Branch)
             .Where(x => !x.IsDeleted)
@@ -26,7 +29,10 @@ public class DoctorRepository : BaseRepository<Doctor>, IDoctorRepository
     {
         return await _context.Doctors
             .Include(d => d.User)
+            .Include(d => d.Gender)
+            .Include(d => d.LicenseType)
             .Include(d => d.Specialty)
+            .Include(d => d.SubSpecialty)
             .Include(d => d.Department)
             .Include(d => d.Branch)
             .Where(x => !x.IsDeleted)
@@ -37,7 +43,10 @@ public class DoctorRepository : BaseRepository<Doctor>, IDoctorRepository
     {
         return await _context.Doctors
             .Include(d => d.User)
+            .Include(d => d.Gender)
+            .Include(d => d.LicenseType)
             .Include(d => d.Specialty)
+            .Include(d => d.SubSpecialty)
             .Include(d => d.Department)
             .Include(d => d.Branch)
             .Where(x => !x.IsDeleted && x.SpecialtyId == specialtyId && x.IsActive)
@@ -48,7 +57,10 @@ public class DoctorRepository : BaseRepository<Doctor>, IDoctorRepository
     {
         return await _context.Doctors
             .Include(d => d.User)
+            .Include(d => d.Gender)
+            .Include(d => d.LicenseType)
             .Include(d => d.Specialty)
+            .Include(d => d.SubSpecialty)
             .Include(d => d.Department)
             .Include(d => d.Branch)
             .Where(x => !x.IsDeleted && x.BranchId == branchId && x.IsActive)
@@ -59,18 +71,22 @@ public class DoctorRepository : BaseRepository<Doctor>, IDoctorRepository
     {
         return await _context.Doctors
             .Include(d => d.User)
+            .Include(d => d.Gender)
+            .Include(d => d.LicenseType)
             .Include(d => d.Specialty)
+            .Include(d => d.SubSpecialty)
             .Include(d => d.Department)
             .Include(d => d.Branch)
             .Where(x => !x.IsDeleted && x.IsActive)
-            .OrderBy(d => d.User.FullName)
+            .OrderBy(d => d.FirstNameEn)
+            .ThenBy(d => d.LastNameEn)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> LicenseNumberExistsAsync(string licenseNumber, Guid? excludeId = null, CancellationToken cancellationToken = default)
     {
         var query = _context.Doctors.Where(x => !x.IsDeleted && x.LicenseNumber == licenseNumber);
-        
+
         if (excludeId.HasValue)
         {
             query = query.Where(x => x.Oid != excludeId.Value);
