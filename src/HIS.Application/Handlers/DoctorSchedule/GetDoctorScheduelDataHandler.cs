@@ -61,3 +61,4 @@ namespace HIS.Application.Handlers.DoctorSchedule
         }
     }
 }
+

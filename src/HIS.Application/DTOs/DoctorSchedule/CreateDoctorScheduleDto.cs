@@ -17,6 +17,8 @@ namespace HIS.Application.DTOs.DoctorSchedule
 
         [Required(ErrorMessage ="EndDate is Required")]
         public TimeOnly EndTime { get; set; }
-        
+        [Required(ErrorMessage = "EndDate is Required")]
+        public float SlotDurationMinutes { get; set; }
+
     }
 }

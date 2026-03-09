@@ -84,8 +84,8 @@ namespace HIS.Api.Controllers
             }
 
         }
-        [HttpGet]
-        public async Task<ActionResult<ApiResponse<PagedResult<DoctorScheduleDto>>>> GetAllDoctorScheduel([FromQuery] QueryRequest request)
+        [HttpPost("query")]
+        public async Task<ActionResult<ApiResponse<PagedResult<DoctorScheduleDto>>>> GetDoctorScheduelData([FromQuery] QueryRequest request)
         {
             try
             {
@@ -105,6 +105,21 @@ namespace HIS.Api.Controllers
                 return ErrorResponse<DoctorScheduleDto>("DoctorSchedule NotFound", 404);
             return SuccessResponse(Scheduel, "DoctorScheduel data retrieved successfully");
 
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<IEnumerable<DoctorScheduleDto>>>> GetDoctorSchdeules(
+            [FromQuery] Guid?DoctorId,
+            [FromQuery] TimeOnly? StartTime)
+        {
+            try
+            {
+                var query = await mediator.Send(new GetDoctorSchdeuleListQuery(DoctorId, StartTime));
+                return SuccessResponse(query, "Doctor Schdeduels retrieved successfully");
+            }
+            catch(Exception ex)
+            {
+                return ErrorResponse<IEnumerable<DoctorScheduleDto>>(ex.Message,500);
+            }
         }
         
 
