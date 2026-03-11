@@ -20,10 +20,25 @@ namespace HIS.Infrastructure.Repositories
             this.context = context;
         }
 
+       public async  Task<IEnumerable<DoctorScheduleException?>> GetSchdeuleExceptionByExceptionDateAsync(DateOnly ExceptionDate,CancellationToken cancellation=default)
+        {
+           return await context.DoctorScheduleExceptions.Where(x => x.ExceptionDate == ExceptionDate ).ToListAsync(cancellation);   
+        }
+
+        public async  Task<IEnumerable<DoctorScheduleException?>> GetSchdeulesExceptionByDoctorIdAsync(Guid DoctorId,CancellationToken cancellation =default)
+        {
+            return await context.DoctorScheduleExceptions.Where(x => x.DoctorId == DoctorId).ToListAsync(cancellation);
+        }
+
         public async Task<DoctorScheduleException?> GetScheduelEXceptionByIdAsync(Guid Id, CancellationToken cancellationToken = default)
         {
             return await context.DoctorScheduleExceptions.Include(x => x.Days).Where(x => !x.IsDeleted)
             .FirstOrDefaultAsync(x => x.Oid == Id, cancellationToken);
+        }
+
+        public async Task<IEnumerable<DoctorScheduleException?>> GetScheduleExceptionByStartTimeAsync(TimeOnly StartTime, CancellationToken cancellation = default)
+        {
+            return await context.DoctorScheduleExceptions.Where(x => x.StartTime == StartTime).ToListAsync(cancellation); 
         }
     }
 }

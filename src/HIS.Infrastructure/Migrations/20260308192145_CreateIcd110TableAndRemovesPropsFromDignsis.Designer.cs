@@ -4,6 +4,7 @@ using HIS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HIS.Infrastructure.Migrations
 {
     [DbContext(typeof(HISDbContext))]
-    partial class HISDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260308192145_CreateIcd110TableAndRemovesPropsFromDignsis")]
+    partial class CreateIcd110TableAndRemovesPropsFromDignsis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1384,7 +1387,7 @@ namespace HIS.Infrastructure.Migrations
                     b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DiagnosisId")
+                    b.Property<Guid>("DiagnosisId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("Effectivefrom")
@@ -1766,7 +1769,9 @@ namespace HIS.Infrastructure.Migrations
                 {
                     b.HasOne("HIS.Domain.Entities.Diagnosis", "Diagnosis")
                         .WithMany("emr_Icd110")
-                        .HasForeignKey("DiagnosisId");
+                        .HasForeignKey("DiagnosisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Diagnosis");
                 });

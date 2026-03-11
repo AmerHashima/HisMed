@@ -47,6 +47,8 @@ public class HISDbContext : DbContext
     public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
     public DbSet<DoctorScheduleException> DoctorScheduleExceptions { get; set; }
     public DbSet<DoctorTimeSlot> DoctorTimeSlots { get; set; }
+    // emr-icd110
+    public DbSet<emr_icd110> emr_icd110 { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

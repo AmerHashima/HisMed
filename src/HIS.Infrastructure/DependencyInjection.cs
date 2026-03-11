@@ -68,8 +68,15 @@ public static class DependencyInjection
         // ====================================
         services.AddScoped<IDoctorScheduleRepository, DoctorScheduleRepository>();
         services.AddScoped<IDoctorscheduelExceptionRepository, DoctorScheduelExceptionRepository>();
+        // ====================================
+        // Register Diagnosis
+        // ====================================
+        services.AddScoped<IDiagonsisRepository, DiagonsisRepository>();
 
         // ====================================
+        // Register Emr
+        // ====================================
+        services.AddScoped<IEmrRepository, EmrRepository>();
         // Register AutoMapper
         // ====================================
         services.AddAutoMapper(cfg => {

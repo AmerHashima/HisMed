@@ -1,33 +1,30 @@
 ﻿using AutoMapper;
 using HIS.Application.DTOs.Common;
-using HIS.Application.DTOs.Doctor;
-using HIS.Application.DTOs.DoctorSchedule;
-using HIS.Application.Queries.DoctorSchedule;
+using HIS.Application.DTOs.Emr_Icd110;
+using HIS.Application.Queries.EmrIcd110;
 using HIS.Application.Services;
-using HIS.Domain.Common;
 using HIS.Domain.Interfaces;
 using MediatR;
-using Microsoft.AspNetCore.Http.Extensions;
 
-namespace HIS.Application.Handlers.DoctorSchedule
+namespace HIS.Application.Handlers.EmrIcd110
 {
-    public sealed class GetDoctorScheduelDataHandler : IRequestHandler<GetDoctorScheduleDataQuery, PagedResult<DoctorScheduleDto>>
+    public sealed class GetEmrIcd110DataHandler : IRequestHandler<GetEmrIcd110DataQuery, PagedResult<EmrResponseDto>>
     {
-        private readonly IMapper mapper;
-        private readonly IDoctorScheduleRepository doctorScheduleRepo;
         private readonly IQueryBuilderService queryBuilder;
+        private readonly IMapper mapper;
+        private readonly IEmrRepository repository;
 
-        public GetDoctorScheduelDataHandler(IMapper mapper,IDoctorScheduleRepository doctorScheduleRepo,IQueryBuilderService queryBuilder)
+        public GetEmrIcd110DataHandler(IQueryBuilderService queryBuilder, IMapper mapper, IEmrRepository repository)
         {
-            this.mapper = mapper;
-            this.doctorScheduleRepo = doctorScheduleRepo;
             this.queryBuilder = queryBuilder;
+            this.mapper = mapper;
+            this.repository = repository;
         }
-        public async Task<PagedResult<DoctorScheduleDto>> Handle(GetDoctorScheduleDataQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<EmrResponseDto>> Handle(GetEmrIcd110DataQuery request, CancellationToken cancellationToken)
         {
             // Start with base query - all non-deleted doctors with includes
-            var query = doctorScheduleRepo.GetQueryable().Where(x => !x.IsDeleted);
-           
+            var query = repository.GetQueryable().Where(x => !x.IsDeleted);
+
 
             // Apply filters
             query = queryBuilder.ApplyFilters(query, request.QueryRequest.Request.Filters);
@@ -39,8 +36,8 @@ namespace HIS.Application.Handlers.DoctorSchedule
             var pagedEntities = await queryBuilder.ApplyPaginationAsync(query, request.QueryRequest.Request.Pagination);
 
             // Map to DTOs
-            var mappedData = mapper.Map<IEnumerable<DoctorScheduleDto>>(pagedEntities.Data);
-            return new PagedResult<DoctorScheduleDto>()
+            var mappedData = mapper.Map<IEnumerable<EmrResponseDto>>(pagedEntities.Data);
+            return new PagedResult<EmrResponseDto>()
             {
                 Data = mappedData,
                 TotalRecords = pagedEntities.TotalRecords,
@@ -51,14 +48,10 @@ namespace HIS.Application.Handlers.DoctorSchedule
                 HasPreviousPage = pagedEntities.HasPreviousPage,
                 Metadata = new Dictionary<string, object>
                 {
-                      { "availableFilters", new List<string> { "DoctorId", "StartTime", "EndTime" } },
-                      { "availableSortFields", new List<string> {  "StartTime", "EndTime" } }
+                    { "availableFilters", new List<string> { "Level" } },
+                    { "availableSortFields", new List<string> { "CodeId", "AustCode" } }
                 }
-
-
-
             };
         }
     }
 }
-
