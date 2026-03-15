@@ -40,7 +40,7 @@ namespace HIS.Api.Controllers
 
         }
         [HttpPost("AddDoctorScheduleBulk")]
-        public async Task<ActionResult<ApiResponse<List<DoctorScheduleDto>>>>CreateDoctorScheduleBulk( [FromBody] List<CreateDoctorScheduleBulkDto> request)
+        public async Task<ActionResult<ApiResponse<List<DoctorScheduleDto>>>>CreateDoctorScheduleBulk( [FromBody] CreateDoctorScheduleBulkDto request)
         {
             try        
             {

@@ -44,6 +44,8 @@ public class HISDbContext : DbContext
     public DbSet<Prescription> Prescriptions { get; set; }
     
     // Doctor Scheduling
+    public DbSet<DoctorScheduleMaster> DoctorSchedulesMaster { get; set; }
+    public DbSet<DoctorScheduleDetail> DoctorScheduleDetail { get; set; }
     public DbSet<DoctorScheduleException> DoctorScheduleExceptions { get; set; }
     public DbSet<DoctorTimeSlot> DoctorTimeSlots { get; set; }
     // emr-icd110
@@ -334,6 +336,50 @@ public class HISDbContext : DbContext
 
             }
             );
+        //========================================================
+        //                  Seed StatusData into tables
+        //========================================================
+        modelBuilder.Entity<AppLookupMaster>().HasData(
+
+           new AppLookupMaster
+           {
+               Oid = Guid.Parse("10000000-0000-0000-0000-000000000011"),
+               LookupCode = "Status",
+               LookupNameAr = "الحاله",
+               LookupNameEn = "Status",
+               Description = "Doctor Status",
+               CreatedAt = new DateTime(2026, 3, 15)
+
+           }
+       );
+        modelBuilder.Entity<AppLookupDetail>().HasData(
+                        new AppLookupDetail
+                        {
+                            Oid = Guid.Parse("10000000-0000-0000-0011-000000000001"),
+                            MasterID = Guid.Parse("10000000-0000-0000-0000-000000000011"),
+                            ValueCode = "Avl",
+                            ValueNameAr = "متاح",
+                            ValueNameEn = "Available",
+                            SortOrder = 1,
+                            IsDefault = false,
+                            IsActive = true,
+                            CreatedAt = new DateTime(2026, 3, 15)
+
+                        },
+            new AppLookupDetail
+            {
+                Oid = Guid.Parse("10000000-0000-0000-0011-000000000002"),
+                MasterID = Guid.Parse("10000000-0000-0000-0000-000000000011"),
+                ValueCode = "NotAvl",
+                ValueNameAr = "غير متاح",
+                ValueNameEn = "Not Available",
+                SortOrder = 2,
+                IsDefault = false,
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 3, 15)
+
+            });
+
 
 
 

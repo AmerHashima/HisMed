@@ -19,50 +19,51 @@ namespace HIS.Application.Handlers.DoctorSchedule
         }
         public async Task<List<DoctorScheduleDto>> Handle(CreateDoctorScheduleBulkCommand request, CancellationToken cancellationToken)
         {
-            //var SchedulesList = mapper.Map<List<Domain.Entities.DoctorSchedule>>(request.DoctorSechduelList);
-            var SchedulesList = request.DoctorSechduelList.SelectMany(x => x.DoctorSchedules
-            .Select(innerlist => new DoctorScheduleMaster()
-            {
-                DoctorId = innerlist.DoctorId,
-               BranchId = innerlist.BranchId,
-               StatusId = innerlist.StatusId,
-               SpecialtyId= innerlist.SpecialtyId,
-               IsActive= innerlist.IsActive,
-               IsPriority= innerlist.IsPriority,
-               Details = new List<DoctorScheduleDetail>()
-               {
-                   new DoctorScheduleDetail()
-                   {
-                       StartTime = innerlist.StartTime,
-                       EndTime = innerlist.EndTime,
-                       DayOfWeekId = innerlist.DayOfWeekId,
-                       SlotDurationMinutes = innerlist.SlotDurationMinutes,
-
-                   }
-               }
-               
-            }));
             
-            var result = await repository.AddDoctorScheduelList(SchedulesList,cancellationToken);
+            var scheduleDetails = request.DoctorSechduel.DoctorSchedulesList
+        .Select(s => new DoctorScheduleDetail()
+        {
+            StartTime = s.StartTime,
+            EndTime = s.EndTime,
+            DayOfWeekId = s.DayOfWeekId,
+            SlotDurationMinutes = s.SlotDurationMinutes,
+        })
+        .ToList();
 
-           
-            return   result.Select(schedule => new DoctorScheduleDto()
+            var scheduleMaster = new DoctorScheduleMaster()
             {
-                
-                        Branch =schedule.Branch.Name,
-                        StartTime = schedule.Details.First().StartTime,
-                        EndTime= schedule.Details.First().EndTime,
-                        Status = schedule.Status.ToString(),
-                        DayOfWeekNameAr = schedule.Details.First().DayOfweek.ValueNameAr,
-                        DayOfWeekNameEn = schedule.Details.First().DayOfweek.ValueNameEn,
-                        SlotDurationMinutes =schedule.Details.First().SlotDurationMinutes,
-                        Specialty = schedule.Specialty.NameEn,
-                        DoctorId =schedule.DoctorId,
-                        IsActive = schedule.IsActive,
-                        IsPriority = schedule.IsPriority
-                     
+                DoctorId = request.DoctorSechduel.DoctorId,
+                BranchId = request.DoctorSechduel.BranchId,
+                StatusId = request.DoctorSechduel.StatusId,
+                SpecialtyId = request.DoctorSechduel.SpecialtyId,
+                IsActive = request.DoctorSechduel.IsActive,
+                IsPriority = request.DoctorSechduel.IsPriority,
+                Details = scheduleDetails   
+            };
 
-            }).ToList();
+
+
+            var result = await repository.AddAsync(scheduleMaster, cancellationToken);
+
+
+            return new List<DoctorScheduleDto>()
+            {
+                new DoctorScheduleDto(){
+
+                        Branch = result.Branch.Name,
+                        StartTime = result.Details.First().StartTime,
+                        EndTime= result.Details.First().EndTime,
+                        Status = result.Status.ToString(),
+                        DayOfWeekNameAr = result.Details.First().DayOfweek.ValueNameAr,
+                        DayOfWeekNameEn = result.Details.First().DayOfweek.ValueNameEn,
+                        SlotDurationMinutes = result.Details.First().SlotDurationMinutes,
+                        Specialty = result.Specialty.NameEn,
+                        DoctorId = result.DoctorId,
+                        IsActive = result.IsActive,
+                        IsPriority = result.IsPriority
+                     }
+
+            };
         }
     }
 }
