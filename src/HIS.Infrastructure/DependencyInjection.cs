@@ -64,9 +64,10 @@ public static class DependencyInjection
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IEncounterRepository, EncounterRepository>();
         // ====================================
-        // Register DoctorSchedule - DoctorScheduleException
+        // Register DoctorScheduleMaster and Detail - DoctorScheduleException
         // ====================================
-        services.AddScoped<IDoctorScheduleRepository, DoctorScheduleRepository>();
+        services.AddScoped<IDoctorScheduleMasterRepository, DoctorScheduleMasterRepository>();
+       
         services.AddScoped<IDoctorscheduelExceptionRepository, DoctorScheduelExceptionRepository>();
         // ====================================
         // Register Diagnosis

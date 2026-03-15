@@ -10,17 +10,15 @@ namespace HIS.Application.DTOs.DoctorSchedule
     public class UpdateDoctorSchdeuelDto
     {
         public Guid Oid { get; set; }
-        [Required(ErrorMessage = "DoctorID is Required")]
         public Guid DoctorId { get; set; }
-
-        [Required(ErrorMessage = "Day of week is Required")]
-
         public Guid DayOfWeekId { get; set; }
-
-        [Required(ErrorMessage = "StartTime is Required")]
         public TimeOnly StartTime { get; set; }
-
-        [Required(ErrorMessage = "EndDate is Required")]
         public TimeOnly EndTime { get; set; }
+        public Guid StatusId { get; set; }
+        public Guid BranchId { get; set; }
+        public Guid SpecialtyId { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsPriority { get; set; } = false;
+        public float SlotDurationMinutes { get; set; } = 15;
     }
 }

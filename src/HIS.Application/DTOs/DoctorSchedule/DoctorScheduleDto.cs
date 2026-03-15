@@ -24,5 +24,17 @@ namespace HIS.Application.DTOs.DoctorSchedule
         public float SlotDurationMinutes { get; set; }
 
         public bool IsActive { get; set; } = true;
+        
+        
+        public string Status { get; set; }
+        public string Branch { get; set; }
+        public string Specialty { get; set; }
+       
+        public bool IsPriority { get; set; } = false;
+        
+        
+       
+
+        
     }
 }

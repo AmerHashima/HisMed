@@ -40,7 +40,7 @@ namespace HIS.Api.Controllers
 
         }
         [HttpPost("AddDoctorScheduleBulk")]
-        public async Task<ActionResult<ApiResponse<List<DoctorScheduleBulkResponseDto>>>> CreateDoctorScheduleBulk( [FromBody] List<CreateDoctorScheduleBulkDto> request)
+        public async Task<ActionResult<ApiResponse<List<DoctorScheduleDto>>>>CreateDoctorScheduleBulk( [FromBody] List<CreateDoctorScheduleBulkDto> request)
         {
             try        
             {
@@ -49,7 +49,7 @@ namespace HIS.Api.Controllers
             }
             catch (Exception ex)
             {
-                return ErrorResponse<List<DoctorScheduleBulkResponseDto>>(ex.Message,500);
+                return ErrorResponse<List<DoctorScheduleDto>>(ex.Message,500);
             }
         }
         [HttpPut]

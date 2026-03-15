@@ -95,7 +95,7 @@ public class Doctor : BaseEntity
     // Navigation Properties
     public virtual ICollection<Appointment>? Appointments { get; set; }
     public virtual ICollection<Encounter>? Encounters { get; set; }
-    public virtual ICollection<DoctorSchedule>? Schedules { get; set; }
+    public virtual ICollection<DoctorScheduleMaster>? Schedules { get; set; }
     public virtual ICollection<DoctorScheduleException>? ScheduleExceptions { get; set; }
     public virtual ICollection<DoctorTimeSlot>? TimeSlots { get; set; }
     public virtual ICollection<DoctorBranch>? DoctorBranches { get; set; }

@@ -8,15 +8,15 @@ namespace HIS.Application.Mappings
     {
         public DoctorScheduleProfile()
         {
-            CreateMap<DoctorSchedule, DoctorScheduleDto>()
-            .ForMember(dest => dest.DayOfWeekNameEn, opt => opt.MapFrom(src => src.DayOfweek.ValueNameEn))
-            .ForMember(dest => dest.DayOfWeekNameAr, opt => opt.MapFrom(src => src.DayOfweek.ValueNameAr))
-            .ReverseMap();
+            //CreateMap<DoctorScheduleMaster, DoctorScheduleDto>()
+            //.ForMember(dest => dest.DayOfWeekNameEn, opt => opt.MapFrom(src => src.DayOfweek.ValueNameEn))
+            //.ForMember(dest => dest.DayOfWeekNameAr, opt => opt.MapFrom(src => src.DayOfweek.ValueNameAr))
+            //.ReverseMap();
 
-            CreateMap<CreateDoctorScheduleDto, DoctorSchedule>();
+            CreateMap<CreateDoctorScheduleDto, DoctorScheduleMaster>();
             //    .ForMember(dest => dest.day, opt => opt.MapFrom(src => src.IdentityType.ValueNameEn))
-            CreateMap<UpdateDoctorSchdeuelDto, DoctorSchedule>().ForMember(dest => dest.Oid, opt => opt.Ignore());
-            CreateMap<CreateDoctorScheduleCommand, DoctorSchedule>().ForMember(dest => dest.Oid, opt => opt.Ignore());
+            CreateMap<UpdateDoctorSchdeuelDto, DoctorScheduleMaster>().ForMember(dest => dest.Oid, opt => opt.Ignore());
+            CreateMap<CreateDoctorScheduleCommand, DoctorScheduleMaster>().ForMember(dest => dest.Oid, opt => opt.Ignore());
             //CreateMap<List<CreateDoctorScheduleDto>, List<DoctorSchedule>>();
             //CreateMap<List<DoctorSchedule>, List<DoctorScheduleDto>>();
 
@@ -27,8 +27,8 @@ namespace HIS.Application.Mappings
             // .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
             // .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
             // .ForMember(dest => dest.SlotDurationMinutes, opt => opt.MapFrom(src => src.SlotDurationMinutes));
-            CreateMap<CreateDoctorScheduleBulkDto, DoctorSchedule>();
-            CreateMap<DoctorSchedule,DoctorScheduleBulkResponseDto>();
+            CreateMap<CreateDoctorScheduleBulkDto, DoctorScheduleMaster>();
+            CreateMap<DoctorScheduleMaster,DoctorScheduleBulkResponseDto>();
 
         }
     }

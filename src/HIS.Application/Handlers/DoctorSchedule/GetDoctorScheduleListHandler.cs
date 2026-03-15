@@ -12,9 +12,9 @@ namespace HIS.Application.Handlers.DoctorSchedule
     public sealed class GetDoctorScheduleListHandler : IRequestHandler<GetDoctorSchdeuleListQuery, IEnumerable<DoctorScheduleDto>>
     {
         private readonly IMapper mapper;
-        private readonly IDoctorScheduleRepository repository;
+        private readonly IDoctorScheduleMasterRepository repository;
 
-        public GetDoctorScheduleListHandler(IMapper mapper,IDoctorScheduleRepository repository)
+        public GetDoctorScheduleListHandler(IMapper mapper,IDoctorScheduleMasterRepository repository)
         {
             this.mapper = mapper;
             this.repository = repository;
@@ -26,10 +26,10 @@ namespace HIS.Application.Handlers.DoctorSchedule
                 var result = await repository.GetSchdeuleByDoctorIdAsync(request.DoctorId.Value, cancellationToken);
                 return mapper.Map<IEnumerable<DoctorScheduleDto>>(result);
             }
-           else if (request.StartTime.HasValue)
-            {
-                var result = await repository.GetSchdeulesByStartTime(request.StartTime,cancellationToken);
-            }
+           //else if (request.StartTime.HasValue)
+           // {
+           //     //var result = await repository.GetSchdeulesByStartTime(request.StartTime,cancellationToken);
+           // }
             
                 var schedules = await repository.GetAllAsync(cancellationToken);
             

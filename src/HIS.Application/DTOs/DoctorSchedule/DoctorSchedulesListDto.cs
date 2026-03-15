@@ -8,6 +8,7 @@ namespace HIS.Application.DTOs.DoctorSchedule
 {
     public class DoctorSchedulesListDto
     {
+        public Guid DoctorId { get; set; }
         public TimeOnly StartTime { get; set; }
 
         public TimeOnly EndTime { get; set; }
