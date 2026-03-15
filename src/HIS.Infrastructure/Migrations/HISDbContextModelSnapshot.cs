@@ -315,15 +315,6 @@ namespace HIS.Infrastructure.Migrations
                     b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DiagnosisCode")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("DiagnosisName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<Guid>("EncounterId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1520,6 +1511,106 @@ namespace HIS.Infrastructure.Migrations
                     b.ToTable("SystemUsers");
                 });
 
+            modelBuilder.Entity("HIS.Domain.Entities.emr_icd110", b =>
+                {
+                    b.Property<Guid>("Oid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("AgeH")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AgeL")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AsciiShortDesc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AsciidDesc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Asterisk")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Atype")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AustCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CodeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("ConceptChange")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Dagger")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DiagnosisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("Effectivefrom")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("Inactive")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MorphCode")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rdiag")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Sex")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Stype")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnacceptPdx")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Valid")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("reactivated")
+                        .HasColumnType("date");
+
+                    b.HasKey("Oid");
+
+                    b.HasIndex("DiagnosisId");
+
+                    b.ToTable("emr_icd110");
+                });
+
             modelBuilder.Entity("HIS.Domain.Entities.AppLookupDetail", b =>
                 {
                     b.HasOne("HIS.Domain.Entities.AppLookupMaster", "Master")
@@ -1916,6 +2007,15 @@ namespace HIS.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("HIS.Domain.Entities.emr_icd110", b =>
+                {
+                    b.HasOne("HIS.Domain.Entities.Diagnosis", "Diagnosis")
+                        .WithMany("emr_Icd110")
+                        .HasForeignKey("DiagnosisId");
+
+                    b.Navigation("Diagnosis");
+                });
+
             modelBuilder.Entity("HIS.Domain.Entities.AppLookupMaster", b =>
                 {
                     b.Navigation("LookupDetails");
@@ -1926,6 +2026,11 @@ namespace HIS.Infrastructure.Migrations
                     b.Navigation("Encounter");
 
                     b.Navigation("TimeSlot");
+                });
+
+            modelBuilder.Entity("HIS.Domain.Entities.Diagnosis", b =>
+                {
+                    b.Navigation("emr_Icd110");
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Doctor", b =>

@@ -7,9 +7,9 @@ namespace HIS.Application.Handlers.DoctorSchedule
     public sealed record DeleteDoctorSecheduelHandler : IRequestHandler<DeleteDoctorScheduelCommand, bool>
     {
         private readonly IMapper mapper;
-        private readonly IDoctorScheduleRepository repository;
+        private readonly IDoctorScheduleMasterRepository repository;
 
-        public DeleteDoctorSecheduelHandler(IMapper mapper, IDoctorScheduleRepository repository)
+        public DeleteDoctorSecheduelHandler(IMapper mapper, IDoctorScheduleMasterRepository repository)
         {
             this.mapper = mapper;
             this.repository = repository;

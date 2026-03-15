@@ -14,10 +14,10 @@ namespace HIS.Application.Handlers.DoctorSchedule
     public sealed class GetDoctorScheduelDataHandler : IRequestHandler<GetDoctorScheduleDataQuery, PagedResult<DoctorScheduleDto>>
     {
         private readonly IMapper mapper;
-        private readonly IDoctorScheduleRepository doctorScheduleRepo;
+        private readonly IDoctorScheduleMasterRepository doctorScheduleRepo;
         private readonly IQueryBuilderService queryBuilder;
 
-        public GetDoctorScheduelDataHandler(IMapper mapper,IDoctorScheduleRepository doctorScheduleRepo,IQueryBuilderService queryBuilder)
+        public GetDoctorScheduelDataHandler(IMapper mapper,IDoctorScheduleMasterRepository doctorScheduleRepo,IQueryBuilderService queryBuilder)
         {
             this.mapper = mapper;
             this.doctorScheduleRepo = doctorScheduleRepo;
@@ -61,3 +61,4 @@ namespace HIS.Application.Handlers.DoctorSchedule
         }
     }
 }
+

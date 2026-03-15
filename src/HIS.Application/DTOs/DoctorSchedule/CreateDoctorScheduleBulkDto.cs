@@ -8,7 +8,7 @@ namespace HIS.Application.DTOs.DoctorSchedule
 {
      public  class CreateDoctorScheduleBulkDto
      {
-        public Guid DoctorId { get; set; }
-        public List<DoctorSchedulesListDto>  DoctorSchedules{ get; set; }
+        
+        public List<CreateDoctorScheduleDto>  DoctorSchedules{ get; set; }
      }
 }

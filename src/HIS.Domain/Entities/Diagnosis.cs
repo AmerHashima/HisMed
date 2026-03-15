@@ -12,12 +12,7 @@ public class Diagnosis : BaseEntity
     [ForeignKey(nameof(EncounterId))]
     public virtual Encounter Encounter { get; set; } = null!;
 
-    [MaxLength(20)]
-    public string? DiagnosisCode { get; set; } // ICD-10 code
-
-    [Required]
-    [MaxLength(255)]
-    public string DiagnosisName { get; set; } = string.Empty;
-
     public bool IsPrimary { get; set; } = false;
+    //Navigational Properties
+    public ICollection<emr_icd110> emr_Icd110 { get; set; }
 }

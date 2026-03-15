@@ -1,8 +1,10 @@
 ﻿using HIS.Api.Models;
 using HIS.Application.Commands.DoctorScheduelException;
 using HIS.Application.DTOs.Common;
+using HIS.Application.DTOs.DoctorSchedule;
 using HIS.Application.DTOs.DoctorScheduleException;
 using HIS.Application.Queries.DoctorSceduelException;
+using HIS.Application.Queries.DoctorSchedule;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -64,8 +66,8 @@ namespace HIS.Api.Controllers
             }
 
         }
-        [HttpGet]
-        public async Task<ActionResult<ApiResponse<PagedResult<DoctorScheduleExceptionResponseDto>>>> GetDoctorScheduelExceptions([FromBody] QueryRequest request)
+        [HttpPost("query")]
+        public async Task<ActionResult<ApiResponse<PagedResult<DoctorScheduleExceptionResponseDto>>>> GetDoctorScheduelExceptionsData([FromBody] QueryRequest request)
         {
             try
             {
@@ -85,6 +87,23 @@ namespace HIS.Api.Controllers
                 return ErrorResponse<DoctorScheduleExceptionResponseDto>("DoctorSchedule NotFound", 404);
             return SuccessResponse(ScheduelException, "DoctorScheduel data retrieved successfully");
         }
-
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<IEnumerable<DoctorScheduleExceptionResponseDto>>>> GetdoctorSchdeulesException
+          (
+            [FromQuery] Guid? DoctorId,
+            [FromQuery] DateOnly? ExceptionDate,
+            [FromQuery] TimeOnly? StartTime
+          )
+        {
+            try
+            {
+                var query = await mediator.Send(new GetDoctorSchdeuleExceptionListQuery(DoctorId,ExceptionDate ,StartTime));
+                return SuccessResponse(query, "Doctor Schdeduels Exceptions retrieved successfully");
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse<IEnumerable<DoctorScheduleExceptionResponseDto>>(ex.Message, 500);
+            }
+        }
     }
 }
