@@ -38,12 +38,15 @@ namespace HIS.Application.Handlers.DoctorSchedule
                 SpecialtyId = request.DoctorSechduel.SpecialtyId,
                 IsActive = request.DoctorSechduel.IsActive,
                 IsPriority = request.DoctorSechduel.IsPriority,
+                StartDate = request.DoctorSechduel.StartDate,
+                EndDate = request.DoctorSechduel.EndDate,
                 Details = scheduleDetails   
             };
 
 
 
-            var result = await repository.AddAsync(scheduleMaster, cancellationToken);
+            var schedule = await repository.AddAsync(scheduleMaster, cancellationToken);
+            var result = await repository.GetByIdAsync(schedule.Oid);
 
 
             return new List<DoctorScheduleDto>()
@@ -51,12 +54,14 @@ namespace HIS.Application.Handlers.DoctorSchedule
                 new DoctorScheduleDto(){
 
                         Branch = result.Branch.Name,
-                        StartTime = result.Details.First().StartTime,
-                        EndTime= result.Details.First().EndTime,
+                        StartTime = result.Details.FirstOrDefault().StartTime,
+                        EndTime= result.Details.FirstOrDefault().EndTime,
+                        StartDate =result.StartDate,
+                        EndDate = result.EndDate,
                         Status = result.Status.ToString(),
-                        DayOfWeekNameAr = result.Details.First().DayOfweek.ValueNameAr,
-                        DayOfWeekNameEn = result.Details.First().DayOfweek.ValueNameEn,
-                        SlotDurationMinutes = result.Details.First().SlotDurationMinutes,
+                        DayOfWeekNameAr = result.Details.FirstOrDefault().DayOfweek.ValueNameAr,
+                        DayOfWeekNameEn = result.Details.FirstOrDefault().DayOfweek.ValueNameEn,
+                        SlotDurationMinutes = result.Details.FirstOrDefault().SlotDurationMinutes,
                         Specialty = result.Specialty.NameEn,
                         DoctorId = result.DoctorId,
                         IsActive = result.IsActive,

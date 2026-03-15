@@ -1,6 +1,7 @@
 using HIS.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Net;
 
 namespace HIS.Domain.Entities;
 
@@ -26,6 +27,8 @@ public class DoctorScheduleMaster : BaseEntity
 
     public bool IsActive { get; set; } = true;
     public bool IsPriority { get; set; } =false;
+    public DateOnly StartDate { get; set; } 
+    public DateOnly EndDate { get; set; }
     //NAVIGTIONAL PROPERTY
     public ICollection<DoctorScheduleDetail> Details { get; set; } = new List<DoctorScheduleDetail>();
 }

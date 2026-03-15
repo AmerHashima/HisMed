@@ -14,6 +14,8 @@ namespace HIS.Application.DTOs.DoctorSchedule
         public Guid SpecialtyId { get; set; }
         public bool IsActive { get; set; } = true;
         public bool IsPriority { get; set; } = false;
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
 
         public List<DoctorSchedulesListDto>  DoctorSchedulesList{ get; set; }
      }

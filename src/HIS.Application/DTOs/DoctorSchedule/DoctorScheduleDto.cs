@@ -18,7 +18,9 @@ namespace HIS.Application.DTOs.DoctorSchedule
       public string DayOfWeekNameAr { get; set; }
         public TimeOnly StartTime { get; set; }
 
-      
+      public DateOnly StartDate { get; set; }
+      public DateOnly EndDate { get; set; }
+
         public TimeOnly EndTime { get; set; }
 
         public float SlotDurationMinutes { get; set; }
