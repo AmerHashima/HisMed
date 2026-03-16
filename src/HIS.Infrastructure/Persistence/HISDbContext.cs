@@ -44,6 +44,8 @@ public class HISDbContext : DbContext
     public DbSet<Prescription> Prescriptions { get; set; }
     
     // Doctor Scheduling
+    public DbSet<DoctorScheduleMaster> DoctorSchedulesMaster { get; set; }
+    public DbSet<DoctorScheduleDetail> DoctorScheduleDetails { get; set; }
     public DbSet<DoctorScheduleException> DoctorScheduleExceptions { get; set; }
     public DbSet<DoctorTimeSlot> DoctorTimeSlots { get; set; }
     // emr-icd110

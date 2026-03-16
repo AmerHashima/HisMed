@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HIS.Application.Commands.DoctorSchedule;
 using HIS.Application.DTOs.DoctorSchedule;
-using HIS.Domain.Common;
 using HIS.Domain.Interfaces;
 using MediatR;
 
@@ -9,51 +8,36 @@ namespace HIS.Application.Handlers.DoctorSchedule
 {
     public sealed class UpdateDoctorScheduelHandler : IRequestHandler<UpdateDoctorScheduleCommand, DoctorScheduleDto>
     {
-        private readonly IMapper mapper;
-        private readonly IDoctorScheduleMasterRepository doctorScheduelRepo;
+        private readonly IMapper _mapper;
+        private readonly IDoctorScheduleMasterRepository _doctorScheduleRepo;
 
-        public UpdateDoctorScheduelHandler(IMapper mapper,IDoctorScheduleMasterRepository DoctorScheduelRepo)
+        public UpdateDoctorScheduelHandler(IMapper mapper, IDoctorScheduleMasterRepository doctorScheduleRepo)
         {
-            this.mapper = mapper;
-            doctorScheduelRepo = DoctorScheduelRepo;
+            _mapper = mapper;
+            _doctorScheduleRepo = doctorScheduleRepo;
         }
+
         public async Task<DoctorScheduleDto> Handle(UpdateDoctorScheduleCommand request, CancellationToken cancellationToken)
         {
-            var master = await doctorScheduelRepo.GetByIdAsync(request.DoctorSchdeuel.Oid, cancellationToken);
+            var master = await _doctorScheduleRepo.GetByIdAsync(request.DoctorSchdeuel.Oid, cancellationToken);
             if (master == null)
             {
-                throw new KeyNotFoundException($"Doctor with ID {request.DoctorSchdeuel.Oid} not found");
+                throw new KeyNotFoundException($"Doctor schedule with ID {request.DoctorSchdeuel.Oid} not found");
             }
-            //Update Data Manualy (MasterData) 
-           
-            master.DoctorId = request.DoctorSchdeuel.DoctorId;
-            master.BranchId = request.DoctorSchdeuel.BranchId;
-            master.StatusId = request.DoctorSchdeuel.StatusId;
-            master.IsActive = request.DoctorSchdeuel.IsActive;
-            master.IsPriority = request.DoctorSchdeuel.IsPriority;
-            master.SpecialtyId = request.DoctorSchdeuel.SpecialtyId;
-            // (Detial Data)
-            var exsistingDetail = master.Details.First();
-            exsistingDetail.StartTime = request.DoctorSchdeuel.StartTime;
-            exsistingDetail.EndTime = request.DoctorSchdeuel.EndTime;
-            exsistingDetail.SlotDurationMinutes = request.DoctorSchdeuel.SlotDurationMinutes;
-            exsistingDetail.DayOfWeekId = request.DoctorSchdeuel.DayOfWeekId;
 
-            return  new DoctorScheduleDto()
-            {
-                DoctorId = master.DoctorId,
-                DayOfWeekNameAr = exsistingDetail.DayOfweek.ValueNameAr,
-                DayOfWeekNameEn = exsistingDetail.DayOfweek.ValueNameEn,
-                StartTime = exsistingDetail.StartTime,
-                EndTime = exsistingDetail.EndTime,
-                Specialty = master.Specialty.NameEn,
-                Branch = master.Branch.Name,
-                SlotDurationMinutes = exsistingDetail.SlotDurationMinutes,
-                Status = master.Status.ToString(),
-                IsActive = master.IsActive,
-                IsPriority = master.IsPriority,
+            // Update master-level properties
+            _mapper.Map(request.DoctorSchdeuel, master);
 
-            };
+            // Update detail-level properties
+            var existingDetail = master.Details.First();
+            existingDetail.StartTime = request.DoctorSchdeuel.StartTime;
+            existingDetail.EndTime = request.DoctorSchdeuel.EndTime;
+            existingDetail.SlotDurationMinutes = request.DoctorSchdeuel.SlotDurationMinutes;
+            existingDetail.DayOfWeekId = request.DoctorSchdeuel.DayOfWeekId;
+
+            await _doctorScheduleRepo.UpdateAsync(master);
+
+            return _mapper.Map<DoctorScheduleDto>(master);
         }
     }
 }
