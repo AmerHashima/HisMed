@@ -3,7 +3,7 @@ using MediatR;
 
 namespace HIS.Application.Commands.DoctorSchedule
 {
-    public sealed  record CreateDoctorScheduleBulkCommand( CreateDoctorScheduleBulkDto DoctorSechduel):IRequest<List<DoctorScheduleDto>>
+    public sealed  record CreateDoctorScheduleBulkCommand( CreateDoctorScheduleBulkDto DoctorSechduel):IRequest<DoctorScheduleMasterDetailDto>
     {
 
     }
