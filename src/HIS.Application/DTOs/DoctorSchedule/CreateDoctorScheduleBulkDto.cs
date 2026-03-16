@@ -8,7 +8,15 @@ namespace HIS.Application.DTOs.DoctorSchedule
 {
      public  class CreateDoctorScheduleBulkDto
      {
-        
-        public List<CreateDoctorScheduleDto>  DoctorSchedules{ get; set; }
+        public Guid DoctorId { get; set; }
+        public Guid StatusId { get; set; }
+        public Guid BranchId { get; set; }
+        public Guid SpecialtyId { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsPriority { get; set; } = false;
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+
+        public List<DoctorSchedulesListDto>  DoctorSchedulesList{ get; set; }
      }
 }

@@ -4,6 +4,7 @@ using HIS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HIS.Infrastructure.Migrations
 {
     [DbContext(typeof(HISDbContext))]
-    partial class HISDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260315152321_docorscedule")]
+    partial class docorscedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,32 +163,6 @@ namespace HIS.Infrastructure.Migrations
                             ValueCode = "Thu",
                             ValueNameAr = "الخميس",
                             ValueNameEn = "Thursday"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0011-000000000001"),
-                            CreatedAt = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000011"),
-                            SortOrder = 1,
-                            ValueCode = "Avl",
-                            ValueNameAr = "متاح",
-                            ValueNameEn = "Available"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0011-000000000002"),
-                            CreatedAt = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            IsDefault = false,
-                            IsDeleted = false,
-                            MasterID = new Guid("10000000-0000-0000-0000-000000000011"),
-                            SortOrder = 2,
-                            ValueCode = "NotAvl",
-                            ValueNameAr = "غير متاح",
-                            ValueNameEn = "Not Available"
                         });
                 });
 
@@ -253,17 +230,6 @@ namespace HIS.Infrastructure.Migrations
                             LookupCode = "Days",
                             LookupNameAr = "الايام",
                             LookupNameEn = "Days"
-                        },
-                        new
-                        {
-                            Oid = new Guid("10000000-0000-0000-0000-000000000011"),
-                            CreatedAt = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Doctor Status",
-                            IsDeleted = false,
-                            IsSystem = false,
-                            LookupCode = "Status",
-                            LookupNameAr = "الحاله",
-                            LookupNameEn = "Status"
                         });
                 });
 
@@ -749,9 +715,6 @@ namespace HIS.Infrastructure.Migrations
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -763,9 +726,6 @@ namespace HIS.Infrastructure.Migrations
 
                     b.Property<Guid>("SpecialtyId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
 
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uniqueidentifier");

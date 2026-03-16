@@ -9,9 +9,16 @@ namespace HIS.Application.Validators.DoctorSchedule
         public CreateDoctorSchdeuleListValidator()
         {
             
-            RuleFor(x => x.DoctorSechduelList).NotEmpty().WithMessage("Schedule List cannot be Empty");
-                
-            RuleForEach(x => x.DoctorSechduelList).SetValidator(new DoctorSchdeuleListValidator());
+            RuleFor(x => x.DoctorSechduel).NotEmpty().WithMessage("Schedule List cannot be Empty");
+
+            RuleFor(x => x.DoctorSechduel.BranchId).NotEmpty().WithMessage("BranchId  is Required");
+            RuleFor(x => x.DoctorSechduel.StatusId).NotEmpty().WithMessage("StatusId  is Required");
+            RuleFor(x => x.DoctorSechduel.DoctorId).NotEmpty().WithMessage("DoctorId  is Required");
+            RuleFor(x => x.DoctorSechduel.IsActive).NotEmpty().WithMessage("IsActive  is Required");
+            RuleFor(x => x.DoctorSechduel.StartDate).NotEmpty().WithMessage("StartDate is Required");
+            RuleFor(x => x.DoctorSechduel.EndDate).NotEmpty().WithMessage("EndDate is Required");
+            RuleForEach(x => x.DoctorSechduel.DoctorSchedulesList).SetValidator(new DoctorSchdeuleListValidator());
+
 
 
         }

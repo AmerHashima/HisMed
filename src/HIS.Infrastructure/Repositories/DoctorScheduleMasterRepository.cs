@@ -31,6 +31,7 @@ namespace HIS.Infrastructure.Repositories
                 .Include(x => x.Branch)
                 .Include(x => x.Status)
                 .Include(x => x.Details)
+                .ThenInclude(x => x.DayOfweek)
                 .Include(x => x.Specialty)
                 .ToListAsync(cancellationToken);
         }
@@ -60,6 +61,7 @@ namespace HIS.Infrastructure.Repositories
                  .Include(x => x.Branch)
                  .Include(x => x.Status)
                  .Include(x => x.Details)
+                 .ThenInclude(x => x.DayOfweek)
                  .Include(x => x.Specialty).FirstOrDefaultAsync(x => x.Oid == id, cancellationToken);
         }
         
