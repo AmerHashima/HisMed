@@ -19,7 +19,8 @@ namespace HIS.Application.DTOs.DoctorSchedule
 
         [Required]
         public TimeOnly EndTime { get; set; }
-
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
         public float SlotDurationMinutes { get; set; } = 15;
 
 

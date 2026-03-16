@@ -80,7 +80,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("MasterID");
 
-                    b.ToTable("AppLookupDetail");
+                    b.ToTable("AppLookupDetail", (string)null);
 
                     b.HasData(
                         new
@@ -240,7 +240,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasKey("Oid");
 
-                    b.ToTable("AppLookupMaster");
+                    b.ToTable("AppLookupMaster", (string)null);
 
                     b.HasData(
                         new
@@ -331,7 +331,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Diagnosis", b =>
@@ -371,7 +371,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("EncounterId");
 
-                    b.ToTable("Diagnoses");
+                    b.ToTable("Diagnoses", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Doctor", b =>
@@ -514,7 +514,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorAttachment", b =>
@@ -567,7 +567,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorAttachment");
+                    b.ToTable("DoctorAttachment", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorBranch", b =>
@@ -612,7 +612,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorBranch");
+                    b.ToTable("DoctorBranch", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorScheduleDetail", b =>
@@ -663,7 +663,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("MasterId");
 
-                    b.ToTable("DoctorScheduleDetail");
+                    b.ToTable("DoctorScheduleDetail", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorScheduleException", b =>
@@ -722,7 +722,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorScheduleExceptions");
+                    b.ToTable("DoctorScheduleExceptions", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorScheduleMaster", b =>
@@ -786,7 +786,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("DoctorSchedules");
+                    b.ToTable("DoctorSchedules", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.DoctorTimeSlot", b =>
@@ -842,7 +842,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorTimeSlots");
+                    b.ToTable("DoctorTimeSlots", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Encounter", b =>
@@ -906,7 +906,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Encounters");
+                    b.ToTable("Encounters", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.HospitalBranch", b =>
@@ -971,7 +971,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasKey("Oid");
 
-                    b.ToTable("HospitalBranches");
+                    b.ToTable("HospitalBranches", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Patient", b =>
@@ -1098,7 +1098,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("NationalityLookupId");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.PatientAddress", b =>
@@ -1165,7 +1165,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("PatientAddress");
+                    b.ToTable("PatientAddress", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.PatientAttachment", b =>
@@ -1225,7 +1225,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("PatientAttachment");
+                    b.ToTable("PatientAttachment", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.PatientContact", b =>
@@ -1283,7 +1283,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("RelationshipId");
 
-                    b.ToTable("PatientContact");
+                    b.ToTable("PatientContact", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.PatientInsurance", b =>
@@ -1343,7 +1343,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("PatientInsurance");
+                    b.ToTable("PatientInsurance", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Prescription", b =>
@@ -1400,7 +1400,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("EncounterId");
 
-                    b.ToTable("Prescriptions");
+                    b.ToTable("Prescriptions", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Role", b =>
@@ -1441,7 +1441,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasKey("Oid");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.Specialty", b =>
@@ -1497,7 +1497,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasKey("Oid");
 
-                    b.ToTable("Specialties");
+                    b.ToTable("Specialties", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.SystemUser", b =>
@@ -1606,7 +1606,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("SystemUsers");
+                    b.ToTable("SystemUsers", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.emr_icd110", b =>
@@ -1706,7 +1706,7 @@ namespace HIS.Infrastructure.Migrations
 
                     b.HasIndex("DiagnosisId");
 
-                    b.ToTable("emr_icd110");
+                    b.ToTable("emr_icd110", (string)null);
                 });
 
             modelBuilder.Entity("HIS.Domain.Entities.AppLookupDetail", b =>

@@ -4,6 +4,7 @@ using HIS.Application.Commands.DoctorSchedule;
 using HIS.Application.DTOs.Common;
 using HIS.Application.DTOs.DoctorSchedule;
 using HIS.Application.Queries.DoctorSchedule;
+using HIS.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace HIS.Api.Controllers
             this.mapper = mapper;
         }
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<DoctorScheduleDto>>> CreateDoctorSchedule([FromBody] CreateDoctorScheduleDto request)
+        public async Task<ActionResult<ApiResponse<DoctorScheduleMasterDetailDto>>> CreateDoctorSchedule([FromBody] CreateDoctorScheduleDto request)
         {
             try
             {
@@ -35,7 +36,7 @@ namespace HIS.Api.Controllers
             }
             catch (Exception ex)
             {
-                return ErrorResponse<DoctorScheduleDto>(ex.Message,500);
+                return ErrorResponse<DoctorScheduleMasterDetailDto>(ex.Message,500);
             }
 
         }
@@ -66,7 +67,7 @@ namespace HIS.Api.Controllers
                 return ErrorResponse<DoctorScheduleDto>(ex.Message,500);
             }
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<ActionResult<ApiResponse>> DeleteDoctorScheduel(Guid Id)
         {
             try
@@ -106,8 +107,8 @@ namespace HIS.Api.Controllers
             return SuccessResponse(Scheduel, "DoctorScheduel data retrieved successfully");
 
         }
-        [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<DoctorScheduleDto>>>> GetDoctorSchdeules(
+        [HttpGet("details")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<DoctorScheduleDto>>>> GetDoctorSchdeulesWithDetails(
             [FromQuery] Guid?DoctorId,
             [FromQuery] TimeOnly? StartTime)
         {
@@ -121,7 +122,54 @@ namespace HIS.Api.Controllers
                 return ErrorResponse<IEnumerable<DoctorScheduleDto>>(ex.Message,500);
             }
         }
+        [HttpDelete("DeleteDetail/{MasterId}")]
+        public async Task<ActionResult<ApiResponse>> DeleteDoctorScheduleDetails(Guid MasterId)
+        {
+            try
+            {
+                var Scheduel = await mediator.Send(new DeleteDoctorScheduleDetailCommand(MasterId));
+
+                if (!Scheduel)
+                    return ErrorResponse("Doctor Schedule Details not found", 404);
+
+                return SuccessResponse("Doctor Schedule Details deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse($"Error deleting doctorScheduleDetails: {ex.Message}", 500);
+            }
+
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<IEnumerable<ScheduleWithNoDetailsDto>>>> GetDoctorSchdeules()
+        {
+            try
+            {
+                var query = await mediator.Send(new GetDoctorScheduleWithoutDetailsQuery());
+                return SuccessResponse(query, "Doctor Schdeduels Detials retrieved successfully");
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse<IEnumerable<ScheduleWithNoDetailsDto>>(ex.Message, 500);
+            }
+        }
+        [HttpPut("details")]
+        public async Task<ActionResult<ApiResponse<DoctorSchedulesListDto>>> UpdateDoctorScheduleDetails([FromBody] UpdateDetailsDto request)
+        {
+            try
+            {
+                var Scheduel = await mediator.Send(new UpdateDoctorScheduleDetailsCommand(request));
+
+                return SuccessResponse(Scheduel, "Doctor Schedule Created successfully");
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse<DoctorSchedulesListDto>(ex.Message, 500);
+            }
+
+        }
         
+
 
     }
 }

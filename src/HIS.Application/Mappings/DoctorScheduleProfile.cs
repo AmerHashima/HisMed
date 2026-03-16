@@ -31,6 +31,7 @@ namespace HIS.Application.Mappings
             CreateMap<CreateDoctorScheduleBulkDto, DoctorScheduleMaster>()
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.DoctorSchedulesList));
             CreateMap<DoctorScheduleMaster,DoctorScheduleBulkResponseDto>();
+            CreateMap<ScheduleWithNoDetailsDto, DoctorScheduleMaster>();
 
             CreateMap<DoctorScheduleDetail, DoctorScheduleDetailResponseDto>()
                 .ForMember(dest => dest.DayOfWeekNameEn, opt => opt.MapFrom(src => src.DayOfweek != null ? src.DayOfweek.ValueNameEn : null))
@@ -40,7 +41,14 @@ namespace HIS.Application.Mappings
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status != null ? src.Status.ValueNameEn : null))
                 .ForMember(dest => dest.Branch, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : null))
                 .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null));
-
+            CreateMap<DoctorScheduleMaster, ScheduleWithNoDetailsDto>();
+            CreateMap<DoctorScheduleMaster, DoctorScheduleDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status != null ? src.Status.ValueNameEn : null))
+                .ForMember(dest => dest.Branch, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : null))
+                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null))
+                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null));
+            CreateMap<DoctorScheduleDetail, DoctorSchedulesListDto>();
         }
     }
+          
 }

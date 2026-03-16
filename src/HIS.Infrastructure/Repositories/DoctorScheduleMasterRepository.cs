@@ -44,7 +44,7 @@ namespace HIS.Infrastructure.Repositories
                 .Include(x => x.Status)
                 .Include(x => x.Details)
                 .Include(x => x.Specialty)
-                .ToListAsync(cancellation) ;
+                .ToListAsync(cancellation);
         }
 
         //public async Task<List<DoctorScheduleMaster>> GetSchdeulesByStartTime(TimeOnly? StartTime, CancellationToken cancellation = default)
@@ -52,18 +52,36 @@ namespace HIS.Infrastructure.Repositories
         //    return await context.DoctorSchedules.Where(x => x.StartTime == StartTime).ToListAsync(); 
         //}
 
-    
+
         public async override Task<DoctorScheduleMaster?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await context.DoctorSchedulesMaster
 
+
+            return await context.DoctorSchedulesMaster
               .Where(x => !x.IsDeleted)
-                 .Include(x => x.Branch)
-                 .Include(x => x.Status)
-                 .Include(x => x.Details)
-                 .ThenInclude(x => x.DayOfweek)
-                 .Include(x => x.Specialty).FirstOrDefaultAsync(x => x.Oid == id, cancellationToken);
+              .Include(x => x.Branch)
+              .Include(x => x.Status)
+              .Include(x => x.Details)
+              .ThenInclude(x => x.DayOfweek)
+              .Include(x => x.Specialty)
+              .FirstOrDefaultAsync(x => x.Oid == id, cancellationToken);
         }
-        
+
+        public async Task<DoctorScheduleDetail> GetDoctorScheduleDetailByMasterId(Guid MasterId,CancellationToken cancellation)
+        {
+           return await context.DoctorScheduleDetail.Where(x => x.MasterId == MasterId).FirstOrDefaultAsync(cancellation);
+        }
+
+        public async Task<List<DoctorScheduleMaster>> GetDoctorSchedule()
+        {
+            return await context.DoctorSchedulesMaster.Where(x => !x.IsDeleted).ToListAsync();
+
+
+        }
+
+        public  DoctorScheduleDetail UpdateScheduleDetails(DoctorScheduleDetail Details)
+        {
+             return context.DoctorScheduleDetail.Update(Details).Entity;
+        }
     }
     }

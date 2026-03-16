@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 
 namespace HIS.Application.DTOs.DoctorSchedule
 {
-    public class DoctorSchedulesListDto
+    public  class UpdateDetailsDto
     {
+        public Guid MasterId { get; set; }
         public Guid DayOfWeekId { get; set; }
 
-        
+
         public TimeOnly StartTime { get; set; }
 
         [Required]
         public TimeOnly EndTime { get; set; }
 
-        public float SlotDurationMinutes { get; set; } = 15;
+        public float SlotDurationMinutes { get; set; } 
 
     }
 }

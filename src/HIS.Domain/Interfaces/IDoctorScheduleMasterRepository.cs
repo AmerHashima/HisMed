@@ -16,6 +16,9 @@ namespace HIS.Domain.Interfaces
         public  Task<List<DoctorScheduleMaster>> AddDoctorScheduelList(IEnumerable<DoctorScheduleMaster> doctorSchedules, CancellationToken cancellation = default);
         public Task<List<DoctorScheduleMaster?>> GetSchdeuleByDoctorIdAsync(Guid DoctorId,CancellationToken cancellation=default);
         //public Task<List<DoctorScheduleMaster>> GetSchdeulesByStartTime(TimeOnly? StartTime,CancellationToken cancellation=default);
+        public Task<DoctorScheduleDetail> GetDoctorScheduleDetailByMasterId(Guid MasterId, CancellationToken cancellation);
+        public Task<List<DoctorScheduleMaster>> GetDoctorSchedule();
+        public  DoctorScheduleDetail UpdateScheduleDetails(DoctorScheduleDetail Details);
         
 
 

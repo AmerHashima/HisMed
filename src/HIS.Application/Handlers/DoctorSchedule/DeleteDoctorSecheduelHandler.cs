@@ -9,9 +9,9 @@ namespace HIS.Application.Handlers.DoctorSchedule
         private readonly IMapper mapper;
         private readonly IDoctorScheduleMasterRepository repository;
 
-        public DeleteDoctorSecheduelHandler(IMapper mapper, IDoctorScheduleMasterRepository repository)
+        public DeleteDoctorSecheduelHandler( IDoctorScheduleMasterRepository repository)
         {
-            this.mapper = mapper;
+            
             this.repository = repository;
         }
         public async Task<bool> Handle(DeleteDoctorScheduelCommand request, CancellationToken cancellationToken)
