@@ -8,6 +8,7 @@ namespace HIS.Application.DTOs.DoctorSchedule
 {
     public class ScheduleWithNoDetailsDto
     {
+        public Guid Oid { get; set; }
         public Guid DoctorId { get; set; }
         public Guid StatusId { get; set; }
         public Guid BranchId { get; set; }

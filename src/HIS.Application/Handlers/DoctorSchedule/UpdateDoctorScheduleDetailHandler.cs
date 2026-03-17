@@ -28,7 +28,8 @@ namespace HIS.Application.Handlers.DoctorSchedule
             {
                 throw new KeyNotFoundException($"Schedule Details With MasterId {request.details.MasterId} NotFound");
             }
-             var result = repository.UpdateScheduleDetails(ExsisitingDetail);
+             var schedule = repository.UpdateScheduleDetails(ExsisitingDetail);
+            var result = await repository.GetByIdAsync(schedule.Oid,cancellationToken);
             return mapper.Map<DoctorSchedulesListDto>(result);
         }
     }

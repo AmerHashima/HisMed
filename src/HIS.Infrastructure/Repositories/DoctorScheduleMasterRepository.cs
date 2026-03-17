@@ -83,5 +83,6 @@ namespace HIS.Infrastructure.Repositories
         {
              return context.DoctorScheduleDetail.Update(Details).Entity;
         }
+       
     }
     }

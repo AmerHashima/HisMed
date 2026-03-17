@@ -29,7 +29,8 @@ namespace HIS.Application.Handlers.DoctorSchedule
             _mapper.Map(request.DoctorSchdeuel, master);
 
             // Update detail-level properties
-            var existingDetail = master.Details.First();
+            var existingDetail = master.Details.FirstOrDefault();
+            if (existingDetail == null) { throw new KeyNotFoundException($"No Details  Found For Schedule Id {request.DoctorSchdeuel.Oid}"); }
             existingDetail.StartTime = request.DoctorSchdeuel.StartTime;
             existingDetail.EndTime = request.DoctorSchdeuel.EndTime;
             existingDetail.SlotDurationMinutes = request.DoctorSchdeuel.SlotDurationMinutes;

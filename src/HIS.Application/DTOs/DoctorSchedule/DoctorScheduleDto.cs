@@ -11,6 +11,7 @@ namespace HIS.Application.DTOs.DoctorSchedule
 {
     public class DoctorScheduleDto
     {
+        public Guid OId { get; set; }
         public Guid DoctorId { get; set; }
 
         public string DayOfWeekNameEn { get; set; }
@@ -26,7 +27,6 @@ namespace HIS.Application.DTOs.DoctorSchedule
         public float SlotDurationMinutes { get; set; }
 
         public bool IsActive { get; set; } = true;
-        
         
         public string Status { get; set; }
         public string Branch { get; set; }

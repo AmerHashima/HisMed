@@ -25,7 +25,7 @@ namespace HIS.Api.Controllers
             this.mapper = mapper;
         }
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<DoctorScheduleMasterDetailDto>>> CreateDoctorSchedule([FromBody] CreateDoctorScheduleDto request)
+        public async Task<ActionResult<ApiResponse<CreateSingleScheduleResponse>>> CreateDoctorSchedule([FromBody] CreateDoctorScheduleDto request)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace HIS.Api.Controllers
             }
             catch (Exception ex)
             {
-                return ErrorResponse<DoctorScheduleMasterDetailDto>(ex.Message,500);
+                return ErrorResponse<CreateSingleScheduleResponse>(ex.Message,500);
             }
 
         }
