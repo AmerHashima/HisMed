@@ -34,16 +34,16 @@ public abstract class BaseApiController : ControllerBase
         return NoContent();
     }
 
-    protected ActionResult<ApiResponse<T>> ErrorResponse<T>(string message, int statusCode = 400, List<string>? errors = null)
+    protected ActionResult<ApiResponse<T>> ErrorResponse<T>(string message, int statusCode = 400, List<string>? errors = null, string? innerException = null)
     {
-        var response = ApiResponse<T>.ErrorResult(message, errors, statusCode);
+        var response = ApiResponse<T>.ErrorResult(message, errors, statusCode, innerException);
         response.TraceId = HttpContext.TraceIdentifier;
         return StatusCode(statusCode, response);
     }
 
-    protected ActionResult<ApiResponse> ErrorResponse(string message, int statusCode = 400, List<string>? errors = null)
+    protected ActionResult<ApiResponse> ErrorResponse(string message, int statusCode = 400, List<string>? errors = null, string? innerException = null)
     {
-        var response = ApiResponse.ErrorResult(message, errors, statusCode);
+        var response = ApiResponse.ErrorResult(message, errors, statusCode, innerException);
         response.TraceId = HttpContext.TraceIdentifier;
         return StatusCode(statusCode, response);
     }

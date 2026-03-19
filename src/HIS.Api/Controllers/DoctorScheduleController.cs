@@ -50,7 +50,7 @@ namespace HIS.Api.Controllers
             }
             catch (Exception ex)
             {
-                return ErrorResponse<DoctorScheduleMasterDetailDto>(ex.Message,500);
+                return ErrorResponse<DoctorScheduleMasterDetailDto>(ex.Message, 500, innerException: ex.InnerException?.Message);
             }
         }
         [HttpPut]
