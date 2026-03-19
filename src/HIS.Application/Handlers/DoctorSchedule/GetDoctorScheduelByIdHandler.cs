@@ -6,7 +6,7 @@ using HIS.Domain.Interfaces;
 
 namespace HIS.Application.Handlers.DoctorSchedule
 {
-    public sealed class GetDoctorScheduelByIdHandler : IRequestHandler<GetDoctorSchedualByIdQuery, DoctorScheduleDto?>
+    public sealed class GetDoctorScheduelByIdHandler : IRequestHandler<GetDoctorSchedualByIdQuery, CreateSingleScheduleResponse?>
     {
         private readonly IMapper mapper;
         private readonly IDoctorScheduleMasterRepository repository;
@@ -16,11 +16,11 @@ namespace HIS.Application.Handlers.DoctorSchedule
             this.mapper = mapper;
             this.repository = repository;
         }
-        public async  Task<DoctorScheduleDto?> Handle(GetDoctorSchedualByIdQuery request, CancellationToken cancellationToken)
+        public async  Task<CreateSingleScheduleResponse?> Handle(GetDoctorSchedualByIdQuery request, CancellationToken cancellationToken)
         {
             var Schdeuel = await repository.GetByIdAsync(request.Id,cancellationToken);
 
-            return Schdeuel == null ? null : mapper.Map<DoctorScheduleDto>(Schdeuel);
+            return Schdeuel == null ? null : mapper.Map<CreateSingleScheduleResponse>(Schdeuel);
         }
     }
 }

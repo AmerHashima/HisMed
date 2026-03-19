@@ -6,7 +6,7 @@ using MediatR;
 
 namespace HIS.Application.Handlers.DoctorSchedule
 {
-    public sealed class UpdateDoctorScheduelHandler : IRequestHandler<UpdateDoctorScheduleCommand, DoctorScheduleDto>
+    public sealed class UpdateDoctorScheduelHandler : IRequestHandler<UpdateDoctorScheduleCommand, CreateSingleScheduleResponse>
     {
         private readonly IMapper _mapper;
         private readonly IDoctorScheduleMasterRepository _doctorScheduleRepo;
@@ -17,7 +17,7 @@ namespace HIS.Application.Handlers.DoctorSchedule
             _doctorScheduleRepo = doctorScheduleRepo;
         }
 
-        public async Task<DoctorScheduleDto> Handle(UpdateDoctorScheduleCommand request, CancellationToken cancellationToken)
+        public async Task<CreateSingleScheduleResponse> Handle(UpdateDoctorScheduleCommand request, CancellationToken cancellationToken)
         {
             var master = await _doctorScheduleRepo.GetByIdAsync(request.DoctorSchdeuel.Oid, cancellationToken);
             if (master == null)
@@ -29,7 +29,8 @@ namespace HIS.Application.Handlers.DoctorSchedule
             _mapper.Map(request.DoctorSchdeuel, master);
 
             // Update detail-level properties
-            var existingDetail = master.Details.First();
+            var existingDetail = master.Details.FirstOrDefault();
+            if (existingDetail == null) { throw new KeyNotFoundException($"No Details  Found For Schedule Id {request.DoctorSchdeuel.Oid}"); }
             existingDetail.StartTime = request.DoctorSchdeuel.StartTime;
             existingDetail.EndTime = request.DoctorSchdeuel.EndTime;
             existingDetail.SlotDurationMinutes = request.DoctorSchdeuel.SlotDurationMinutes;
@@ -37,7 +38,7 @@ namespace HIS.Application.Handlers.DoctorSchedule
 
             await _doctorScheduleRepo.UpdateAsync(master);
 
-            return _mapper.Map<DoctorScheduleDto>(master);
+            return _mapper.Map<CreateSingleScheduleResponse>(master);
         }
     }
 }

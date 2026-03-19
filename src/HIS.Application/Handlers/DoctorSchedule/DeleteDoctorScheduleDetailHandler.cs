@@ -19,7 +19,7 @@ namespace HIS.Application.Handlers.DoctorSchedule
         }
         public async Task<bool> Handle(DeleteDoctorScheduleDetailCommand request, CancellationToken cancellationToken)
         {
-            var details = await _repository.GetDoctorScheduleDetailByMasterId(request.MasterId,cancellationToken);
+            var details = await _repository.GetSchedulDetailsById(request.Id,cancellationToken);
             if (details == null)
             {
                 return false;

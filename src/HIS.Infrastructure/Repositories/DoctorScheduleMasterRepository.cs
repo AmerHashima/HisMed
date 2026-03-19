@@ -1,4 +1,5 @@
-﻿using HIS.Domain.Entities;
+﻿using HIS.Application.DTOs.DoctorSchedule;
+using HIS.Domain.Entities;
 using HIS.Domain.Interfaces;
 using HIS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -79,9 +80,78 @@ namespace HIS.Infrastructure.Repositories
 
         }
 
-        public  DoctorScheduleDetail UpdateScheduleDetails(DoctorScheduleDetail Details)
+        //public  DoctorScheduleDetail UpdateScheduleDetails(DoctorScheduleDetail Details)
+        //{
+        //     return context.DoctorScheduleDetail.Update(Details).Entity;
+            
+        //}
+        public async Task<DoctorScheduleDetail> UpdateScheduleDetails(DoctorScheduleDetail Details, CancellationToken cancellationToken=default)
         {
-             return context.DoctorScheduleDetail.Update(Details).Entity;
+            context.DoctorScheduleDetail.Update(Details);
+            await context.SaveChangesAsync(cancellationToken);
+            return Details;
         }
+
+        public async Task<DoctorScheduleDetail> GetSchedulDetailsById(Guid id,CancellationToken cancellation)
+        {
+            return await context.DoctorScheduleDetail.FirstOrDefaultAsync(x => x.Oid == id, cancellation);
+        }
+
+        public async Task DeleteScheduleDetailsById(Guid Id,CancellationToken cancellationToken)
+        {
+            var entity = await GetSchedulDetailsById(Id, cancellationToken);
+            if (entity != null)
+            {
+                entity.IsDeleted = true;
+                entity.DeletedAt = DateTime.UtcNow;
+                 UpdateScheduleDetails(entity,cancellationToken);
+            }
+            await context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async  Task<DoctorScheduleDetail> AddScheduleDetailAsync(DoctorScheduleDetail detail, CancellationToken cancellationToken)
+        {
+            await context.DoctorScheduleDetail.AddAsync(detail, cancellationToken);
+           await context.SaveChangesAsync(cancellationToken);
+            return detail;
+        }
+
+        //public async Task<bool> HasOverLapAsync(DateTime NewStart, DateTime NewEnd, Guid DoctorId, Guid BranchId, Guid SpecialtyId,IEnumerable<DoctorScheduleDetail> details)
+        //{
+        //    foreach (var detail in details)
+        //    {
+        //        var HasConflict = await context.DoctorSchedulesMaster.AnyAsync(S =>
+
+        //            NewEnd > S.StartDate.ToDateTime(detail.StartTime) &&
+        //           NewStart < S.EndDate.ToDateTime(detail.EndTime) &&
+        //           S.DoctorId == DoctorId && S.SpecialtyId == SpecialtyId &&
+        //           S.BranchId == BranchId
+
+        //        );
+        //         if(HasConflict)
+        //            return true;
+
+        //    }
+        //    return false;
+
+        //}
+        //public async Task<bool> HasOverLapAsync(DateTime NewStart, DateTime NewEnd, Guid DoctorId, Guid BranchId, Guid SpecialtyId)
+        //{
+        //    var Schedules = await context.DoctorSchedulesMaster.Include(x => x.Details)
+        //       .Where(s => s.DoctorId == DoctorId && s.BranchId == BranchId && s.SpecialtyId == SpecialtyId).ToListAsync();
+        //      var data = Schedules.SelectMany(s=> s.Details) 
+        //    var result = Schedules.Any(S =>
+        //         NewEnd > S.StartDate.ToDateTime(S.Details.First().StartTime) &&
+        //           NewStart < S.EndDate.ToDateTime(S.Details.First().EndTime) &&
+        //           S.DoctorId == DoctorId && S.SpecialtyId == SpecialtyId &&
+        //           S.BranchId == BranchId
+        //    );
+        //    if (result)
+        //        return true;
+        //    return false;
+
+        //}
+
+
     }
     }

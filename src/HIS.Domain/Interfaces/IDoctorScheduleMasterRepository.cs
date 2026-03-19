@@ -18,8 +18,16 @@ namespace HIS.Domain.Interfaces
         //public Task<List<DoctorScheduleMaster>> GetSchdeulesByStartTime(TimeOnly? StartTime,CancellationToken cancellation=default);
         public Task<DoctorScheduleDetail> GetDoctorScheduleDetailByMasterId(Guid MasterId, CancellationToken cancellation);
         public Task<List<DoctorScheduleMaster>> GetDoctorSchedule();
-        public  DoctorScheduleDetail UpdateScheduleDetails(DoctorScheduleDetail Details);
         
+        //public Task<bool> HasOverLapAsync<T>(DateTime NewStart, DateTime NewEnd, Guid DoctorId, Guid BranchId, Guid SpecialtyId, IEnumerable<DoctorScheduleDetail> details);
+        public Task<DoctorScheduleDetail> GetSchedulDetailsById(Guid Id,CancellationToken cancellation);
+        public Task DeleteScheduleDetailsById(Guid Id, CancellationToken cancellationToken);
+
+        Task<DoctorScheduleDetail> AddScheduleDetailAsync(DoctorScheduleDetail detail, CancellationToken cancellationToken);
+        Task<DoctorScheduleDetail> UpdateScheduleDetails(DoctorScheduleDetail Details, CancellationToken cancellationToken= default);
+
+
+
 
 
     }

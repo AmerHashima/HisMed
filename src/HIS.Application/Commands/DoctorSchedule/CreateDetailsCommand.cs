@@ -1,4 +1,5 @@
 ﻿using HIS.Application.DTOs.DoctorSchedule;
+using HIS.Domain.Common;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HIS.Application.Commands.DoctorSchedule
 {
-    public sealed record UpdateDoctorScheduleCommand(UpdateDoctorSchdeuelDto DoctorSchdeuel):IRequest<CreateSingleScheduleResponse>
+    public sealed record CreateDetailsCommand(CreateDetailsDto details):IRequest<DoctorSchedulesListDto>
     {
     }
 }

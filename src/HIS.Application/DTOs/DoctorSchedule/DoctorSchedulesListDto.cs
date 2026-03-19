@@ -9,12 +9,13 @@ namespace HIS.Application.DTOs.DoctorSchedule
 {
     public class DoctorSchedulesListDto
     {
-        public Guid DayOfWeekId { get; set; }
 
-        
+        public Guid Oid { get; set; }
+        public Guid DayOfWeekId { get; set; }
+        public string DayOfWeekNameEn { get; set; }
+        public string DayOfWeekNameAr { get; set; }
         public TimeOnly StartTime { get; set; }
 
-        [Required]
         public TimeOnly EndTime { get; set; }
 
         public float SlotDurationMinutes { get; set; } = 15;

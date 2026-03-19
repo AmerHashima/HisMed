@@ -12,6 +12,7 @@ namespace HIS.Application.Validators.DoctorSchedule
     {
         public UpdateDoctorScheduleDetailsValidator()
         {
+            RuleFor(x => x.details.Oid).NotEmpty().WithMessage("Oid is Required");
             RuleFor(x => x.details.StartTime).NotEmpty()
             .Must((model,x) =>  x < model.details.EndTime)
             .WithMessage("Start Time must be Before EndTime");
