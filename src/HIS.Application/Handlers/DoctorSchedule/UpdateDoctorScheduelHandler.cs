@@ -25,20 +25,15 @@ namespace HIS.Application.Handlers.DoctorSchedule
                 throw new KeyNotFoundException($"Doctor schedule with ID {request.DoctorSchdeuel.Oid} not found");
             }
 
-            // Update master-level properties
+            // Update master-level properties only
             _mapper.Map(request.DoctorSchdeuel, master);
-
-            // Update detail-level properties
-            var existingDetail = master.Details.FirstOrDefault();
-            if (existingDetail == null) { throw new KeyNotFoundException($"No Details  Found For Schedule Id {request.DoctorSchdeuel.Oid}"); }
-            existingDetail.StartTime = request.DoctorSchdeuel.StartTime;
-            existingDetail.EndTime = request.DoctorSchdeuel.EndTime;
-            existingDetail.SlotDurationMinutes = request.DoctorSchdeuel.SlotDurationMinutes;
-            existingDetail.DayOfWeekId = request.DoctorSchdeuel.DayOfWeekId;
 
             await _doctorScheduleRepo.UpdateAsync(master);
 
-            return _mapper.Map<CreateSingleScheduleResponse>(master);
+            // Re-fetch with includes for response mapping
+            var result = await _doctorScheduleRepo.GetByIdAsync(master.Oid, cancellationToken);
+
+            return _mapper.Map<CreateSingleScheduleResponse>(result);
         }
     }
 }

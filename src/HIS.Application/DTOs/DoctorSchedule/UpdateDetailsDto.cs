@@ -10,6 +10,7 @@ namespace HIS.Application.DTOs.DoctorSchedule
     public  class UpdateDetailsDto
     {
         public Guid Oid { get; set; }
+        public Guid MasterId { get; set; }
         public Guid DayOfWeekId { get; set; }
 
         public TimeOnly StartTime { get; set; }

@@ -19,7 +19,7 @@ namespace HIS.Application.Validators.DoctorSchedule
                 .Must((Model,x)=> x <= Model.DoctorSechduel.EndDate) .WithMessage("StartDate must be Before EndDate");
             RuleFor(x => x.DoctorSechduel.EndDate).NotEmpty().WithMessage("EndDate is Required");
                 
-            RuleForEach(x => x.DoctorSechduel.DoctorSchedulesList).SetValidator(new DoctorSchdeuleListValidator());
+            RuleForEach(x => x.DoctorSechduel.DoctorScheduleDetailList).SetValidator(new DoctorSchdeuleListValidator());
 
 
 

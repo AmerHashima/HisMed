@@ -16,13 +16,13 @@ namespace HIS.Infrastructure.Repositories
             this.context = context;
         }
 
-        public  async Task<List<DoctorScheduleMaster?>>AddDoctorScheduelList(IEnumerable<DoctorScheduleMaster> doctorSchedules,CancellationToken cancellation)
+        public  async Task<List<DoctorScheduleMaster>>AddDoctorScheduelList(IEnumerable<DoctorScheduleMaster> doctorSchedules,CancellationToken cancellation)
         {
-           
+
             await context.DoctorSchedulesMaster.AddRangeAsync(doctorSchedules,cancellation);
             await context.SaveChangesAsync(cancellation);
-            return doctorSchedules.ToList(); //return only the insterted records 
-            
+            return doctorSchedules.ToList();
+
         }
 
       
@@ -31,19 +31,20 @@ namespace HIS.Infrastructure.Repositories
             return await context.DoctorSchedulesMaster.Where(x => !x.IsDeleted)
                 .Include(x => x.Branch)
                 .Include(x => x.Status)
-                .Include(x => x.Details)
+                .Include(x => x.Details.Where(d => !d.IsDeleted))
                 .ThenInclude(x => x.DayOfweek)
                 .Include(x => x.Specialty)
                 .ToListAsync(cancellationToken);
         }
 
-        public async  Task<List<DoctorScheduleMaster?>> GetSchdeuleByDoctorIdAsync(Guid DoctorId, CancellationToken cancellation = default)
+        public async Task<List<DoctorScheduleMaster>> GetSchdeuleByDoctorIdAsync(Guid DoctorId, CancellationToken cancellation = default)
         {
             return await context.DoctorSchedulesMaster
-                .Where(x => x.DoctorId == DoctorId)
-                 .Include(x => x.Branch)
+                .Where(x => x.DoctorId == DoctorId&&  !x.IsDeleted)
+                .Include(x => x.Branch)
                 .Include(x => x.Status)
-                .Include(x => x.Details)
+                .Include(x => x.Details.Where(d => !d.IsDeleted))
+                    .ThenInclude(d => d.DayOfweek)
                 .Include(x => x.Specialty)
                 .ToListAsync(cancellation);
         }
@@ -62,20 +63,30 @@ namespace HIS.Infrastructure.Repositories
               .Where(x => !x.IsDeleted)
               .Include(x => x.Branch)
               .Include(x => x.Status)
-              .Include(x => x.Details)
+              .Include(x => x.Details.Where(d => !d.IsDeleted))
               .ThenInclude(x => x.DayOfweek)
               .Include(x => x.Specialty)
+
               .FirstOrDefaultAsync(x => x.Oid == id, cancellationToken);
         }
 
-        public async Task<DoctorScheduleDetail> GetDoctorScheduleDetailByMasterId(Guid MasterId,CancellationToken cancellation)
+        public async Task<DoctorScheduleDetail?> GetDoctorScheduleDetailByMasterId(Guid MasterId, CancellationToken cancellation)
         {
-           return await context.DoctorScheduleDetail.Where(x => x.MasterId == MasterId).FirstOrDefaultAsync(cancellation);
+           return await context.DoctorScheduleDetail
+                .Where(x => x.MasterId == MasterId && !x.IsDeleted)
+                .Include(x => x.DayOfweek)
+                .FirstOrDefaultAsync(cancellation);
         }
 
         public async Task<List<DoctorScheduleMaster>> GetDoctorSchedule()
         {
-            return await context.DoctorSchedulesMaster.Where(x => !x.IsDeleted).ToListAsync();
+            return await context.DoctorSchedulesMaster.Where(x => !x.IsDeleted)
+                .Include(x => x.Branch)
+              .Include(x => x.Status)
+              .Include(x => x.Doctor)
+                .ThenInclude(x=>x.User)
+              .Include(x => x.Specialty)
+.ToListAsync();
 
 
         }
@@ -92,21 +103,23 @@ namespace HIS.Infrastructure.Repositories
             return Details;
         }
 
-        public async Task<DoctorScheduleDetail> GetSchedulDetailsById(Guid id,CancellationToken cancellation)
+        public async Task<DoctorScheduleDetail?> GetSchedulDetailsById(Guid id, CancellationToken cancellation)
         {
-            return await context.DoctorScheduleDetail.FirstOrDefaultAsync(x => x.Oid == id, cancellation);
+            return await context.DoctorScheduleDetail.Where(x => !x.IsDeleted)
+                .Include(x => x.DayOfweek)
+                .FirstOrDefaultAsync(x => x.Oid == id, cancellation);
         }
 
-        public async Task DeleteScheduleDetailsById(Guid Id,CancellationToken cancellationToken)
+        public async Task DeleteScheduleDetailsById(Guid Id, CancellationToken cancellationToken)
         {
             var entity = await GetSchedulDetailsById(Id, cancellationToken);
             if (entity != null)
             {
                 entity.IsDeleted = true;
                 entity.DeletedAt = DateTime.UtcNow;
-                 UpdateScheduleDetails(entity,cancellationToken);
+                // UpdateScheduleDetails persists the change
+                await UpdateScheduleDetails(entity, cancellationToken);
             }
-            await context.SaveChangesAsync(cancellationToken);
         }
 
         public async  Task<DoctorScheduleDetail> AddScheduleDetailAsync(DoctorScheduleDetail detail, CancellationToken cancellationToken)

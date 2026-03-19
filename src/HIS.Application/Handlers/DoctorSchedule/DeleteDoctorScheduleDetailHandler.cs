@@ -24,7 +24,7 @@ namespace HIS.Application.Handlers.DoctorSchedule
             {
                 return false;
             }
-            await _repository.DeleteAsync(details.Oid);
+            await _repository.DeleteScheduleDetailsById(details.Oid, cancellationToken);
             return true;
         }
     }

@@ -8,10 +8,11 @@ using HIS.Domain.Common;
 using HIS.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace HIS.Application.Handlers.DoctorSchedule
 {
-    public sealed class GetDoctorScheduelDataHandler : IRequestHandler<GetDoctorScheduleDataQuery, PagedResult<DoctorScheduleDto>>
+    public sealed class GetDoctorScheduelDataHandler : IRequestHandler<GetDoctorScheduleDataQuery, PagedResult<ScheduleWithNoDetailsDto>>
     {
         private readonly IMapper mapper;
         private readonly IDoctorScheduleMasterRepository doctorScheduleRepo;
@@ -23,10 +24,14 @@ namespace HIS.Application.Handlers.DoctorSchedule
             this.doctorScheduleRepo = doctorScheduleRepo;
             this.queryBuilder = queryBuilder;
         }
-        public async Task<PagedResult<DoctorScheduleDto>> Handle(GetDoctorScheduleDataQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<ScheduleWithNoDetailsDto>> Handle(GetDoctorScheduleDataQuery request, CancellationToken cancellationToken)
         {
             // Start with base query - all non-deleted doctors with includes
-            var query = doctorScheduleRepo.GetQueryable().Where(x => !x.IsDeleted);
+            var query = doctorScheduleRepo.GetQueryable().Include(x => x.Branch)
+              .Include(x => x.Status)
+              .Include(x => x.Doctor)
+                .ThenInclude(x => x.User)
+              .Include(x => x.Specialty).Where(x => !x.IsDeleted);
            
 
             // Apply filters
@@ -39,8 +44,8 @@ namespace HIS.Application.Handlers.DoctorSchedule
             var pagedEntities = await queryBuilder.ApplyPaginationAsync(query, request.QueryRequest.Request.Pagination);
 
             // Map to DTOs
-            var mappedData = mapper.Map<IEnumerable<DoctorScheduleDto>>(pagedEntities.Data);
-            return new PagedResult<DoctorScheduleDto>()
+            var mappedData = mapper.Map<IEnumerable<ScheduleWithNoDetailsDto>>(pagedEntities.Data);
+            return new PagedResult<ScheduleWithNoDetailsDto>()
             {
                 Data = mappedData,
                 TotalRecords = pagedEntities.TotalRecords,

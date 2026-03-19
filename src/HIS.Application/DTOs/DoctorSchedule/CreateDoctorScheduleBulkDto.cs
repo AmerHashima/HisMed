@@ -17,6 +17,6 @@ namespace HIS.Application.DTOs.DoctorSchedule
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
 
-        public List<DoctorSchedulesListDto>  DoctorSchedulesList{ get; set; }
+        public List<CreateDetailsDto> DoctorScheduleDetailList { get; set; }
      }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HIS.Application.Queries.DoctorSchedule
 {
-    public sealed record GetDoctorScheduleDataQuery(QueryRequest QueryRequest) :IRequest<PagedResult<DoctorScheduleDto>>
+    public sealed record GetDoctorScheduleDataQuery(QueryRequest QueryRequest) :IRequest<PagedResult<ScheduleWithNoDetailsDto>>
     {
     }
 }

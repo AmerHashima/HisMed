@@ -13,18 +13,17 @@ namespace HIS.Application.Mappings
             //.ForMember(dest => dest.DayOfWeekNameAr, opt => opt.MapFrom(src => src.DayOfweek.ValueNameAr))
             //.ReverseMap();
 
+            // Map a single-create DTO into a master with one detail item.
+            // Define a direct mapping for the detail and let AutoMapper project a single-element
+            // collection when creating the master, keeping mapping logic concise and testable.
+            CreateMap<CreateDoctorScheduleDto, DoctorScheduleDetail>()
+                .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime))
+                .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime))
+                .ForMember(dest => dest.SlotDurationMinutes, opt => opt.MapFrom(src => src.SlotDurationMinutes))
+                .ForMember(dest => dest.DayOfWeekId, opt => opt.MapFrom(src => src.DayOfWeekId));
+
             CreateMap<CreateDoctorScheduleDto, DoctorScheduleMaster>()
-                .ForMember(dest => dest.Details, opt => opt.MapFrom(src => new List<DoctorScheduleDetail>()
-                {
-                    new DoctorScheduleDetail
-                    {
-                        
-                        StartTime =src.StartTime,
-                        EndTime =src.EndTime,
-                        SlotDurationMinutes = src.SlotDurationMinutes,
-                        DayOfWeekId = src.DayOfWeekId
-                    }
-                }));
+                .ForMember(dest => dest.Details, opt => opt.MapFrom(src => new[] { src }));
             CreateMap<UpdateDoctorSchdeuelDto, DoctorScheduleMaster>().ForMember(dest => dest.Oid, opt => opt.Ignore());
             CreateMap<CreateDoctorScheduleCommand, DoctorScheduleMaster>().ForMember(dest => dest.Oid, opt => opt.Ignore());
             //CreateMap<List<CreateDoctorScheduleDto>, List<DoctorSchedule>>();
@@ -39,7 +38,7 @@ namespace HIS.Application.Mappings
             // .ForMember(dest => dest.SlotDurationMinutes, opt => opt.MapFrom(src => src.SlotDurationMinutes));
             CreateMap<DoctorSchedulesListDto, DoctorScheduleDetail>();
             CreateMap<CreateDoctorScheduleBulkDto, DoctorScheduleMaster>()
-                .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.DoctorSchedulesList));
+                .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.DoctorScheduleDetailList));
             CreateMap<DoctorScheduleMaster,DoctorScheduleBulkResponseDto>();
             
                 
@@ -53,15 +52,18 @@ namespace HIS.Application.Mappings
                 .ForMember(dest => dest.Branch, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : null))
                 .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null));
             CreateMap<DoctorScheduleMaster, ScheduleWithNoDetailsDto>()
-                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor.User.FullName))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ValueNameEn))
-                .ForMember(dest => dest.SpecialtyName, opt => opt.MapFrom(src => src.Doctor.Specialty.NameEn))
-                .ForMember(dest => dest.BranchName, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : null)); 
-                
+                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor != null && src.Doctor.User != null ? src.Doctor.User.FullName : src.Doctor.FirstNameAr))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status != null ? src.Status.ValueNameEn : null))
+                .ForMember(dest => dest.SpecialtyName, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : (src.Doctor != null && src.Doctor.Specialty != null ? src.Doctor.Specialty.NameEn : null)))
+                .ForMember(dest => dest.BranchName, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : null))
+                .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.StatusId))
+                .ForMember(dest => dest.BranchId, opt => opt.MapFrom(src => src.BranchId))
+                .ForMember(dest => dest.SpecialtyId, opt => opt.MapFrom(src => src.SpecialtyId));
+
+
               CreateMap<DoctorScheduleMaster, DoctorScheduleDto>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status != null ? src.Status.ValueNameEn : null))
                 .ForMember(dest => dest.Branch, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : null))
-                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null))
                 .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null));
             CreateMap<DoctorScheduleDetail, DoctorSchedulesListDto>()
                 .ForMember(dest => dest.DayOfWeekNameAr,opt => opt.MapFrom(src => src.DayOfweek.ValueNameAr))
@@ -69,21 +71,7 @@ namespace HIS.Application.Mappings
             CreateMap<DoctorScheduleMaster, CreateSingleScheduleResponse>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status != null ? src.Status.ValueNameEn : null))
                 .ForMember(dest => dest.Branch, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : null))
-                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null))
-                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null))
-                .ForMember(dest => dest.Details, opt => opt.MapFrom(src => new List<DoctorScheduleDetailResponseDto>
-                {
-                    new DoctorScheduleDetailResponseDto
-                    {
-                        Oid = src.Details.FirstOrDefault().Oid,
-                        StartTime =src.Details.FirstOrDefault().StartTime,
-                        EndTime= src.Details.FirstOrDefault().EndTime,
-                        SlotDurationMinutes = src.Details.FirstOrDefault().SlotDurationMinutes,
-                        DayOfWeekId = src.Details.FirstOrDefault().DayOfWeekId,
-                        DayOfWeekNameAr = src.Details.FirstOrDefault().DayOfweek.ValueNameAr,
-                        DayOfWeekNameEn = src.Details.FirstOrDefault().DayOfweek.ValueNameEn,
-                    }
-                }));
+                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null));
             
             CreateMap<UpdateDetailsDto, DoctorScheduleDetail>();
             

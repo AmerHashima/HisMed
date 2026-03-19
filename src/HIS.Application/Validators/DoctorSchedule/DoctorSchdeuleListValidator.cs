@@ -3,7 +3,7 @@ using HIS.Application.DTOs.DoctorSchedule;
 
 namespace HIS.Application.Validators.DoctorSchedule
 {
-    public  class  DoctorSchdeuleListValidator:AbstractValidator<DoctorSchedulesListDto>
+    public  class  DoctorSchdeuleListValidator:AbstractValidator<CreateDetailsDto>
     {
         public DoctorSchdeuleListValidator()
         {

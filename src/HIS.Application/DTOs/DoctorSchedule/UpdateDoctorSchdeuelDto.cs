@@ -11,9 +11,6 @@ namespace HIS.Application.DTOs.DoctorSchedule
     {
         public Guid Oid { get; set; }
         public Guid DoctorId { get; set; }
-        public Guid DayOfWeekId { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public Guid StatusId { get; set; }
@@ -21,6 +18,5 @@ namespace HIS.Application.DTOs.DoctorSchedule
         public Guid SpecialtyId { get; set; }
         public bool IsActive { get; set; } = true;
         public bool IsPriority { get; set; } = false;
-        public float SlotDurationMinutes { get; set; } = 15;
     }
 }
