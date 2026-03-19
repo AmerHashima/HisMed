@@ -3,7 +3,7 @@ using MediatR;
 
 namespace HIS.Application.Queries.DoctorSchedule
 {
-    public sealed record GetDoctorSchedualByIdQuery(Guid Id):IRequest<DoctorScheduleDto?>
+    public sealed record GetDoctorSchedualByIdQuery(Guid Id):IRequest<CreateSingleScheduleResponse?>
     {
     }
 }

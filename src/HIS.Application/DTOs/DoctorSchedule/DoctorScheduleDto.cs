@@ -11,8 +11,9 @@ namespace HIS.Application.DTOs.DoctorSchedule
 {
     public class DoctorScheduleDto
     {
-        public Guid OId { get; set; }
+        public Guid Oid { get; set; }
         public Guid DoctorId { get; set; }
+        public string DoctorName { get; set; }
 
         public string DayOfWeekNameEn { get; set; }
 

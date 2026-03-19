@@ -9,7 +9,7 @@ using MediatR;
 
 namespace HIS.Application.Handlers.DoctorSchedule
 {
-    public sealed class GetDoctorScheduleListHandler : IRequestHandler<GetDoctorSchdeuleListQuery, IEnumerable<DoctorScheduleDto>>
+    public sealed class GetDoctorScheduleListHandler : IRequestHandler<GetDoctorSchdeuleListQuery, IEnumerable<CreateSingleScheduleResponse>>
     {
         private readonly IMapper mapper;
         private readonly IDoctorScheduleMasterRepository repository;
@@ -19,22 +19,12 @@ namespace HIS.Application.Handlers.DoctorSchedule
             this.mapper = mapper;
             this.repository = repository;
         }
-        public async Task<IEnumerable<DoctorScheduleDto>> Handle(GetDoctorSchdeuleListQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CreateSingleScheduleResponse>> Handle(GetDoctorSchdeuleListQuery request, CancellationToken cancellationToken)
         {
-            if (request.DoctorId.HasValue)
-            {
-                var result = await repository.GetSchdeuleByDoctorIdAsync(request.DoctorId.Value, cancellationToken);
-                return mapper.Map<IEnumerable<DoctorScheduleDto>>(result);
-            }
-           //else if (request.StartTime.HasValue)
-           // {
-           //     //var result = await repository.GetSchdeulesByStartTime(request.StartTime,cancellationToken);
-           // }
-            
+         
                 var schedules = await repository.GetAllAsync(cancellationToken);
             
-
-            return mapper.Map<IEnumerable<DoctorScheduleDto>>(schedules);
+            return mapper.Map<IEnumerable<CreateSingleScheduleResponse>>(schedules);
 
         }
     }

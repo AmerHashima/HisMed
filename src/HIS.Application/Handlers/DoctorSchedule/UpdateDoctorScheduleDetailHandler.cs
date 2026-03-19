@@ -23,14 +23,15 @@ namespace HIS.Application.Handlers.DoctorSchedule
         }
         public async Task<DoctorSchedulesListDto> Handle(UpdateDoctorScheduleDetailsCommand request, CancellationToken cancellationToken)
         {
-            var ExsisitingDetail = await repository.GetDoctorScheduleDetailByMasterId(request.details.MasterId,cancellationToken);
-            if (ExsisitingDetail is null)
+            var existingDetail = await repository.GetSchedulDetailsById(request.details.Oid,cancellationToken);
+            if (existingDetail is null)
             {
-                throw new KeyNotFoundException($"Schedule Details With MasterId {request.details.MasterId} NotFound");
+                throw new KeyNotFoundException($"Schedule Details With MasterId {request.details.Oid} NotFound");
             }
-             var schedule = repository.UpdateScheduleDetails(ExsisitingDetail);
-            var result = await repository.GetByIdAsync(schedule.Oid,cancellationToken);
-            return mapper.Map<DoctorSchedulesListDto>(result);
+            mapper.Map(request.details, existingDetail);
+            var schedule = repository.UpdateScheduleDetails(existingDetail);
+            
+            return mapper.Map<DoctorSchedulesListDto>(schedule);
         }
     }
 }

@@ -14,6 +14,8 @@ namespace HIS.Application.DTOs.DoctorSchedule
         public Guid DayOfWeekId { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
         public Guid StatusId { get; set; }
         public Guid BranchId { get; set; }
         public Guid SpecialtyId { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HIS.Application.Commands.DoctorSchedule
 {
-    public sealed record DeleteDoctorScheduleDetailCommand(Guid MasterId):IRequest<bool>
+    public sealed record DeleteDoctorScheduleDetailCommand(Guid Id):IRequest<bool>
     {
     }
 }

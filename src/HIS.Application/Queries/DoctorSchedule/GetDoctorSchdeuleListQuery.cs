@@ -4,7 +4,7 @@ using MediatR;
 
 namespace HIS.Application.Queries.DoctorSchedule
 {
-    public sealed record GetDoctorSchdeuleListQuery(Guid? DoctorId, TimeOnly? StartTime):IRequest<IEnumerable<DoctorScheduleDto>>
+    public sealed record GetDoctorSchdeuleListQuery():IRequest<IEnumerable<CreateSingleScheduleResponse>>
     {
     }
 }
