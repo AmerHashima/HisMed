@@ -22,23 +22,25 @@ namespace HIS.Infrastructure.Repositories
 
        public async  Task<IEnumerable<DoctorScheduleException?>> GetSchdeuleExceptionByExceptionDateAsync(DateOnly ExceptionDate,CancellationToken cancellation=default)
         {
-           return await context.DoctorScheduleExceptions.Where(x => x.ExceptionDate == ExceptionDate ).ToListAsync(cancellation);   
+           return await context.DoctorScheduleExceptions.Where(x => x.ExceptionDate == ExceptionDate && !x.IsDeleted ).Include(x => x.Days).ToListAsync(cancellation);   
         }
 
         public async  Task<IEnumerable<DoctorScheduleException?>> GetSchdeulesExceptionByDoctorIdAsync(Guid DoctorId,CancellationToken cancellation =default)
         {
-            return await context.DoctorScheduleExceptions.Where(x => x.DoctorId == DoctorId).ToListAsync(cancellation);
-        }
-
-        public async Task<DoctorScheduleException?> GetScheduelEXceptionByIdAsync(Guid Id, CancellationToken cancellationToken = default)
-        {
-            return await context.DoctorScheduleExceptions.Include(x => x.Days).Where(x => !x.IsDeleted)
-            .FirstOrDefaultAsync(x => x.Oid == Id, cancellationToken);
+            return await context.DoctorScheduleExceptions.Where(x => x.DoctorId == DoctorId && !x.IsDeleted).Include(x => x.Days).ToListAsync(cancellation);
         }
 
         public async Task<IEnumerable<DoctorScheduleException?>> GetScheduleExceptionByStartTimeAsync(TimeOnly StartTime, CancellationToken cancellation = default)
         {
-            return await context.DoctorScheduleExceptions.Where(x => x.StartTime == StartTime).ToListAsync(cancellation); 
+            return await context.DoctorScheduleExceptions.Where(x => x.StartTime == StartTime && !x.IsDeleted).Include(x => x.Days).ToListAsync(cancellation); 
+        }
+        public override async Task<DoctorScheduleException?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+             return await context.DoctorScheduleExceptions.Where(x => !x.IsDeleted).Include(x => x.Days).FirstOrDefaultAsync(cancellationToken);
+        }
+        public override async Task<IEnumerable<DoctorScheduleException>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await context.DoctorScheduleExceptions.Where(x => !x.IsDeleted).Include(x => x.Days).ToListAsync(cancellationToken);
         }
     }
 }

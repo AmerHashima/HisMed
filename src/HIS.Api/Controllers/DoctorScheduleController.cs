@@ -18,12 +18,12 @@ namespace HIS.Api.Controllers
     public class DoctorScheduleController : BaseApiController
     {
         private readonly IMediator mediator;
-        private readonly IMapper mapper;
+        
 
-        public DoctorScheduleController(IMediator mediator, IMapper mapper)
+        public DoctorScheduleController(IMediator mediator)
         {
             this.mediator = mediator;
-            this.mapper = mapper;
+            
         }
         [HttpPost]
         public async Task<ActionResult<ApiResponse<CreateSingleScheduleResponse>>> CreateDoctorSchedule([FromBody] CreateDoctorScheduleDto request)

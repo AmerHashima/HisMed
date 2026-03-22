@@ -23,9 +23,10 @@ namespace HIS.Application.Handlers.DoctorScheduelException
         }
         public async Task<DoctorScheduleExceptionResponseDto> Handle(UpdateDoctorScheduleCommand request, CancellationToken cancellationToken)
         {
-            var ExsistingScheduelException = await repository.GetByIdAsync(request.DoctorScheduleException.Id,cancellationToken);
+            var ExsistingScheduelException = await repository.GetByIdAsync(request.DoctorScheduleException.Oid,cancellationToken);
             if(ExsistingScheduelException ==null)
-                throw new KeyNotFoundException($"DoctorScheduleException with ID {request.DoctorScheduleException.Id} not found");
+                throw new KeyNotFoundException($"DoctorScheduleException with ID {request.DoctorScheduleException.Oid} not found");
+            mapper.Map(request.DoctorScheduleException, ExsistingScheduelException);
             await repository.UpdateAsync(ExsistingScheduelException,cancellationToken);
             return mapper.Map<DoctorScheduleExceptionResponseDto>(ExsistingScheduelException);
         }

@@ -14,7 +14,8 @@ namespace HIS.Application.Validators.DoctorScheduleException
         {
             RuleFor(x => x.ExceptionDate).NotEmpty().WithMessage("ExceptionDate is Required");
             RuleFor(x => x.ExceptionType).NotEmpty().WithMessage("ExceptionType is Required");
-            RuleFor(x => x.StartTime).NotEmpty().WithMessage("StartTime is Required");
+            RuleFor(x => x.StartTime).NotEmpty().WithMessage("StartTime is Required")
+                .LessThan(x => x.EndTime).WithMessage("StartTime Must be Before EndTime");
             RuleFor(x => x.EndTime).NotEmpty().WithMessage(" EndTime is Required");
             
             RuleFor(x => x.DoctorId).NotEmpty().WithMessage(" DoctorId is Required");

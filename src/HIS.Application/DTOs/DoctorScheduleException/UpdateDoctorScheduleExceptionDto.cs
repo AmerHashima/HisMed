@@ -9,7 +9,7 @@ namespace HIS.Application.DTOs.DoctorScheduleException
 {
     public  class UpdateDoctorScheduleExceptionDto
     {
-        public Guid Id { get; set; }
+        public Guid Oid { get; set; }
         public Guid DoctorId { get; set; }
 
         [Required]

@@ -19,7 +19,8 @@ namespace HIS.Application.Handlers.DoctorScheduelException
         public async Task<DoctorScheduleExceptionResponseDto> Handle(CreateDoctorScheduelExceptionCommand request, CancellationToken cancellationToken)
         {
             var DoctorException = mapper.Map<Domain.Entities.DoctorScheduleException>(request.DoctorScheduelException);
-            var  result = await repository.AddAsync(DoctorException);
+            var exception = await repository.AddAsync(DoctorException);
+            var result = await repository.GetByIdAsync(exception.Oid); 
             return mapper.Map<DoctorScheduleExceptionResponseDto>(result);
         }
     }

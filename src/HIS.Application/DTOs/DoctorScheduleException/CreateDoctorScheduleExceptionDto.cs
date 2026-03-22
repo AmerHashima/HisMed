@@ -11,7 +11,7 @@ namespace HIS.Application.DTOs.DoctorScheduleException
 {
     public class CreateDoctorScheduleExceptionDto
     {
-        public Guid Id { get; set; }
+        
         public Guid DoctorId { get; set; }
         
         [Required]

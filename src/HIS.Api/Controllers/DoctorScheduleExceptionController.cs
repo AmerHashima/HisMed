@@ -28,29 +28,31 @@ namespace HIS.Api.Controllers
             try
             {
                 var result = await mediator.Send(new CreateDoctorScheduelExceptionCommand(request));
-                return CreatedResponse(result, nameof(GetDoctorScheduelExceptionById), new { id = result.Id }, "DoctorScheduelException created successfully");
+                return SuccessResponse(result, "Doctor Schedule Exception Has cretaed sucessfully!");
             }
             catch (Exception ex)
             {
-                return ErrorResponse<DoctorScheduleExceptionResponseDto>(ex.Message,500);
+                return ErrorResponse<DoctorScheduleExceptionResponseDto>(ex.Message, 500);
             }
         }
-        [HttpPut]
-        public async Task<ActionResult<ApiResponse<DoctorScheduleExceptionResponseDto>>> UpdateDoctorSchedule([FromBody] UpdateDoctorScheduleExceptionDto request)
+        [HttpPut("{Id}")]
+        public async Task<ActionResult<ApiResponse<DoctorScheduleExceptionResponseDto>>> UpdateDoctorSchedule(Guid Id, [FromBody] UpdateDoctorScheduleExceptionDto request)
         {
-            try 
+            try
             {
-               
+                if (Id != request.Oid)
+                    return ErrorResponse<DoctorScheduleExceptionResponseDto>("DoctorSchedule ID mismatch", 400);
+
                 var command = await mediator.Send(new UpdateDoctorScheduleCommand(request));
-                return SuccessResponse(command,"DoctorScheduelException is updated sucessfully!");
+                return SuccessResponse(command, "DoctorScheduelException is updated sucessfully!");
             }
             catch (Exception ex)
             {
-                return ErrorResponse<DoctorScheduleExceptionResponseDto>(ex.Message,500);
+                return ErrorResponse<DoctorScheduleExceptionResponseDto>(ex.Message, 500);
             }
-            
+
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<ActionResult<ApiResponse>> DeleteDoctorScheduleException(Guid Id)
         {
             try

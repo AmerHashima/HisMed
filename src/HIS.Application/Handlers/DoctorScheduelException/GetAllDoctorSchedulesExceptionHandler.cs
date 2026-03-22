@@ -6,6 +6,7 @@ using HIS.Application.Queries.DoctorSceduelException;
 using HIS.Application.Services;
 using HIS.Domain.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,8 @@ namespace HIS.Application.Handlers.DoctorScheduelException
         }
         public async Task<PagedResult<DoctorScheduleExceptionResponseDto>> Handle(GetAllDoctorsScheduleExceptionQuery request, CancellationToken cancellationToken)
         {
-            // Start with base query - all non-deleted doctors with includes
-            var query = repository.GetQueryable().Where(x => !x.IsDeleted);
+            // Start with base query - all non-deleted doctors Schedule Exception with includes
+            var query = repository.GetQueryable().Include(x => x.Days).Where(x => !x.IsDeleted);
 
 
             // Apply filters

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,13 @@ namespace HIS.Application.DTOs.DoctorScheduleException
 {
    public class DoctorScheduleExceptionResponseDto
    {
-        public Guid Id { get; set; }  
+        public Guid Oid { get; set; }  
 
         public Guid DoctorId { get; set; }
 
         public DateOnly ExceptionDate { get; set; }
+        public string DayOfWeekNameAr { get; set; } =string.Empty;
+        public string DayOfWeekNameEn { get; set; } = string.Empty;
 
         public TimeOnly? StartTime { get; set; }
 
