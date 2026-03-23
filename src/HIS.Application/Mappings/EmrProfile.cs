@@ -16,6 +16,8 @@ namespace HIS.Application.Mappings
         {
             CreateMap<CreateEmrIcd110Command,emr_icd110>();
             CreateMap<emr_icd110, EmrResponseDto>();
+            CreateMap<UpdateEmrIcd110Dto, emr_icd110>()
+                .ForMember(dest => dest.Oid,opt => opt.Ignore());
         }
     }
 }

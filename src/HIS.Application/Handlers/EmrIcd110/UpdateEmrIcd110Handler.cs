@@ -23,13 +23,15 @@ namespace HIS.Application.Handlers.EmrIcd110
         }
         public async Task<EmrResponseDto> Handle(UpdateEmrIcd110Command request, CancellationToken cancellationToken)
         {
-            var emr = await repository.GetByIdAsync(request.Emr.Oid,cancellationToken);
-            if (emr is null)
+            var ExsistingEmr = await repository.GetByIdAsync(request.Emr.Oid,cancellationToken);
+            if (ExsistingEmr is null)
             {
                 throw new KeyNotFoundException($"Emr with Key {request.Emr.Oid} NotFound");
+
             }
-            await repository.UpdateAsync(emr,cancellationToken);
-            return mapper.Map<EmrResponseDto>(emr);
+            mapper.Map(request.Emr, ExsistingEmr);
+            await repository.UpdateAsync(ExsistingEmr,cancellationToken);
+            return mapper.Map<EmrResponseDto>(ExsistingEmr);
         }
     }
 }

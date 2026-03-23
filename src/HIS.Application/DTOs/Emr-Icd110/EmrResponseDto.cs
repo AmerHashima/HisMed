@@ -9,7 +9,7 @@ namespace HIS.Application.DTOs.Emr_Icd110
 {
     public class EmrResponseDto
     {
-        
+        public Guid Oid { get; set; }
         public int Level { get; set; }
         
         public string CodeId { get; set; } = default!;

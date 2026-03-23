@@ -34,7 +34,7 @@ namespace HIS.Api.Controllers
             {
                 var emr = await mediator.Send(new CreateEmrIcd110Command(request));
 
-                
+
                 return SuccessResponse(emr, "Emr Created successfully");
             }
             catch (Exception ex)
@@ -43,12 +43,14 @@ namespace HIS.Api.Controllers
             }
 
         }
-      
-        [HttpPut]
-        public async Task<ActionResult<ApiResponse<EmrResponseDto>>> UpdateEmr([FromBody] UpdateEmrIcd110Dto request)
+
+        [HttpPut("{Id}")]
+        public async Task<ActionResult<ApiResponse<EmrResponseDto>>> UpdateEmr(Guid Id,[FromBody] UpdateEmrIcd110Dto request)
         {
             try
             {
+                if (Id != request.Oid)
+                    return ErrorResponse<EmrResponseDto>("EmrIcd110 ID mismatch", 400);
                 var emr = await mediator.Send(new UpdateEmrIcd110Command(request));
 
                 return SuccessResponse(emr, "emr Updated successfully");
@@ -58,7 +60,7 @@ namespace HIS.Api.Controllers
                 return ErrorResponse<EmrResponseDto>(ex.Message, 500);
             }
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<ActionResult<ApiResponse>> DeleteEmr(Guid Id)
         {
             try
