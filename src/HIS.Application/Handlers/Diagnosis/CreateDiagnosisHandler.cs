@@ -11,11 +11,13 @@ public class CreateDiagnosisHandler : IRequestHandler<CreateDiagnosisCommand, Di
 {
     private readonly IEncounterRepository _encounterRepository;
     private readonly IMapper _mapper;
+    private readonly IDiagonsisRepository _diagonsisRepository;
 
-    public CreateDiagnosisHandler(IEncounterRepository encounterRepository, IMapper mapper)
+    public CreateDiagnosisHandler(IEncounterRepository encounterRepository, IMapper mapper,IDiagonsisRepository diagonsisRepository)
     {
         _encounterRepository = encounterRepository;
         _mapper = mapper;
+        _diagonsisRepository = diagonsisRepository;
     }
 
     public async Task<DiagnosisDto> Handle(CreateDiagnosisCommand request, CancellationToken cancellationToken)
@@ -34,9 +36,10 @@ public class CreateDiagnosisHandler : IRequestHandler<CreateDiagnosisCommand, Di
         {
             encounter.Diagnoses = new List<Domain.Entities.Diagnosis>();
         }
-        encounter.Diagnoses.Add(diagnosis);
+        //encounter.Diagnoses.Add(diagnosis);
+        await _diagonsisRepository.AddAsync(diagnosis);
 
-        await _encounterRepository.UpdateAsync(encounter, cancellationToken);
+        //await _encounterRepository.UpdateAsync(encounter, cancellationToken);   // Concurrency Conflicts
 
         return _mapper.Map<DiagnosisDto>(diagnosis);
     }

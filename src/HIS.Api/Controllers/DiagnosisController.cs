@@ -3,6 +3,7 @@ using HIS.Application.Commands.Diagnosis;
 using HIS.Application.Commands.DoctorSchedule;
 using HIS.Application.DTOs.Common;
 using HIS.Application.DTOs.Diagnosis;
+using HIS.Application.DTOs.DoctorScheduleException;
 using HIS.Application.Queries.Diagnosis;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -71,11 +72,13 @@ namespace HIS.Api.Controllers
                 return ErrorResponse<DiagnosisDto>(ex.Message, 500);
             }
         }
-        [HttpPut]
-        public async Task<ActionResult<ApiResponse<DiagnosisDto>>> UpdateDiagnosis([FromBody] UpdatedDiagnsisDto request)
+        [HttpPut("{Id}")]
+        public async Task<ActionResult<ApiResponse<DiagnosisDto>>> UpdateDiagnosis(Guid Id, [FromBody] UpdatedDiagnsisDto request)
         {
             try
             {
+                if (Id != request.Oid)
+                    return ErrorResponse<DiagnosisDto>("DoctorSchedule ID mismatch", 400);
                 var diagnosis = await mediator.Send(new UpdateDiagnosisCommand(request));
                 return SuccessResponse(diagnosis, "Diagnosis Updated sucessfully");
 
@@ -85,7 +88,7 @@ namespace HIS.Api.Controllers
                 return ErrorResponse<DiagnosisDto>(ex.Message, 500);
             }
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<ActionResult<ApiResponse>> DeleteDiagnosis(Guid Id)
         {
             try
