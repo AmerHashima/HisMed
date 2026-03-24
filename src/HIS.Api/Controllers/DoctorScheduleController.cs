@@ -134,7 +134,7 @@ namespace HIS.Api.Controllers
 
 
         [HttpPost("detail")]
-        public async Task<ActionResult<ApiResponse<DoctorSchedulesListDto>>> CreateDoctorScheduleDetail([FromBody] CreateDetailsDto request)
+        public async Task<ActionResult<ApiResponse<DoctorSchedulesListDto>>> CreateDoctorScheduleDetail([FromBody] CreateDetailDto request)
         {
             try
             {

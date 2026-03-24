@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HIS.Application.Commands.DoctorSchedule
 {
-    public sealed record CreateDetailsCommand(CreateDetailsDto details):IRequest<DoctorSchedulesListDto>
+    public sealed record CreateDetailsCommand(CreateDetailDto details):IRequest<DoctorSchedulesListDto>
     {
     }
 }
