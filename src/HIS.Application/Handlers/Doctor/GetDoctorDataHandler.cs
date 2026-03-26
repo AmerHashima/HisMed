@@ -5,6 +5,8 @@ using HIS.Application.Queries.Doctor;
 using HIS.Application.Services;
 using HIS.Domain.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using HIS.Domain.Entities;
 
 namespace HIS.Application.Handlers.Doctor;
 
@@ -24,11 +26,19 @@ public class GetDoctorDataHandler : IRequestHandler<GetDoctorDataQuery, PagedRes
         _mapper = mapper;
     }
 
-    public async Task<PagedResult<DoctorDto>> Handle(GetDoctorDataQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<DoctorDto>> Handle(GetDoctorDataQuery request, CancellationToken cancellationToken)
     {
         // Start with base query - all non-deleted doctors with includes
         var query = _repository.GetQueryable()
-            .Where(x => !x.IsDeleted);
+            .Where(x => !x.IsDeleted)
+            .Include(x => x.User)
+            .Include(x => x.Branch)
+            .Include(x => x.Specialty)
+            .Include(x => x.Gender)
+            .Include(x => x.LicenseType)
+            .Include(x => x.SubSpecialty)
+            .Include(x => x.Department)
+            .AsQueryable();
 
         // Apply filters
         query = _queryBuilder.ApplyFilters(query, request.QueryRequest.Request.Filters);

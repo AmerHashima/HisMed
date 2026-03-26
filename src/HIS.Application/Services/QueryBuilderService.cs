@@ -106,6 +106,20 @@ public class QueryBuilderService : IQueryBuilderService
             return query;
         }
 
+        if (typeof(T) == typeof(Doctor))
+        {
+            // Ensure doctor queries include related navigation properties so mappings have the data
+            return query.Cast<Doctor>()
+                .Include(x => x.User)
+                .Include(x => x.Branch)
+                .Include(x => x.Specialty)
+                .Include(x => x.Gender)
+                .Include(x => x.LicenseType)
+                .Include(x => x.SubSpecialty)
+                .Include(x => x.Department)
+                .Cast<T>();
+        }
+
         // Add more include logic for other entities as needed
         return query;
     }
