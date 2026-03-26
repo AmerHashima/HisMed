@@ -76,6 +76,7 @@ namespace HIS.Application.Mappings
             CreateMap<UpdateDetailsDto, DoctorScheduleDetail>();
             
             CreateMap<CreateDetailsDto, DoctorScheduleDetail>();
+            CreateMap<CreateDetailDto, DoctorScheduleDetail>();
             
         }
     }
