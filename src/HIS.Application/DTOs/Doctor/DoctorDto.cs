@@ -57,4 +57,8 @@ public class DoctorDto
     public bool IsActive { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+
+    /* ==== Full Names ==== */
+    public string? FullNameAr { get; set; }
+    public string? FullNameEn { get; set; }
 }

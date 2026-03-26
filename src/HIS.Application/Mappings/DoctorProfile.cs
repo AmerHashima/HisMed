@@ -10,6 +10,8 @@ public class DoctorProfile : Profile
     {
         CreateMap<Doctor, DoctorDto>()
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User != null ? src.User.Username : null))
+            .ForMember(dest => dest.FullNameAr, opt => opt.MapFrom(src => src.User != null && !string.IsNullOrEmpty(src.User.FullName) ? src.User.FullName : ((src.FirstNameAr ?? "") + " " + (src.MiddleNameAr ?? "") + " " + (src.LastNameAr ?? "")).Trim()))
+            .ForMember(dest => dest.FullNameEn, opt => opt.MapFrom(src => src.User != null && !string.IsNullOrEmpty(src.User.FullName) ? src.User.FullName : ((src.FirstNameEn ?? "") + " " + (src.MiddleNameEn ?? "") + " " + (src.LastNameEn ?? "")).Trim()))
             .ForMember(dest => dest.GenderName, opt => opt.MapFrom(src => src.Gender != null ? src.Gender.ValueNameEn : null))
             .ForMember(dest => dest.LicenseTypeName, opt => opt.MapFrom(src => src.LicenseType != null ? src.LicenseType.ValueNameEn : null))
             .ForMember(dest => dest.SpecialtyNameEn, opt => opt.MapFrom(src => src.Specialty != null ? src.Specialty.NameEn : null))
