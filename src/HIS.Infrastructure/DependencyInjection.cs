@@ -90,6 +90,7 @@ public static class DependencyInjection
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IQueryBuilderService, QueryBuilderService>();
         services.AddScoped<IPatientValidationService, PatientValidationService>();
+        services.AddScoped<IDoctorScheduleValidationService, DoctorScheduleValidationService>();
 
         return services;
     }

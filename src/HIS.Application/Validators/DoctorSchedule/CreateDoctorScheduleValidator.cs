@@ -1,11 +1,15 @@
 ﻿using FluentValidation;
 using HIS.Application.DTOs.DoctorSchedule;
+using HIS.Application.Services;
 
 namespace HIS.Application.Validators.DoctorSchedule
 {
-    public sealed class DoctorScheduleValidator:AbstractValidator<CreateDoctorScheduleDto>
+    public sealed class CreateDoctorScheduleValidator:AbstractValidator<CreateDoctorScheduleDto>
     {
-        public DoctorScheduleValidator()
+        private readonly IDoctorScheduleValidationService service;
+
+     
+        public CreateDoctorScheduleValidator()
         {
             
             
@@ -20,6 +24,7 @@ namespace HIS.Application.Validators.DoctorSchedule
             .WithMessage("StartDate is required").LessThanOrEqualTo(x => x.EndDate).WithMessage("start date must be Before EndDate");
             //RuleFor(x => x.BranchId).NotEmpty().WithMessage("BranchId is Required");
             //RuleFor(x => x.SpecialtyId).NotEmpty().WithMessage("SpecialtyId is Required");
+            
 
 
         }
