@@ -15,35 +15,37 @@ namespace HIS.Infrastructure.Services
 {
     public class DoctorScheduleValidationService : IDoctorScheduleValidationService
     {
-       
+
         private readonly HISDbContext _context;
         public DoctorScheduleValidationService(HISDbContext context)
         {
             _context = context;
         }
-        public async  Task<bool> HasOverLap(Guid BranchId, Guid SpecialityId, Guid DoctorId,IEnumerable<DoctorScheduleDetail> details, Guid? ExculdingSchedule, CancellationToken cancellation)
-        {
-            foreach (var detail in details)
-            {
 
-                var HasConflict = await _context.DoctorSchedulesMaster
-                    .AnyAsync(x =>
-                        x.Oid != ExculdingSchedule &&
-                        x.DoctorId == DoctorId &&
-                        x.SpecialtyId == SpecialityId &&
-                        x.BranchId == BranchId &&
-                        x.Details.Any(d =>
-                            
-                                d.StartTime < detail.EndTime &&
-                                d.EndTime > detail.StartTime &&
-                                d.DayOfWeekId == detail.DayOfWeekId
-                        ),
-                        
-                        cancellation
-                    );
-                if (HasConflict) return true;
-            }
+        public async Task<bool> HasOverLap(Guid BranchId, Guid SpecialityId, Guid DoctorId, DateOnly StartDate, DateOnly EndDate, IEnumerable<DoctorScheduleDetail> Newdetails, Guid? ExculdingSchedule = null, CancellationToken cancellation = default)
+  {
+            var data = await _context.DoctorSchedulesMaster.Where(master =>     // Load Needed Data To Memory 
+            master.DoctorId == DoctorId &&
+            master.SpecialtyId == SpecialityId &&
+            master.BranchId == BranchId).Include(x => x.Details).ToListAsync(cancellation);
+            var HasConflict = data.Any(ExsistingMaster =>
+                                ExsistingMaster.Oid != ExculdingSchedule &&
+                                ExsistingMaster.StartDate <= EndDate &&     //[To Do]  Fix OverNight 
+                                ExsistingMaster.EndDate >= StartDate &&
+                                ExsistingMaster.Details.Any(ExsistingDetails =>
+                                Newdetails.Any(
+                                              NewDetails => NewDetails.StartTime < ExsistingDetails.EndTime &&
+                                                   NewDetails.EndTime > ExsistingDetails.StartTime &&
+                                                   NewDetails.DayOfWeekId == ExsistingDetails.DayOfWeekId
+                                )));
+
+
+            if (HasConflict) return true;
+
             return false;
-        }           
+
+
+
+        }
     }
 }

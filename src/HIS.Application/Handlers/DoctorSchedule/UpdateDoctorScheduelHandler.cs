@@ -28,12 +28,12 @@ namespace HIS.Application.Handlers.DoctorSchedule
                 throw new KeyNotFoundException($"Doctor schedule with ID {request.DoctorSchdeuel.Oid} not found");
             }
             else if (await service.HasOverLap(master.BranchId, master.SpecialtyId, 
-                master.DoctorId, master.Details,ExculdingSchedule:master.Oid , cancellationToken))
+                master.DoctorId, master.StartDate,master.EndDate,master.Details,ExculdingSchedule:master.Oid , cancellationToken))
             {
                 throw new InvalidOperationException($"A doctor with Specialty: {master.SpecialtyId} and  Branch:{master.BranchId} " +
                     "already has an overlapping time slot on the same day.");
             }
-
+    
             // Update master-level properties only
             _mapper.Map(request.DoctorSchdeuel, master);
 

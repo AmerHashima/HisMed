@@ -25,7 +25,7 @@ namespace HIS.Application.Handlers.DoctorSchedule
         public async Task<CreateSingleScheduleResponse> Handle(CreateDoctorScheduleCommand request, CancellationToken cancellationToken)
         {
             var master = _mapper.Map<DoctorScheduleMaster>(request.DoctorSechedule);
-            if (await service.HasOverLap(master.BranchId, master.SpecialtyId, master.DoctorId, master.Details, cancellation: cancellationToken))
+            if (await service.HasOverLap(master.BranchId, master.SpecialtyId, master.DoctorId,master.StartDate,master.EndDate, master.Details, cancellation: cancellationToken))
             {
                throw  new InvalidOperationException($"A doctor with Specialty: {master.SpecialtyId} and Branch: {master.BranchId} " +
                     "already has an overlapping time slot on the same day.");

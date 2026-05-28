@@ -9,7 +9,7 @@ namespace HIS.Application.Services
 {
     public interface  IDoctorScheduleValidationService
     {
-        Task<bool> HasOverLap(Guid BranchId,Guid SpecialityId, Guid DoctorId, IEnumerable<DoctorScheduleDetail> details, Guid? ExculdingSchedule=null, CancellationToken cancellation=default);
+        Task<bool> HasOverLap(Guid BranchId,Guid SpecialityId, Guid DoctorId, DateOnly StartDate, DateOnly EndDate, IEnumerable<DoctorScheduleDetail> Newdetails, Guid? ExculdingSchedule=null, CancellationToken cancellation=default);
         
     }
 }
